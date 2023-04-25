@@ -13,74 +13,74 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
-import React from 'react';
 import { setUser } from "state";
+import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 
 const initialValues = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    location: "",
-    picture: "",
-    isClient: true,
+  firstName: "",
+  lastName: "",
+  location: "",
 };
 
 const Form = ({ userId }) => {
-    const { palette } = useTheme();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const isNonMobile = useMediaQuery("(min-width:600px)");
+  const { palette } = useTheme();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isNonMobile = useMediaQuery("(min-width:600px)");
 
-    const [user, setUser] = useState(null);
-    const token = useSelector((state) => state.token);
+  const [user, setUser] = useState(null);
+  const token = useSelector((state) => state.token);
 
-    const getUser = async () => {
-        const response = await fetch(`http://localhost:3001/users/${userId}`, {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await response.json();
-        setUser(data);
-    };
+  const getUser = async () => {
+    const response = await fetch(`http://localhost:3001/users/${userId}`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    
+    const data = await response.json();
+    setUser(data);
+  };
 
-    useEffect(() => {
-        getUser();
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-    if (!user) {
-        return null;
+  useEffect(() => {
+    if (!userId) {
+      return;
     }
+    getUser();
+  }, [userId]);
 
-    const {
-        firstName,
-        lastName,
-        location,
-    } = user;
+  if (!user) {
+    return null;
+  }
 
-    const handleFormSubmit = async (values) => {
-      const { firstName, lastName, location } = values;
-      const formData = new FormData();
-      formData.append("firstName", firstName);
-      formData.append("lastName", lastName);
-      formData.append("location", location);
-      //formData.append("picturePath", picture);
+  const {
+    firstName,
+    lastName,
+    location,
+  } = user;
 
+  const updateUser = async (data) => {
+    try {
       const response = await fetch(`http://localhost:3001/users/${userId}/edit`, {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: formData,
+        body: JSON.stringify(data),
       });
-
-      const updatedUser = await response.json();
-      dispatch(setUser({ user: updatedUser }));
-      navigate(`/profile/${userId}`);
+      const result = await response.json();
+      dispatch(setUser(result));
+    } catch (error) {
+      console.error(error);
     }
+  };
+
+  const handleFormSubmit = async (values) => {
+    const { firstName, lastName, location } = values;
+    await updateUser({ firstName, lastName, location });
+    navigate(`/profile/${userId}`);
+  };
   
   return (
     <Formik
@@ -111,10 +111,7 @@ const Form = ({ userId }) => {
                 onBlur={handleBlur}
                 defaultValue={ firstName }
                 name="firstName"
-                onChange={(event) => {
-                    const value = event.target.value;
-                    setUser({ ...user, firstName: value });
-                }}
+                onChange={handleChange}
                 error={
                  Boolean(touched.firstName) && Boolean(errors.firstName)
                 }
@@ -125,10 +122,7 @@ const Form = ({ userId }) => {
             <TextField
                 label="Last Name"
                 onBlur={handleBlur}
-                onChange={(event) => {
-                    const value = event.target.value;
-                    setUser({ ...user, lastName: value });
-                }}
+                onChange={handleChange}
                 defaultValue={ lastName }
                 name="lastName"
                 error={Boolean(touched.lastName) && Boolean(errors.lastName)}
@@ -139,10 +133,8 @@ const Form = ({ userId }) => {
             <TextField
                 label="Location"
                 onBlur={handleBlur}
-                onChange={(event) => {
-                    const value = event.target.value;
-                    setUser({ ...user, location: value });
-                }}
+                onChange={handleChange}
+                
                 defaultValue={ location }
                 name="location"
                 error={Boolean(touched.location) && Boolean(errors.location)}

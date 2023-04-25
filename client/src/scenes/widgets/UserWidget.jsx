@@ -23,7 +23,8 @@ import EditIcon from '@mui/icons-material/Edit';
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
-  
+    const loggedInUserId = useSelector((state) => state.user._id);
+    const isProfileUser = userId === loggedInUserId;
     const getUser = async () => {
       const response = await fetch(`http://localhost:3001/users/${userId}`, {
         method: "GET",
@@ -81,7 +82,7 @@ import EditIcon from '@mui/icons-material/Edit';
               </Box>
             </FlexBetween>
           </FlexBetween>
-
+          {isProfileUser && (
           <EditIcon 
               onClick={() => navigate(`/edit/${userId}`)}
               sx={{
@@ -91,7 +92,7 @@ import EditIcon from '@mui/icons-material/Edit';
                   cursor: "pointer"
                 },
               }}
-          />
+          />)}
         </FlexBetween>
   
         <Divider />
