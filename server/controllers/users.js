@@ -61,24 +61,30 @@ export const addRemoveFriend = async (req, res) => {
 };
 
 export const editUser = async (req, res) => {
-    try {
-      const {
-        firstName,
-        lastName,
-        location,
-      } = req.body;
-      const { id } = req.params;
+  try {
+    const { id } = req.params;
+    const { name, email, password } = req.body;
+    console.log("result");
+    // Find the user by id
+    const user = await User.findById(id);
 
-      const updatedProfile = await User.findByIdAndUpdate(
-        id,
-        {  firstName,
-           lastName,
-           location,
-        },
-        { new: true }
-      );
-      res.status(200).json(updatedProfile);
-    } catch (err) {
-      res.status(404).json({ message: err.message });
+    // If user doesn't exist, return error message
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
+
+    // Update user details
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.password = password || user.password;
+
+    // Save updated user details to database
+    const updatedUser = await user.save();
+
+    // Return updated user
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
 };

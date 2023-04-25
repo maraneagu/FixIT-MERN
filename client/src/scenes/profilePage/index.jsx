@@ -13,7 +13,8 @@ const ProfilePage = () => {
   const { userId } = useParams();
   const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-
+  const loggedInUserId = useSelector((state) => state.user._id);
+  const isProfileUser = userId === loggedInUserId;
   const getUser = async () => {
     const response = await fetch(`http://localhost:3001/users/${userId}`, {
       method: "GET",
@@ -45,6 +46,7 @@ const ProfilePage = () => {
           <FriendListWidget userId={userId} />
         </Box>
 
+        {isProfileUser ? (
         <Box
           flexBasis={isNonMobileScreens ? "42%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"}
@@ -53,6 +55,14 @@ const ProfilePage = () => {
           <Box m="2rem 0" />
           <PostsWidget userId={userId} isProfile />
         </Box>
+      ) : (
+        <Box
+          flexBasis={isNonMobileScreens ? "42%" : undefined}
+          mt={isNonMobileScreens ? undefined : "2rem"}
+        >
+          <PostsWidget userId={userId} isProfile/>
+        </Box>
+      )}
         
       </Box>
     </Box>
