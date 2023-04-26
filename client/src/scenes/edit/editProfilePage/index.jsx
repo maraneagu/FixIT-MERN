@@ -11,7 +11,9 @@ import React from 'react';
 const EditProfilePage = () => {
   const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const { _id, picturePath } = useSelector((state) => state.user);
+  const { _id } = useSelector((state) => state.user);
+
+  console.log("am ajuns in edit page la index");
 
   return (
     <Box>

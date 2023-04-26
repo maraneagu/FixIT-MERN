@@ -64,16 +64,14 @@ export const editUser = async (req, res) => {
     try {
       const {
         firstName,
-        lastName,
-        location,
       } = req.body;
       const { id } = req.params;
+
+      console.log("ajung vreodata aici?");
 
       const updatedProfile = await User.findByIdAndUpdate(
         id,
         {  firstName,
-           lastName,
-           location,
         },
         { new: true }
       );
