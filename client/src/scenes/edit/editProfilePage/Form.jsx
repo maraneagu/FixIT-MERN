@@ -50,6 +50,8 @@ import { setUser } from "state";
 const EditUserForm = ({ userId }) => {
   const [user, setUser] = useState(null);
   const token = useSelector((state) => state.token);
+  const { palette } = useTheme();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getUser = async () => {
@@ -99,7 +101,8 @@ const EditUserForm = ({ userId }) => {
       if (response.ok) {
         const data = await response.json();
         setUser(data);
-        alert('User updated successfully');
+        //alert('User updated successfully');
+        navigate(`/profile/${userId}`);
       } else {
         throw new Error('Error updating user');
       }
@@ -114,29 +117,86 @@ const EditUserForm = ({ userId }) => {
 
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+       {({
+        values,
+        errors,
+        touched,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        setFieldValue,
+        resetForm,
+      }) => (
       <Form>
-        <div>
-          <label htmlFor="firstName">First Name:</label>
-          <Field type="text" name="firstName" />
-        </div>
+        <Box
+            display="grid"
+            gap="30px"
+            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+          >
+                  <TextField
+                  label="First Name"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.firstName}
+                  name="firstName"
+                  error={
+                    Boolean(touched.firstName) && Boolean(errors.firstName)
+                  }
+                  helperText={touched.firstName && errors.firstName}
+                  sx={{ gridColumn: "span 2" }}
+                />
 
-        <div>
-          <label htmlFor="lastName">Last Name:</label>
-          <Field type="text" name="lastName" />
-        </div>
+                <TextField
+                  label="Last Name"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.lastName}
+                  name="lastName"
+                  error={Boolean(touched.lastName) && Boolean(errors.lastName)}
+                  helperText={touched.lastName && errors.lastName}
+                  sx={{ gridColumn: "span 2" }}
+                />
 
-        <div>
-          <label htmlFor="location">Location:</label>
-          <Field type="text" name="location" />
-        </div>
+                <TextField
+                  label="Location"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.location}
+                  name="location"
+                  error={Boolean(touched.location) && Boolean(errors.location)}
+                  helperText={touched.location && errors.location}
+                  sx={{ gridColumn: "span 4" }}
+                />
 
-        <div>
-          <label htmlFor="bio">Bio:</label>
-          <Field type="text" name="bio" />
-        </div>
+                <TextField
+                  label="Bio"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.bio}
+                  name="bio"
+                  error={Boolean(touched.bio) && Boolean(errors.bio)}
+                  helperText={touched.bio && errors.bio}
+                  sx={{ gridColumn: "span 4" }}
+                />
 
-        <button type="submit">Submit</button>
-      </Form>
+          <Box sx={{ gridColumn: "span 4", placeSelf: "center" }}>
+            <Button
+              fullWidth
+              type="submit"
+              sx={{
+                m: "2rem 0",
+                p: "1rem",
+                backgroundColor: palette.login.button,
+                color: palette.background.alt,
+                "&:hover": { backgroundColor: palette.login.buttonHover,
+                             color: palette.login.buttonTextHover },
+              }}
+            >
+              Edit profile
+            </Button>
+            </Box>
+        </Box>
+      </Form>)}
     </Formik>
   );
 };
