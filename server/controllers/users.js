@@ -64,6 +64,9 @@ export const editUser = async (req, res) => {
     try {
       const {
         firstName,
+        lastName,
+        location,
+        bio,
       } = req.body;
       const { id } = req.params;
 
@@ -72,6 +75,9 @@ export const editUser = async (req, res) => {
       const updatedProfile = await User.findByIdAndUpdate(
         id,
         {  firstName,
+          lastName,
+          location,
+          bio,
         },
         { new: true }
       );

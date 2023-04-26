@@ -77,6 +77,10 @@ const EditUserForm = ({ userId }) => {
   
   const initialValues = {
     firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    location: user?.location || '',
+    bio: user?.bio || '',
+    
   };
 
   const handleSubmit = async (values) => {
@@ -90,7 +94,7 @@ const EditUserForm = ({ userId }) => {
         body: JSON.stringify(values)
       });
 
-      console.log(response)
+      //console.log(response)
 
       if (response.ok) {
         const data = await response.json();
@@ -115,6 +119,22 @@ const EditUserForm = ({ userId }) => {
           <label htmlFor="firstName">First Name:</label>
           <Field type="text" name="firstName" />
         </div>
+
+        <div>
+          <label htmlFor="lastName">Last Name:</label>
+          <Field type="text" name="lastName" />
+        </div>
+
+        <div>
+          <label htmlFor="location">Location:</label>
+          <Field type="text" name="location" />
+        </div>
+
+        <div>
+          <label htmlFor="bio">Bio:</label>
+          <Field type="text" name="bio" />
+        </div>
+
         <button type="submit">Submit</button>
       </Form>
     </Formik>

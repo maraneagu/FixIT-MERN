@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import PsychologyAltIcon from '@mui/icons-material/PsychologyAlt';
 import EditIcon from '@mui/icons-material/Edit';
+import BuildIcon from '@mui/icons-material/Build';
   
   const UserWidget = ({ userId, picturePath }) => {
     const [user, setUser] = useState(null);
@@ -23,6 +24,7 @@ import EditIcon from '@mui/icons-material/Edit';
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
+    var hasBio = false;
   
     const getUser = async () => {
       const response = await fetch(`http://localhost:3001/users/${userId}`, {
@@ -47,7 +49,12 @@ import EditIcon from '@mui/icons-material/Edit';
       location,
       isClient,
       friends,
+      bio,
     } = user;
+
+    if(bio!=="") hasBio = true;
+
+    console.log(hasBio);
 
   if (isClient === true) {
     return (
@@ -106,6 +113,7 @@ import EditIcon from '@mui/icons-material/Edit';
             <PsychologyAltIcon fontSize="large" sx={{ color: main }} />
             <Typography color={medium}>Client</Typography>
           </Box>
+          
         </Box>
   
         <Divider />
@@ -223,6 +231,15 @@ import EditIcon from '@mui/icons-material/Edit';
             <Typography color={medium}>Master</Typography>
           </Box>
         </Box>
+
+         {hasBio ? (
+              <Box display="flex" alignItems="center" gap="1rem">
+                <BuildIcon fontSize="large" sx={{ color: main }} />
+                <Typography color={medium}>{bio}</Typography>
+              </Box>
+              
+          ) : null}
+       
   
         <Divider />
   
