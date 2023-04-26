@@ -3,6 +3,7 @@ import HomePage from "scenes/homePage";
 import LoginPage from "scenes/loginPage";
 import ProfilePage from "scenes/profilePage";
 import EditProfilePage from "scenes/edit/editProfilePage";
+import TipsPage from "scenes/tipsPage";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -32,6 +33,10 @@ function App() {
             <Route
               path="/edit/:userId"
               element={isAuth ? <EditProfilePage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/tips"
+              element={isAuth ? <TipsPage /> : <Navigate to="/" />}
             />
           </Routes>
         </ThemeProvider>
