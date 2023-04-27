@@ -232,16 +232,16 @@ import BuildIcon from '@mui/icons-material/Build';
           </Box>
         </Box>
 
+        <Divider />
+
          {hasBio ? (
-              <Box display="flex" alignItems="center" gap="1rem">
+              <Box display="flex" alignItems="center" gap="1rem" marginTop="10px">
                 <BuildIcon fontSize="large" sx={{ color: main }} />
                 <Typography color={medium}>{bio}</Typography>
               </Box>
               
           ) : null}
        
-  
-        <Divider />
   
         {/* THIRD ROW */}
         {/*
