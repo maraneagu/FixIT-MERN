@@ -11,9 +11,7 @@ import React from 'react';
 const EditProfilePage = () => {
   const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const { _id } = useSelector((state) => state.user);
-
-  console.log("am ajuns in edit page la index");
+  const { _id, picturePath } = useSelector((state) => state.user);
 
   return (
     <Box>
@@ -25,7 +23,7 @@ const EditProfilePage = () => {
           borderRadius="1.5rem"
           backgroundColor={theme.palette.login.box}
         >
-        <Form userId={_id} />
+        <Form userId={_id} picturePath={picturePath}/>
       </Box>
     </Box>
   );

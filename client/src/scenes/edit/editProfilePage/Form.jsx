@@ -3,22 +3,19 @@ import {
   Box,
   Button,
   TextField,
-  useMediaQuery,
   Typography,
   useTheme,
+  InputLabel,
 } from "@mui/material";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik, Field, Form } from "formik";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import Dropzone from "react-dropzone";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import FlexBetween from "components/FlexBetween";
-import { setUser } from "state";
-import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 
-
-const EditUserForm = ({ userId }) => {
+const EditUserForm = ({ userId, picturePath }) => {
   const [user, setUser] = useState(null);
   const token = useSelector((state) => state.token);
   const { palette } = useTheme();
@@ -53,27 +50,28 @@ const EditUserForm = ({ userId }) => {
     lastName: user?.lastName || '',
     location: user?.location || '',
     bio: user?.bio || '',
-    
+    picturePath: picturePath,
   };
 
   const handleSubmit = async (values) => {
     try {
+      const formData = new FormData();
+      for (let value in values) {
+        formData.append(value, values[value]);
+      }
+      formData.append("picturePath", values.picturePath.name);
       const response = await fetch(`http://localhost:3001/users/${userId}/edit`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(values)
+        body: formData,
       });
-
-      //console.log(response)
 
       if (response.ok) {
         const data = await response.json();
         setUser(data);
-        //alert('User updated successfully');
         navigate(`/profile/${userId}`);
       } else {
         throw new Error('Error updating user');
@@ -86,7 +84,6 @@ const EditUserForm = ({ userId }) => {
   if (!user) {
     return <div>Loading...</div>;
   }
-
 
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
@@ -106,7 +103,6 @@ const EditUserForm = ({ userId }) => {
             gap="30px"
             gridTemplateColumns="repeat(4, minmax(0, 1fr))"
           >
-
                   <TextField
                   label="First Name"
                   onBlur={handleBlur}
@@ -153,12 +149,50 @@ const EditUserForm = ({ userId }) => {
                   sx={{ gridColumn: "span 4" }}
                 />
 
+                <InputLabel id="picture-label" sx={{ marginBottom: '-22px' }}>Profile Picture</InputLabel>
+                <Box
+                  gridColumn="span 4"
+                  border={`1px solid ${palette.neutral.medium}`}
+                  borderRadius="5px"
+                  p="1rem"
+                >
+                  <Dropzone
+                    acceptedFiles=".jpg,.jpeg,.png"
+                    multiple={false}
+                    onDrop={(acceptedFiles) =>
+                      setFieldValue("picturePath", acceptedFiles[0])
+                    }
+                  >
+                    {({ getRootProps, getInputProps }) => (
+                      <Box
+                        {...getRootProps()}
+                        border={`2px dashed ${palette.primary.main}`}
+                        p="1rem"
+                        sx={{ "&:hover": { cursor: "pointer" } }}
+                      >
+                        {!values.picturePath.name ? (
+                          <FlexBetween>
+                            <Typography>{values.picturePath}</Typography>
+                            <EditOutlinedIcon />
+                          </FlexBetween>
+                        ) : (
+                          <FlexBetween>
+                            <Typography>{values.picturePath.name}</Typography>
+                            <EditOutlinedIcon />
+                          </FlexBetween>
+                        )}
+                        <input {...getInputProps()} />
+                      </Box>
+                    )}
+                  </Dropzone>
+                </Box>
+
           <Box sx={{ gridColumn: "span 4", placeSelf: "center" }}>
             <Button
               fullWidth
               type="submit"
               sx={{
-                m: "2rem 0",
+                m: "0.5rem 0",
                 p: "1rem",
                 backgroundColor: palette.login.button,
                 color: palette.background.alt,
