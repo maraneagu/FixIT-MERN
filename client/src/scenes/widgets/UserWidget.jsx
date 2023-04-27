@@ -3,7 +3,9 @@ import {
   EditOutlined,
   LocationOnOutlined,
   WorkOutlineOutlined,
+  
 } from "@mui/icons-material";
+import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { Box, Typography, Divider, useTheme } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
@@ -15,18 +17,28 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import PsychologyAltIcon from "@mui/icons-material/PsychologyAlt";
 import EditIcon from "@mui/icons-material/Edit";
 import BuildIcon from "@mui/icons-material/Build";
+import {IconButton} from "@mui/material";
+import { useDispatch} from "react-redux";
+import { setFriends } from "state";
 
 const UserWidget = ({ userId, picturePath }) => {
   const [user, setUser] = useState(null);
   const { palette } = useTheme();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = useSelector((state) => state.token);
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
+  const primaryLight = palette.primary.light;
+  const primaryDark = palette.primary.dark;
   var hasBio = false;
   const loggedInUserId = useSelector((state) => state.user._id);
+  const friendss = useSelector((state) => state.user.friends);
+  console.log(friendss);
   const isProfileUser = userId === loggedInUserId;
+  const isFriend = friendss.find((friend) => friend._id === userId);
+  console.log(isFriend);
   const getUser = async () => {
     const response = await fetch(`http://localhost:3001/users/${userId}`, {
       method: "GET",
@@ -35,20 +47,32 @@ const UserWidget = ({ userId, picturePath }) => {
     const data = await response.json();
     setUser(data);
   };
-
+  const patchFriend = async () => {
+    const response = await fetch(
+      `http://localhost:3001/users/${loggedInUserId}/${userId}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );}
+   
+  
   useEffect(() => {
     getUser();
+   
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
+ 
   if (!user) {
     return null;
   }
 
   const { firstName, lastName, location, isClient, friends, bio } = user;
-
+ 
   if (bio !== "") hasBio = true;
 
-  console.log(hasBio);
 
   if (isClient === true) {
     return (
@@ -82,7 +106,7 @@ const UserWidget = ({ userId, picturePath }) => {
               </Box>
             </FlexBetween>
           </FlexBetween>
-          {isProfileUser && (
+          {isProfileUser ? (
             <EditIcon
               onClick={() => navigate(`/edit/${userId}`)}
               sx={{
@@ -93,6 +117,17 @@ const UserWidget = ({ userId, picturePath }) => {
                 },
               }}
             />
+          ) : (
+            <IconButton
+              onClick={() => patchFriend()}
+              sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
+            >
+              {isFriend ? (
+                <PersonRemoveOutlined sx={{ color: primaryDark }} />
+              ) : (
+                <PersonAddOutlined sx={{ color: primaryDark }} />
+              )}
+            </IconButton>
           )}
         </FlexBetween>
 
@@ -199,16 +234,29 @@ const UserWidget = ({ userId, picturePath }) => {
             </FlexBetween>
           </FlexBetween>
 
-          <EditIcon
-            onClick={() => navigate(`/edit/${userId}`)}
-            sx={{
-              marginTop: "-33px",
-              marginRight: "5px",
-              "&:hover": {
-                cursor: "pointer",
-              },
-            }}
-          />
+          {isProfileUser ? (
+  <EditIcon
+    onClick={() => navigate(`/edit/${userId}`)}
+    sx={{
+      marginTop: "-33px",
+      marginRight: "5px",
+      "&:hover": {
+        cursor: "pointer",
+      },
+    }}
+  />
+) : (
+  <IconButton
+    onClick={() => patchFriend()}
+    sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
+  >
+    {isFriend ? (
+      <PersonRemoveOutlined sx={{ color: primaryDark }} />
+    ) : (
+      <PersonAddOutlined sx={{ color: primaryDark }} />
+    )}
+  </IconButton>
+)}
         </FlexBetween>
 
         <Divider />
