@@ -28,6 +28,9 @@ const UserWidget = ({ userId, picturePath }) => {
   const loggedInUserId = useSelector((state) => state.user._id);
   const isProfileUser = userId === loggedInUserId;
 
+  console.log("aici picture");
+  console.log(picturePath);
+
   const getUser = async () => {
     const response = await fetch(`http://localhost:3001/users/${userId}`, {
       method: "GET",

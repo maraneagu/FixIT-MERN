@@ -77,16 +77,16 @@ export const addRemoveFriend = async (req, res) => {
 
 export const editUser = async (req, res) => {
   try {
-    const { firstName, lastName, location, bio, picturePath } = req.body;
+    const { firstName, lastName, location, bio } = req.body;
     const { id } = req.params;
-
-    console.log(req.body);
+    const picturePath = req.file.path;
 
     const updatedProfile = await User.findByIdAndUpdate(
       id,
       { firstName, lastName, location, bio, picturePath },
       { new: true }
     );
+
     console.log("no crash");
     console.log(updatedProfile);
     res.status(200).json(updatedProfile);

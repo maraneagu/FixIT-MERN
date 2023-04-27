@@ -53,20 +53,23 @@ const EditUserForm = ({ userId, picturePath }) => {
     picturePath: picturePath,
   };
 
+  console.log(initialValues.picturePath);
+
   const handleSubmit = async (values) => {
     try {
+      //picturePath = values.picturePath.name;
       const formData = new FormData();
-      for (let value in values) {
-        formData.append(value, values[value]);
-      }
-      formData.append("picturePath", values.picturePath.name);
+      formData.append("firstName", values.firstName);
+      formData.append("lastName", values.lastName);
+      formData.append("location", values.location);
+      formData.append("bio", values.bio);
+      formData.append("picturePath", values.picturePath);
       const response = await fetch(`http://localhost:3001/users/${userId}/edit`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          Authorization: `Bearer ${token}`
         },
-        body: formData,
+        body: formData
       });
 
       if (response.ok) {
@@ -155,6 +158,7 @@ const EditUserForm = ({ userId, picturePath }) => {
                   border={`1px solid ${palette.neutral.medium}`}
                   borderRadius="5px"
                   p="1rem"
+                  name="picturePath"
                 >
                   <Dropzone
                     acceptedFiles=".jpg,.jpeg,.png"
