@@ -13,39 +13,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
-import React from 'react';
 import { setUser } from "state";
+import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 
-// const initialValues = {
-//     firstName: "",
-//     lastName: "",
-//     email: "",
-//     password: "",
-//     location: "",
-//     picture: "",
-//     isClient: true,
-// };
-
-// const Form = ({ userId }) => {
-//     const { palette } = useTheme();
-//     const dispatch = useDispatch();
-//     const navigate = useNavigate();
-//     const isNonMobile = useMediaQuery("(min-width:600px)");
-
-//     const [user, setUser] = useState(null);
-//     const token = useSelector((state) => state.token);
-
-//     // const getUser = async () => {
-//     //     const response = await fetch(`http://localhost:3001/users/${userId}`, {
-//     //         method: "GET",
-//     //         headers: { Authorization: `Bearer ${token}` },
-//     //     });
-//     //     const data = await response.json();
-//     //     setUser(data);
-//     // };
-// }
 
 const EditUserForm = ({ userId }) => {
   const [user, setUser] = useState(null);
@@ -91,6 +62,7 @@ const EditUserForm = ({ userId }) => {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
+
           "Content-Type": "application/json"
         },
         body: JSON.stringify(values)
@@ -115,6 +87,7 @@ const EditUserForm = ({ userId }) => {
     return <div>Loading...</div>;
   }
 
+
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
        {({
@@ -133,6 +106,7 @@ const EditUserForm = ({ userId }) => {
             gap="30px"
             gridTemplateColumns="repeat(4, minmax(0, 1fr))"
           >
+
                   <TextField
                   label="First Name"
                   onBlur={handleBlur}

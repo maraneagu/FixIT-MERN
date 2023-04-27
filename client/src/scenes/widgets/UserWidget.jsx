@@ -24,8 +24,8 @@ import BuildIcon from '@mui/icons-material/Build';
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
-    var hasBio = false;
-  
+    const loggedInUserId = useSelector((state) => state.user._id);
+    const isProfileUser = userId === loggedInUserId;
     const getUser = async () => {
       const response = await fetch(`http://localhost:3001/users/${userId}`, {
         method: "GET",
@@ -88,7 +88,7 @@ import BuildIcon from '@mui/icons-material/Build';
               </Box>
             </FlexBetween>
           </FlexBetween>
-
+          {isProfileUser && (
           <EditIcon 
               onClick={() => navigate(`/edit/${userId}`)}
               sx={{
@@ -98,7 +98,7 @@ import BuildIcon from '@mui/icons-material/Build';
                   cursor: "pointer"
                 },
               }}
-          />
+          />)}
         </FlexBetween>
   
         <Divider />

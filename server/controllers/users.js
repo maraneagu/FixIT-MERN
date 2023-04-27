@@ -61,6 +61,7 @@ export const addRemoveFriend = async (req, res) => {
 };
 
 export const editUser = async (req, res) => {
+
     try {
       const {
         firstName,
@@ -84,5 +85,21 @@ export const editUser = async (req, res) => {
       res.status(200).json(updatedProfile);
     } catch (err) {
       res.status(404).json({ message: err.message });
+
     }
+
+    // Update user details
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.password = password || user.password;
+
+    // Save updated user details to database
+    const updatedUser = await user.save();
+
+    // Return updated user
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
 };
