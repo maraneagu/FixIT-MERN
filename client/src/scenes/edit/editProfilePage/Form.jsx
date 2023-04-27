@@ -8,7 +8,7 @@ import {
   useTheme,
 } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { Formik } from "formik";
+import { Formik, Field, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -17,77 +17,80 @@ import FlexBetween from "components/FlexBetween";
 import { setUser } from "state";
 import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 
-const initialValues = {
-  firstName: "",
-  lastName: "",
-  location: "",
-};
 
-const Form = ({ userId }) => {
-  const { palette } = useTheme();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const isNonMobile = useMediaQuery("(min-width:600px)");
-
+const EditUserForm = ({ userId }) => {
   const [user, setUser] = useState(null);
   const token = useSelector((state) => state.token);
-
-  const getUser = async () => {
-    const response = await fetch(`http://localhost:3001/users/${userId}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    
-    const data = await response.json();
-    setUser(data);
-  };
+  const { palette } = useTheme();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!userId) {
-      return;
-    }
+    const getUser = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/users/${userId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data);
+        } else {
+          throw new Error('Error fetching user data');
+        }
+      } catch (error) {
+        console.log('Error fetching user:', error);
+      }
+    };
+  
     getUser();
-  }, [userId]);
+  }, [userId, token]);
+  
+  const initialValues = {
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    location: user?.location || '',
+    bio: user?.bio || '',
+    
+  };
 
-  if (!user) {
-    return null;
-  }
-
-  const {
-    firstName,
-    lastName,
-    location,
-  } = user;
-
-  const updateUser = async (data) => {
+  const handleSubmit = async (values) => {
     try {
       const response = await fetch(`http://localhost:3001/users/${userId}/edit`, {
-        method: "PATCH",
+        method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(values)
       });
-      const result = await response.json();
-      dispatch(setUser(result));
+
+      //console.log(response)
+
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data);
+        //alert('User updated successfully');
+        navigate(`/profile/${userId}`);
+      } else {
+        throw new Error('Error updating user');
+      }
     } catch (error) {
-      console.error(error);
-    }
+      alert(error.message);
+    } 
   };
 
-  const handleFormSubmit = async (values) => {
-    const { firstName, lastName, location } = values;
-    await updateUser({ firstName, lastName, location });
-    navigate(`/profile/${userId}`);
-  };
-  
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
+
   return (
-    <Formik
-      onSubmit={handleFormSubmit}
-      initialValues={initialValues}
-    >
-      {({
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+       {({
         values,
         errors,
         touched,
@@ -97,90 +100,60 @@ const Form = ({ userId }) => {
         setFieldValue,
         resetForm,
       }) => (
-        <form onSubmit={handleSubmit}>
-          <Box
+      <Form>
+        <Box
             display="grid"
             gap="30px"
             gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-            sx={{
-              "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
-            }}
           >
-            <TextField
-                label="First Name"
-                onBlur={handleBlur}
-                defaultValue={ firstName }
-                name="firstName"
-                onChange={handleChange}
-                error={
-                 Boolean(touched.firstName) && Boolean(errors.firstName)
-                }
-                helpertext={touched.firstName && errors.firstName}
-                sx={{ gridColumn: "span 2" }}
-            />
 
-            <TextField
-                label="Last Name"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                defaultValue={ lastName }
-                name="lastName"
-                error={Boolean(touched.lastName) && Boolean(errors.lastName)}
-                helpertext={touched.lastName && errors.lastName}
-                sx={{ gridColumn: "span 2" }}
-            />
+                  <TextField
+                  label="First Name"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.firstName}
+                  name="firstName"
+                  error={
+                    Boolean(touched.firstName) && Boolean(errors.firstName)
+                  }
+                  helperText={touched.firstName && errors.firstName}
+                  sx={{ gridColumn: "span 2" }}
+                />
 
-            <TextField
-                label="Location"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                
-                defaultValue={ location }
-                name="location"
-                error={Boolean(touched.location) && Boolean(errors.location)}
-                helpertext={touched.location && errors.location}
-                sx={{ gridColumn: "span 4" }}
-            />
+                <TextField
+                  label="Last Name"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.lastName}
+                  name="lastName"
+                  error={Boolean(touched.lastName) && Boolean(errors.lastName)}
+                  helperText={touched.lastName && errors.lastName}
+                  sx={{ gridColumn: "span 2" }}
+                />
 
-            {/*}
-            <Box
-                gridColumn="span 4"
-                border={`1px solid ${palette.neutral.medium}`}
-                borderRadius="5px"
-                p="1rem"
-            >
-                <Dropzone
-                    acceptedFiles=".jpg,.jpeg,.png"
-                    multiple={false}
-                    onDrop={(acceptedFiles) =>
-                      setFieldValue("picture", acceptedFiles[0])
-                    }
-                >
-                    {({ getRootProps, getInputProps }) => (
-                      <Box
-                        {...getRootProps()}
-                        border={`2px dashed ${palette.primary.main}`}
-                        p="1rem"
-                        sx={{ "&:hover": { cursor: "pointer" } }}
-                      >
-                        <input {...getInputProps()} />
-                        {!values.picture ? (
-                          <p>Add Picture Here</p>
-                        ) : (
-                          <FlexBetween>
-                            <Typography>{values.picture.name}</Typography>
-                            <EditOutlinedIcon />
-                          </FlexBetween>
-                        )}
-                      </Box>
-                    )}
-                </Dropzone>
-            </Box>
-                        */}
-          </Box>
+                <TextField
+                  label="Location"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.location}
+                  name="location"
+                  error={Boolean(touched.location) && Boolean(errors.location)}
+                  helperText={touched.location && errors.location}
+                  sx={{ gridColumn: "span 4" }}
+                />
 
-          {/* BUTTONS */}
-          <Box>
+                <TextField
+                  label="Bio"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.bio}
+                  name="bio"
+                  error={Boolean(touched.bio) && Boolean(errors.bio)}
+                  helperText={touched.bio && errors.bio}
+                  sx={{ gridColumn: "span 4" }}
+                />
+
+          <Box sx={{ gridColumn: "span 4", placeSelf: "center" }}>
             <Button
               fullWidth
               type="submit"
@@ -193,13 +166,14 @@ const Form = ({ userId }) => {
                              color: palette.login.buttonTextHover },
               }}
             >
-                Save
+              Edit profile
             </Button>
-          </Box>
-        </form>
-      )}
+            </Box>
+        </Box>
+      </Form>)}
     </Formik>
   );
 };
 
-export default Form;
+export default EditUserForm;
+

@@ -61,16 +61,31 @@ export const addRemoveFriend = async (req, res) => {
 };
 
 export const editUser = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { name, email, password } = req.body;
-    console.log("result");
-    // Find the user by id
-    const user = await User.findById(id);
 
-    // If user doesn't exist, return error message
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    try {
+      const {
+        firstName,
+        lastName,
+        location,
+        bio,
+      } = req.body;
+      const { id } = req.params;
+
+      console.log("ajung vreodata aici?");
+
+      const updatedProfile = await User.findByIdAndUpdate(
+        id,
+        {  firstName,
+          lastName,
+          location,
+          bio,
+        },
+        { new: true }
+      );
+      res.status(200).json(updatedProfile);
+    } catch (err) {
+      res.status(404).json({ message: err.message });
+
     }
 
     // Update user details
