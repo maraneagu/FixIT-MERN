@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Navbar from "scenes/navbar";
-import FriendListWidget from "scenes/widgets/FriendListWidget";
+import FriendListWidgetProfile from "scenes/widgets/FriendListWidgetProfile";
 import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import UserWidget from "scenes/widgets/UserWidget";
@@ -15,6 +15,7 @@ const ProfilePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const loggedInUserId = useSelector((state) => state.user._id);
   const isProfileUser = userId === loggedInUserId;
+
   const getUser = async () => {
     const response = await fetch(`http://localhost:3001/users/${userId}`, {
       method: "GET",
@@ -43,7 +44,7 @@ const ProfilePage = () => {
         <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
           <UserWidget userId={userId} picturePath={user.picturePath} />
           <Box m="2rem 0" />
-          <FriendListWidget userId={userId} />
+          <FriendListWidgetProfile userId={userId} />
         </Box>
 
         {isProfileUser ? (

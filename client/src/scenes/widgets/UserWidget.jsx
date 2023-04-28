@@ -20,9 +20,12 @@ import BuildIcon from "@mui/icons-material/Build";
 import {IconButton} from "@mui/material";
 import { useDispatch} from "react-redux";
 import { setFriends } from "state";
+import Friend from "components/Friend";
+
 
 const UserWidget = ({ userId, picturePath }) => {
   const [user, setUser] = useState(null);
+  const [userAct, setUserAct] = useState(null);
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,11 +37,10 @@ const UserWidget = ({ userId, picturePath }) => {
   const primaryDark = palette.primary.dark;
   var hasBio = false;
   const loggedInUserId = useSelector((state) => state.user._id);
-  const friendss = useSelector((state) => state.user.friends);
-  console.log(friendss);
+  
   const isProfileUser = userId === loggedInUserId;
-  const isFriend = friendss.find((friend) => friend._id === userId);
-  console.log(isFriend);
+  const fstate = useSelector((state) => state.user.friends);
+  const isFriend = fstate.find((friend) => friend._id === userId);
   const getUser = async () => {
     const response = await fetch(`http://localhost:3001/users/${userId}`, {
       method: "GET",
@@ -62,15 +64,20 @@ const UserWidget = ({ userId, picturePath }) => {
   
   useEffect(() => {
     getUser();
-   
+    
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
  
   if (!user) {
     return null;
   }
 
-  const { firstName, lastName, location, isClient, friends, bio } = user;
- 
+  const { firstName, lastName, location, isClient, friends,followers, bio } = user;
+  //const { firstNameact, lastNameact, locationact, isClientact, friendsact,followersact, bioact } = userAct;
+  //const friendss = useSelector((state) => state.user.followers);
+
+  //console.log(loggedInUserId);
+  //const isFriend = followers.some((friend) => friend._id === userId);
+  //console.log(isFriend);
   if (bio !== "") hasBio = true;
 
 
@@ -78,6 +85,9 @@ const UserWidget = ({ userId, picturePath }) => {
     return (
       <WidgetWrapper>
         {/* FIRST ROW */}
+        
+        {isProfileUser ? (
+        // FIRST ROW for profile user
         <FlexBetween>
           <FlexBetween
             gap="0.5rem"
@@ -106,8 +116,7 @@ const UserWidget = ({ userId, picturePath }) => {
               </Box>
             </FlexBetween>
           </FlexBetween>
-          {isProfileUser ? (
-            <EditIcon
+          <EditIcon
               onClick={() => navigate(`/edit/${userId}`)}
               sx={{
                 marginTop: "-33px",
@@ -117,21 +126,23 @@ const UserWidget = ({ userId, picturePath }) => {
                 },
               }}
             />
-          ) : (
-            <IconButton
-              onClick={() => patchFriend()}
-              sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
-            >
-              {isFriend ? (
-                <PersonRemoveOutlined sx={{ color: primaryDark }} />
-              ) : (
-                <PersonAddOutlined sx={{ color: primaryDark }} />
-              )}
-            </IconButton>
-          )}
+          
         </FlexBetween>
-
-        <Divider />
+        ):(
+          <Friend
+              key={userId}
+              friendId={userId}
+              name={`${firstName} ${lastName}`}
+              subtitle={isClient}
+              userPicturePath={picturePath}
+              onClick={() => navigate("/home")}
+          />
+        )}
+        {isProfileUser ?(<Divider />):
+              (<Divider sx={{
+                marginTop:"15px"
+              }}/>)}
+        
 
         {/* SECOND ROW */}
         <Box p="1rem 0">
@@ -205,6 +216,8 @@ const UserWidget = ({ userId, picturePath }) => {
     return (
       <WidgetWrapper>
         {/* FIRST ROW */}
+        {isProfileUser ? (
+        // FIRST ROW for profile user
         <FlexBetween>
           <FlexBetween
             gap="0.5rem"
@@ -233,33 +246,33 @@ const UserWidget = ({ userId, picturePath }) => {
               </Box>
             </FlexBetween>
           </FlexBetween>
-
-          {isProfileUser ? (
-  <EditIcon
-    onClick={() => navigate(`/edit/${userId}`)}
-    sx={{
-      marginTop: "-33px",
-      marginRight: "5px",
-      "&:hover": {
-        cursor: "pointer",
-      },
-    }}
-  />
-) : (
-  <IconButton
-    onClick={() => patchFriend()}
-    sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
-  >
-    {isFriend ? (
-      <PersonRemoveOutlined sx={{ color: primaryDark }} />
-    ) : (
-      <PersonAddOutlined sx={{ color: primaryDark }} />
-    )}
-  </IconButton>
-)}
+          <EditIcon
+              onClick={() => navigate(`/edit/${userId}`)}
+              sx={{
+                marginTop: "-33px",
+                marginRight: "5px",
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              }}
+            />
+          
         </FlexBetween>
+        ):(
+          <Friend
+              key={userId}
+              friendId={userId}
+              name={`${firstName} ${lastName}`}
+              subtitle={isClient}
+              userPicturePath={picturePath}
+              onClick={() => navigate("/home")}
+          />
+        )}
 
-        <Divider />
+        {isProfileUser ?(<Divider />):
+              (<Divider sx={{
+                marginTop:"15px"
+              }}/>)}
 
         {/* SECOND ROW */}
         <Box p="1rem 0">
