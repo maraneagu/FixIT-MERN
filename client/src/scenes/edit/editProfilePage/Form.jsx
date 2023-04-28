@@ -15,7 +15,7 @@ import Dropzone from "react-dropzone";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import FlexBetween from "components/FlexBetween";
 
-const EditUserForm = ({ userId, picturePath }) => {
+const EditUserForm = ({ userId }) => {
   const [user, setUser] = useState(null);
   const token = useSelector((state) => state.token);
   const { palette } = useTheme();
@@ -50,20 +50,23 @@ const EditUserForm = ({ userId, picturePath }) => {
     lastName: user?.lastName || '',
     location: user?.location || '',
     bio: user?.bio || '',
-    picturePath: picturePath,
+    picturePath: user?.picturePath || '',
   };
 
   console.log(initialValues.picturePath);
 
   const handleSubmit = async (values) => {
     try {
-      //picturePath = values.picturePath.name;
       const formData = new FormData();
       formData.append("firstName", values.firstName);
       formData.append("lastName", values.lastName);
       formData.append("location", values.location);
       formData.append("bio", values.bio);
-      formData.append("picturePath", values.picturePath);
+      //daca schimbam poza, 
+      if (values.picturePath.name) formData.append("picturePath", values.picturePath.name); 
+      // daca schimbam orice dar nu poza
+      else formData.append("picturePath", values.picturePath);
+
       const response = await fetch(`http://localhost:3001/users/${userId}/edit`, {
         method: "POST",
         headers: {
