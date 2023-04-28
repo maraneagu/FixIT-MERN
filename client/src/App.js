@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import HomePage from "scenes/homePage";
 import LoginPage from "scenes/loginPage";
 import ProfilePage from "scenes/profilePage";
+import CreatePostPage from "scenes/createPostPage";
 import EditProfilePage from "scenes/edit/editProfilePage";
 import TipsPage from "scenes/tipsPage";
 import { useMemo } from "react";
@@ -30,6 +31,10 @@ function App() {
             <Route
               path="/profile/:userId"
               element={isAuth ? <ProfilePage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/createpost/:userId"
+              element={isAuth ? <CreatePostPage /> : <Navigate to="/" />}
             />
             <Route
               path="/edit/:userId"
