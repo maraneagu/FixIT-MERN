@@ -115,8 +115,13 @@ const Navbar = () => {
               }}
               input={<InputBase />}
             >
-              <MenuItem
-                onClick={() => navigate(`/profile/${userId}`)}
+
+              <MenuItem 
+                onClick={() => {
+                  navigate(`/profile/${userId}`);
+                  navigate(0);
+                }} 
+
                 value={fullName}
               >
                 <Typography>{fullName}</Typography>
@@ -193,8 +198,13 @@ const Navbar = () => {
                 }}
                 input={<InputBase />}
               >
-                <MenuItem
-                  onClick={() => navigate(`/profile/${userId}`)}
+
+                <MenuItem 
+                  onClick={() => {
+                    navigate(`/profile/${userId}`);
+                    navigate(0);
+                  }} 
+
                   value={fullName}
                 >
                   <Typography>{fullName}</Typography>
