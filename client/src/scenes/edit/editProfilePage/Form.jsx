@@ -48,26 +48,23 @@ const EditUserForm = ({ userId }) => {
   }, [userId, token]);
 
   const initialValues = {
-
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
     location: user?.location || '',
     bio: user?.bio || '',
-
     picturePath: user?.picturePath || '',
-
   };
 
   console.log(initialValues.picturePath);
 
   const handleSubmit = async (values) => {
     try {
-
       const formData = new FormData();
       formData.append("firstName", values.firstName);
       formData.append("lastName", values.lastName);
       formData.append("location", values.location);
       formData.append("bio", values.bio);
+
       //daca schimbam poza, 
       if (values.picturePath.name) formData.append("picturePath", values.picturePath.name); 
       // daca schimbam orice dar nu poza
@@ -80,6 +77,7 @@ const EditUserForm = ({ userId }) => {
         },
         body: formData
       });
+
       if (response.ok) {
         const data = await response.json();
         setUser(data);
@@ -114,7 +112,6 @@ const EditUserForm = ({ userId }) => {
             gap="30px"
             gridTemplateColumns="repeat(4, minmax(0, 1fr))"
           >
-
                   <TextField
                   label="First Name"
                   onBlur={handleBlur}
@@ -195,6 +192,7 @@ const EditUserForm = ({ userId }) => {
                           </FlexBetween>
                         )}
                         <input {...getInputProps()} />
+                        
                       </Box>
                     )}
                   </Dropzone>

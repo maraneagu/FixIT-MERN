@@ -9,8 +9,6 @@ const CreatePostPage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const { _id } = useSelector((state) => state.user);
 
-  console.log("am ajuns in create post la index");
-
   return (
     <Box>
       <EditNavbar />
