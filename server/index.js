@@ -50,6 +50,8 @@ const upload = multer({ storage });
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
 app.post("/posts", verifyToken, upload.single("picture"), createPost);
+app.post("/users/:id/edit", verifyToken, upload.single("picturePath"), editUser);
+
 app.post("/tips", verifyToken, upload.single("picture"), createTip);
 //app.patch("/users/editUser", upload.single("picture"), editUser);
 
