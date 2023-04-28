@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import Post from "../models/Post.js";
 
 /* READ */
 export const getUser = async (req, res) => {
@@ -88,6 +89,17 @@ export const editUser = async (req, res) => {
       { firstName, lastName, location, bio, picturePath },
       { new: true }
     );
+
+    try {
+      await Post.updateMany(
+        { userId: id },
+        { $set: { firstName, lastName, userPicturePath: picturePath } }
+      );
+    } catch (err) {
+      console.error(err);
+      // handle the error appropriately
+    }
+    
 
     console.log("no crash");
     console.log(updatedProfile);
