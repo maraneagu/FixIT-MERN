@@ -9,8 +9,9 @@ import {
 } from "@mui/material";
 import { Formik, Field, Form } from "formik";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import {setUser as setUserRedux} from "state";
 import Dropzone from "react-dropzone";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import FlexBetween from "components/FlexBetween";
@@ -20,6 +21,7 @@ const EditUserForm = ({ userId }) => {
   const token = useSelector((state) => state.token);
   const { palette } = useTheme();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getUser = async () => {
@@ -33,6 +35,8 @@ const EditUserForm = ({ userId }) => {
   
         if (response.ok) {
           const data = await response.json();
+
+         
           setUser(data);
         } else {
           throw new Error('Error fetching user data');
@@ -78,6 +82,7 @@ const EditUserForm = ({ userId }) => {
       if (response.ok) {
         const data = await response.json();
         setUser(data);
+        dispatch(setUserRedux({ user: data }));
         navigate(`/profile/${userId}`);
       } else {
         throw new Error('Error updating user');
