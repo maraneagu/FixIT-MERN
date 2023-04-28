@@ -19,6 +19,5 @@ router.patch("/:id/:friendId", verifyToken, addRemoveFriend);
 
 //router.post("/:id/edit", verifyToken, editUser);
 
-
 export default router;
 

@@ -13,8 +13,6 @@ const CreatePostForm = () => {
   };
 
   const handleSubmit = async (values) => {
-    console.log("user : ", user);
-    console.log("user : ", userId);
     try {
       const response = await fetch(
         `http://localhost:3001/posts/${userId}/create`,
@@ -30,7 +28,7 @@ const CreatePostForm = () => {
           }),
         }
       );
-      console.log("response :", response);
+
       if (response.ok) {
         const data = await response.json();
         console.log(data);
@@ -71,12 +69,13 @@ const CreatePostForm = () => {
               helperText={touched.description && errors.description}
               sx={{ gridColumn: "span 4" }}
             />
+
             <Box sx={{ gridColumn: "span 4", placeSelf: "center" }}>
               <Button
                 fullWidth
                 type="submit"
                 sx={{
-                  m: "2rem 0",
+                  m: "0.5rem 0",
                   p: "1rem",
                   backgroundColor: palette.login.button,
                   color: palette.background.alt,
@@ -86,7 +85,7 @@ const CreatePostForm = () => {
                   },
                 }}
               >
-                Create post
+                Create Post
               </Button>
             </Box>
           </Box>

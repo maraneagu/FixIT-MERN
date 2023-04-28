@@ -41,7 +41,6 @@ const Navbar = () => {
 
   const fullName = `${user.firstName} ${user.lastName}`;
   const userId = user._id;
-  console.log(userId);
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -121,7 +120,6 @@ const Navbar = () => {
                   navigate(`/profile/${userId}`);
                   navigate(0);
                 }} 
-
                 value={fullName}
               >
                 <Typography>{fullName}</Typography>
