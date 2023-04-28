@@ -16,6 +16,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import FlexBetween from "components/FlexBetween";
 
 const EditUserForm = ({ userId, picturePath }) => {
+
   const [user, setUser] = useState(null);
   const token = useSelector((state) => state.token);
   const { palette } = useTheme();
@@ -27,34 +28,37 @@ const EditUserForm = ({ userId, picturePath }) => {
         const response = await fetch(`http://localhost:3001/users/${userId}`, {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
-  
+
         if (response.ok) {
           const data = await response.json();
           setUser(data);
         } else {
-          throw new Error('Error fetching user data');
+          throw new Error("Error fetching user data");
         }
       } catch (error) {
-        console.log('Error fetching user:', error);
+        console.log("Error fetching user:", error);
       }
     };
-  
+
     getUser();
   }, [userId, token]);
-  
+
   const initialValues = {
+
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
     location: user?.location || '',
     bio: user?.bio || '',
     picturePath: picturePath,
+
   };
 
   const handleSubmit = async (values) => {
     try {
+
       const formData = new FormData();
       for (let value in values) {
         formData.append(value, values[value]);
@@ -68,17 +72,16 @@ const EditUserForm = ({ userId, picturePath }) => {
         },
         body: formData,
       });
-
       if (response.ok) {
         const data = await response.json();
         setUser(data);
         navigate(`/profile/${userId}`);
       } else {
-        throw new Error('Error updating user');
+        throw new Error("Error updating user");
       }
     } catch (error) {
       alert(error.message);
-    } 
+    }
   };
 
   if (!user) {
@@ -87,7 +90,7 @@ const EditUserForm = ({ userId, picturePath }) => {
 
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-       {({
+      {({
         values,
         errors,
         touched,
@@ -97,12 +100,13 @@ const EditUserForm = ({ userId, picturePath }) => {
         setFieldValue,
         resetForm,
       }) => (
-      <Form>
-        <Box
+        <Form>
+          <Box
             display="grid"
             gap="30px"
             gridTemplateColumns="repeat(4, minmax(0, 1fr))"
           >
+
                   <TextField
                   label="First Name"
                   onBlur={handleBlur}
@@ -202,12 +206,13 @@ const EditUserForm = ({ userId, picturePath }) => {
             >
               Edit profile
             </Button>
+
             </Box>
-        </Box>
-      </Form>)}
+          </Box>
+        </Form>
+      )}
     </Formik>
   );
 };
 
 export default EditUserForm;
-
