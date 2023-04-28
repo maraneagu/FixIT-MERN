@@ -9,8 +9,10 @@ import FriendListWidget from "scenes/widgets/FriendListWidget";
 const TipsPage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { _id, picturePath } = useSelector((state) => state.user);
-
+  const { isClient } = useSelector((state) => state.user);
+  
   return (
+    
     <Box>
       <Navbar />
       <Box
@@ -28,7 +30,9 @@ const TipsPage = () => {
           flexBasis={isNonMobileScreens ? "42%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
+          {!isClient && (
           <MyTipWidget picturePath={picturePath} />
+          )}
           <TipsWidget userId={_id} />
         </Box>
 

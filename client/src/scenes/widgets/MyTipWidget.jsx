@@ -26,11 +26,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setTips } from "state";
 
 // import { ToastContainer, toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
+// import 'react-toastify/dist/ReactToastify.css';
 import React from 'react';
 import Alert from "@mui/material";
 
 const MyTipWidget = ({ picturePath }) => {
+
   const dispatch = useDispatch();
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
@@ -41,13 +42,8 @@ const MyTipWidget = ({ picturePath }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
-  const { isClient } = useSelector((state) => state.user);
-  const { firstName } = useSelector((state) => state.user); 
-  const { lastName } = useSelector((state) => state.user); 
 
-  // const notify = () => {
-  //   toast("warning");
-  // };
+  // const notify = () => toast("Wow so easy !");
 
   const handleTip = async () => {
     const formData = new FormData();
@@ -57,25 +53,20 @@ const MyTipWidget = ({ picturePath }) => {
       formData.append("picture", image);
       formData.append("picturePath", image.name);
     }
-
-    if (!isClient) {
-      const response = await fetch(`http://localhost:3001/tips`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
-      const tips = await response.json();
-      dispatch(setTips({ tips }));
-      alert("Tip added successfully!");
-    } else {
-      alert("User " + firstName + lastName + " cannot add a tip, because he is not a master!");
-    }
+    const response = await fetch(`http://localhost:3001/tips`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    });
+    const tips = await response.json();
+    dispatch(setTips({ tips }));
+    alert("Tip added successfully!");
     setImage(null);
     setTip("");
   };
 
   return (
-    <WidgetWrapper>
+    <WidgetWrapper m = "0 0 2rem 0">
       <FlexBetween gap="1.5rem">
         <UserImage image={picturePath} />
         <InputBase
