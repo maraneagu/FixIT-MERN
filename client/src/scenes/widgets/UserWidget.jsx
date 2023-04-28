@@ -25,22 +25,21 @@ import Friend from "components/Friend";
 
 const UserWidget = ({ userId, picturePath }) => {
   const [user, setUser] = useState(null);
-  const [userAct, setUserAct] = useState(null);
+  
   const { palette } = useTheme();
-  const dispatch = useDispatch();
+  
   const navigate = useNavigate();
   const token = useSelector((state) => state.token);
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
-  const primaryLight = palette.primary.light;
-  const primaryDark = palette.primary.dark;
+
   var hasBio = false;
   const loggedInUserId = useSelector((state) => state.user._id);
   
   const isProfileUser = userId === loggedInUserId;
-  const fstate = useSelector((state) => state.user.friends);
-  const isFriend = fstate.find((friend) => friend._id === userId);
+  
+  
   const getUser = async () => {
     const response = await fetch(`http://localhost:3001/users/${userId}`, {
       method: "GET",
@@ -72,12 +71,7 @@ const UserWidget = ({ userId, picturePath }) => {
   }
 
   const { firstName, lastName, location, isClient, friends,followers, bio } = user;
-  //const { firstNameact, lastNameact, locationact, isClientact, friendsact,followersact, bioact } = userAct;
-  //const friendss = useSelector((state) => state.user.followers);
 
-  //console.log(loggedInUserId);
-  //const isFriend = followers.some((friend) => friend._id === userId);
-  //console.log(isFriend);
   if (bio !== "") hasBio = true;
 
 
