@@ -11,7 +11,7 @@ import React from 'react';
 const EditProfilePage = () => {
   const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const { _id, picturePath } = useSelector((state) => state.user);
+  const { _id } = useSelector((state) => state.user);
 
   return (
     <Box>
@@ -23,7 +23,7 @@ const EditProfilePage = () => {
           borderRadius="1.5rem"
           backgroundColor={theme.palette.login.box}
         >
-        <Form userId={_id} picturePath={picturePath}/>
+        <Form userId={_id}/>
       </Box>
     </Box>
   );

@@ -15,7 +15,8 @@ import Dropzone from "react-dropzone";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import FlexBetween from "components/FlexBetween";
 
-const EditUserForm = ({ userId, picturePath }) => {
+
+const EditUserForm = ({ userId }) => {
 
   const [user, setUser] = useState(null);
   const token = useSelector((state) => state.token);
@@ -52,25 +53,32 @@ const EditUserForm = ({ userId, picturePath }) => {
     lastName: user?.lastName || '',
     location: user?.location || '',
     bio: user?.bio || '',
-    picturePath: picturePath,
+
+    picturePath: user?.picturePath || '',
 
   };
+
+  console.log(initialValues.picturePath);
 
   const handleSubmit = async (values) => {
     try {
 
       const formData = new FormData();
-      for (let value in values) {
-        formData.append(value, values[value]);
-      }
-      formData.append("picturePath", values.picturePath.name);
+      formData.append("firstName", values.firstName);
+      formData.append("lastName", values.lastName);
+      formData.append("location", values.location);
+      formData.append("bio", values.bio);
+      //daca schimbam poza, 
+      if (values.picturePath.name) formData.append("picturePath", values.picturePath.name); 
+      // daca schimbam orice dar nu poza
+      else formData.append("picturePath", values.picturePath);
+
       const response = await fetch(`http://localhost:3001/users/${userId}/edit`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          Authorization: `Bearer ${token}`
         },
-        body: formData,
+        body: formData
       });
       if (response.ok) {
         const data = await response.json();
@@ -159,6 +167,7 @@ const EditUserForm = ({ userId, picturePath }) => {
                   border={`1px solid ${palette.neutral.medium}`}
                   borderRadius="5px"
                   p="1rem"
+                  name="picturePath"
                 >
                   <Dropzone
                     acceptedFiles=".jpg,.jpeg,.png"

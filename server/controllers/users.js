@@ -80,17 +80,16 @@ export const editUser = async (req, res) => {
     const { firstName, lastName, location, bio, picturePath } = req.body;
     const { id } = req.params;
 
-    console.log(req.body);
-
     const updatedProfile = await User.findByIdAndUpdate(
       id,
       { firstName, lastName, location, bio, picturePath },
       { new: true }
     );
+
     console.log("no crash");
     console.log(updatedProfile);
     res.status(200).json(updatedProfile);
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(409).json({ message: err.message });
   }
 };
