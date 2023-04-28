@@ -23,14 +23,19 @@ import UserImage from "components/UserImage";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "state";
+import { setTips } from "state";
+
+// import { ToastContainer, toast } from "react-toastify";
+// import 'react-toastify/dist/ReactToastify.css';
+import React from 'react';
 import Alert from "@mui/material";
 
-const MyPostWidget = ({ picturePath }) => {
+const MyTipWidget = ({ picturePath }) => {
+
   const dispatch = useDispatch();
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
-  const [post, setPost] = useState("");
+  const [tip, setTip] = useState("");
   const { palette } = useTheme();
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
@@ -38,35 +43,36 @@ const MyPostWidget = ({ picturePath }) => {
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
 
-  const handlePost = async () => {
+  // const notify = () => toast("Wow so easy !");
+
+  const handleTip = async () => {
     const formData = new FormData();
     formData.append("userId", _id);
-    formData.append("description", post);
+    formData.append("description", tip);
     if (image) {
       formData.append("picture", image);
       formData.append("picturePath", image.name);
     }
-
-    const response = await fetch(`http://localhost:3001/posts`, {
+    const response = await fetch(`http://localhost:3001/tips`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: formData,
     });
-    const posts = await response.json();
-    dispatch(setPosts({ posts }));
-    alert("Post added successfully!");
+    const tips = await response.json();
+    dispatch(setTips({ tips }));
+    alert("Tip added successfully!");
     setImage(null);
-    setPost("");
+    setTip("");
   };
 
   return (
-    <WidgetWrapper>
+    <WidgetWrapper m = "0 0 2rem 0">
       <FlexBetween gap="1.5rem">
         <UserImage image={picturePath} />
         <InputBase
-          placeholder="What's on your mind..."
-          onChange={(e) => setPost(e.target.value)}
-          value={post}
+          placeholder="Add a tip..."
+          onChange={(e) => setTip(e.target.value)}
+          value={tip}
           sx={{
             width: "100%",
             backgroundColor: palette.neutral.light,
@@ -149,8 +155,11 @@ const MyPostWidget = ({ picturePath }) => {
         )}
 
         <Button
-          disabled={!post}
-          onClick={handlePost}
+          disabled={!tip}
+          onClick = { () => {
+            handleTip();
+            // notify();
+          }}
           sx={{
             color: palette.background.alt,
             backgroundColor: palette.primary.main,
@@ -164,4 +173,4 @@ const MyPostWidget = ({ picturePath }) => {
   );
 };
 
-export default MyPostWidget;
+export default MyTipWidget;
