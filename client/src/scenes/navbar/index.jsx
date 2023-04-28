@@ -41,7 +41,6 @@ const Navbar = () => {
 
   const fullName = `${user.firstName} ${user.lastName}`;
   const userId = user._id;
-  console.log(userId);
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -85,7 +84,16 @@ const Navbar = () => {
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
             )}
           </IconButton>
-          <Message sx={{ fontSize: "25px" }} />
+          <Message
+            onClick={() => navigate(`/createpost/${userId}`)}
+            sx={{
+              fontSize: "25px",
+              "&:hover": {
+                color: primaryLight,
+                cursor: "pointer",
+              },
+            }}
+          />
           <Notifications sx={{ fontSize: "25px" }} />
           <Help sx={{ fontSize: "25px" }} />
           <FormControl variant="standard" value={fullName}>
@@ -106,7 +114,14 @@ const Navbar = () => {
               }}
               input={<InputBase />}
             >
-              <MenuItem onClick={() => navigate(`/profile/${userId}`)} value={fullName}>
+
+              <MenuItem 
+                onClick={() => {
+                  navigate(`/profile/${userId}`);
+                  navigate(0);
+                }} 
+                value={fullName}
+              >
                 <Typography>{fullName}</Typography>
               </MenuItem>
               <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
@@ -181,7 +196,15 @@ const Navbar = () => {
                 }}
                 input={<InputBase />}
               >
-                <MenuItem onClick={() => navigate(`/profile/${userId}`)} value={fullName}>
+
+                <MenuItem 
+                  onClick={() => {
+                    navigate(`/profile/${userId}`);
+                    navigate(0);
+                  }} 
+
+                  value={fullName}
+                >
                   <Typography>{fullName}</Typography>
                 </MenuItem>
                 <MenuItem onClick={() => dispatch(setLogout())}>

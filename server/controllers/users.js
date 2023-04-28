@@ -54,7 +54,6 @@ export const addRemoveFriend = async (req, res) => {
     }
 
     await user.save();
-    //await friend.save();
     const friends = await Promise.all(
       user.friends.map((id) => User.findById(id))
     );
@@ -81,18 +80,19 @@ export const addRemoveFriend = async (req, res) => {
 
 export const editUser = async (req, res) => {
   try {
-    const { firstName, lastName, location, bio } = req.body;
+    const { firstName, lastName, location, bio, picturePath } = req.body;
     const { id } = req.params;
-
-    console.log("ajung vreodata aici?");
 
     const updatedProfile = await User.findByIdAndUpdate(
       id,
-      { firstName, lastName, location, bio },
+      { firstName, lastName, location, bio, picturePath },
       { new: true }
     );
+
+    console.log("no crash");
+    console.log(updatedProfile);
     res.status(200).json(updatedProfile);
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(409).json({ message: err.message });
   }
 };

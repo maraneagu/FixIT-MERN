@@ -40,6 +40,7 @@ const Navbar = () => {
   const alt = theme.palette.background.alt;
 
   const fullName = `${user.firstName} ${user.lastName}`;
+  const userId = user._id;
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -91,7 +92,13 @@ const Navbar = () => {
               }}
               input={<InputBase />}
             >
-              <MenuItem value={fullName}>
+              <MenuItem 
+                onClick={() => {
+                  navigate(`/profile/${userId}`);
+                  navigate(0);
+                }} 
+                value={fullName}
+              >
                 <Typography>{fullName}</Typography>
               </MenuItem>
               <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
@@ -166,7 +173,13 @@ const Navbar = () => {
                 }}
                 input={<InputBase />}
               >
-                <MenuItem value={fullName}>
+                <MenuItem 
+                onClick={() => {
+                  navigate(`/profile/${userId}`);
+                  navigate(0);
+                }} 
+                value={fullName}
+              >
                   <Typography>{fullName}</Typography>
                 </MenuItem>
                 <MenuItem onClick={() => dispatch(setLogout())}>

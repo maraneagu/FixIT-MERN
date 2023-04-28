@@ -13,8 +13,6 @@ const EditProfilePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const { _id } = useSelector((state) => state.user);
 
-  console.log("am ajuns in edit page la index");
-
   return (
     <Box>
       <EditNavbar />
@@ -25,7 +23,7 @@ const EditProfilePage = () => {
           borderRadius="1.5rem"
           backgroundColor={theme.palette.login.box}
         >
-        <Form userId={_id} />
+        <Form userId={_id}/>
       </Box>
     </Box>
   );

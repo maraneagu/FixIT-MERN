@@ -39,7 +39,7 @@ const FriendListWidget = ({ userId }) => {
       >
         Following
       </Typography>
-      <Box display="flex" flexDirection="column" gap="1.5rem">
+      <Box display="flex" flexDirection="column" gap="1.5rem" mb="0.5rem">
       {friends.map((friend) => (
           isProfileUser ? (
             <Friend
