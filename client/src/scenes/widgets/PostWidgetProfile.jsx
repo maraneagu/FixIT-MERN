@@ -4,13 +4,21 @@ import {
   FavoriteOutlined,
   ShareOutlined,
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Divider,
+  IconButton,
+  Typography,
+  useTheme,
+  Button,
+} from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import FriendOnPost from "components/FriendOnPost";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const PostWidgetProfile = ({
   postId,
@@ -29,7 +37,7 @@ const PostWidgetProfile = ({
   const loggedInUserId = useSelector((state) => state.user._id);
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
-
+  const navigate = useNavigate();
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
@@ -86,6 +94,16 @@ const PostWidgetProfile = ({
             </IconButton>
             <Typography>{comments.length}</Typography>
           </FlexBetween>
+        </FlexBetween>
+        {/* Show the button only on the home page */}
+
+        <FlexBetween>
+          <Button
+            variant="contained"
+            onClick={() => navigate(`/show/${postId}`)}
+          >
+            See the offer
+          </Button>
         </FlexBetween>
 
         <IconButton>
