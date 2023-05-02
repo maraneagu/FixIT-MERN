@@ -45,7 +45,9 @@ const FriendListWidget = ({ userId }) => {
       </Typography>
       <Box display="flex" flexDirection="column" gap="1.5rem">
 
+
       {friends.slice(0, showMore ? friends.length : 3).map((friend) => (
+
           isProfileUser ? (
             <Friend
               key={friend._id}
@@ -63,7 +65,9 @@ const FriendListWidget = ({ userId }) => {
               userPicturePath={friend.picturePath}
             />
           )
+
         ))}
+
       </Box>
 
       {friends.length > 3 && ( // only show button if there are more than 3 friends
