@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import HomePage from "scenes/homePage";
 import LoginPage from "scenes/loginPage";
 import ProfilePage from "scenes/profilePage";
+import ShowPost from "scenes/showPost";
 import CreatePostPage from "scenes/createPostPage";
 import EditProfilePage from "scenes/edit/editProfilePage";
 import ShowMoreFriends from "scenes/showMoreFriends";
@@ -45,6 +46,10 @@ function App() {
             <Route
               path="/showMoreFriends/:userId"
               element={isAuth ? <ShowMoreFriends /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/show/:postId"
+              element={isAuth ? <ShowPost /> : <Navigate to="/" />}
             />
             <Route
               path="/tips"

@@ -18,7 +18,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const PostWidget = ({
   postId,
@@ -38,10 +38,11 @@ const PostWidget = ({
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
   const navigate = useNavigate();
-
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
+  const location2 = useLocation();
+  const isHomePage = location2.pathname === "/home";
 
   const patchLike = async () => {
     const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
@@ -99,14 +100,17 @@ const PostWidget = ({
             <Typography>{comments.length}</Typography>
           </FlexBetween>
         </FlexBetween>
-        <FlexBetween>
-          <Button
-            variant="contained"
-            onClick={() => navigate(`/show/${postId}`)}
-          >
-            See the offer
-          </Button>
-        </FlexBetween>
+        {/* Show the button only on the home page */}
+        {isHomePage && (
+          <FlexBetween>
+            <Button
+              variant="contained"
+              onClick={() => navigate(`/show/${postId}`)}
+            >
+              See the offer
+            </Button>
+          </FlexBetween>
+        )}
         <IconButton>
           <ShareOutlined />
         </IconButton>
