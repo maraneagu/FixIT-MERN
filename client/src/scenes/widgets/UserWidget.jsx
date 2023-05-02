@@ -3,7 +3,9 @@ import {
   EditOutlined,
   LocationOnOutlined,
   WorkOutlineOutlined,
+  
 } from "@mui/icons-material";
+import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { Box, Typography, Divider, useTheme } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
@@ -15,21 +17,26 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import PsychologyAltIcon from "@mui/icons-material/PsychologyAlt";
 import EditIcon from "@mui/icons-material/Edit";
 import BuildIcon from "@mui/icons-material/Build";
+import {IconButton} from "@mui/material";
+import { useDispatch} from "react-redux";
+import { setFriends } from "state";
+import Friend from "components/Friend";
 
 const UserWidget = ({ userId, picturePath }) => {
   const [user, setUser] = useState(null);
+  
   const { palette } = useTheme();
+  
   const navigate = useNavigate();
   const token = useSelector((state) => state.token);
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
+
   var hasBio = false;
   const loggedInUserId = useSelector((state) => state.user._id);
+  
   const isProfileUser = userId === loggedInUserId;
-
-  console.log("aici picture");
-  console.log(picturePath);
 
   const getUser = async () => {
     const response = await fetch(`http://localhost:3001/users/${userId}`, {
@@ -39,25 +46,26 @@ const UserWidget = ({ userId, picturePath }) => {
     const data = await response.json();
     setUser(data);
   };
-
+   
   useEffect(() => {
     getUser();
+    
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
+ 
   if (!user) {
     return null;
   }
 
-  const { firstName, lastName, location, isClient, friends, bio } = user;
-
+  const { firstName, lastName, location, isClient, friends,followers, bio } = user;
   if (bio !== "") hasBio = true;
-
-  console.log(hasBio);
 
   if (isClient === true) {
     return (
       <WidgetWrapper>
         {/* FIRST ROW */}
+        
+        {isProfileUser ? (
+        // FIRST ROW for profile user
         <FlexBetween>
           <FlexBetween
             gap="0.5rem"
@@ -65,7 +73,7 @@ const UserWidget = ({ userId, picturePath }) => {
             onClick={() => navigate(`/profile/${userId}`)}
           >
             <FlexBetween gap="1rem">
-              <UserImage image={picturePath} />
+              <UserImage image={user.picturePath} />
 
               <Box>
                 <Typography
@@ -86,8 +94,7 @@ const UserWidget = ({ userId, picturePath }) => {
               </Box>
             </FlexBetween>
           </FlexBetween>
-          {isProfileUser && (
-            <EditIcon
+          <EditIcon
               onClick={() => navigate(`/edit/${userId}`)}
               sx={{
                 marginTop: "-33px",
@@ -97,10 +104,23 @@ const UserWidget = ({ userId, picturePath }) => {
                 },
               }}
             />
-          )}
+          
         </FlexBetween>
-
-        <Divider />
+        ):(
+          <Friend
+              key={userId}
+              friendId={userId}
+              name={`${firstName} ${lastName}`}
+              subtitle={isClient}
+              userPicturePath={picturePath}
+              onClick={() => navigate("/home")}
+          />
+        )}
+        {isProfileUser ?(<Divider />):
+              (<Divider sx={{
+                marginTop:"15px"
+              }}/>)}
+        
 
         {/* SECOND ROW */}
         <Box p="1rem 0">
@@ -139,6 +159,8 @@ const UserWidget = ({ userId, picturePath }) => {
     return (
       <WidgetWrapper>
         {/* FIRST ROW */}
+        {isProfileUser ? (
+        // FIRST ROW for profile user
         <FlexBetween>
           <FlexBetween
             gap="0.5rem"
@@ -167,20 +189,33 @@ const UserWidget = ({ userId, picturePath }) => {
               </Box>
             </FlexBetween>
           </FlexBetween>
-
           <EditIcon
-            onClick={() => navigate(`/edit/${userId}`)}
-            sx={{
-              marginTop: "-33px",
-              marginRight: "5px",
-              "&:hover": {
-                cursor: "pointer",
-              },
-            }}
-          />
+              onClick={() => navigate(`/edit/${userId}`)}
+              sx={{
+                marginTop: "-33px",
+                marginRight: "5px",
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              }}
+            />
+          
         </FlexBetween>
+        ):(
+          <Friend
+              key={userId}
+              friendId={userId}
+              name={`${firstName} ${lastName}`}
+              subtitle={isClient}
+              userPicturePath={picturePath}
+              onClick={() => navigate("/home")}
+          />
+        )}
 
-        <Divider />
+        {isProfileUser ?(<Divider />):
+              (<Divider sx={{
+                marginTop:"15px"
+              }}/>)}
 
         {/* SECOND ROW */}
         <Box p="1rem 0">

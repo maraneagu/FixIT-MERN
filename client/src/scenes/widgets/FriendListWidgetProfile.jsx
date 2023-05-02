@@ -2,17 +2,17 @@ import { Box, Button, Typography, useTheme } from "@mui/material";
 import Friend from "components/Friend";
 import FriendOnPost from "components/FriendOnPost";
 import WidgetWrapper from "components/WidgetWrapper";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setFriends } from "state";
 import { useNavigate } from "react-router-dom";
+//import { setFriends } from "state";
+import { useState } from "react";
 
 const FriendListWidget = ({ userId }) => {
-  const dispatch = useDispatch();
+  const [friends, setFriends] = useState([]);
   const { palette } = useTheme();
-  const token = useSelector((state) => state.token);
   const navigate = useNavigate();
-  const friends = useSelector((state) => state.user.friends);
+  const token = useSelector((state) => state.token);
   const loggedInUserId = useSelector((state) => state.user._id);
   const isProfileUser = userId === loggedInUserId;
   const [showMore, setShowMore] = useState(false);
@@ -26,12 +26,12 @@ const FriendListWidget = ({ userId }) => {
       }
     );
     const data = await response.json();
-    dispatch(setFriends({ friends: data }));
+    setFriends(data);
   };
 
   useEffect(() => {
     getFriends();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [userId]); // call getFriends whenever the userId prop changes
 
   return (
     <WidgetWrapper>
@@ -43,9 +43,11 @@ const FriendListWidget = ({ userId }) => {
       >
         Following
       </Typography>
-      <Box display="flex" flexDirection="column" gap="1.5rem" mb="0.5rem">
+      <Box display="flex" flexDirection="column" gap="1.5rem">
 
-      {friends.slice(0, showMore ? friends.length : 3).map((friend)  => (
+
+      {friends.slice(0, showMore ? friends.length : 3).map((friend) => (
+
           isProfileUser ? (
             <Friend
               key={friend._id}
@@ -63,7 +65,9 @@ const FriendListWidget = ({ userId }) => {
               userPicturePath={friend.picturePath}
             />
           )
+
         ))}
+
       </Box>
 
       {friends.length > 3 && ( // only show button if there are more than 3 friends

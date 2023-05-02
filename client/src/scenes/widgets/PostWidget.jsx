@@ -4,13 +4,21 @@ import {
   FavoriteOutlined,
   ShareOutlined,
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Divider,
+  IconButton,
+  Typography,
+  useTheme,
+  Button,
+} from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
+import { useNavigate } from "react-router-dom";
 
 const PostWidget = ({
   postId,
@@ -29,6 +37,7 @@ const PostWidget = ({
   const loggedInUserId = useSelector((state) => state.user._id);
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
+  const navigate = useNavigate();
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
@@ -48,14 +57,14 @@ const PostWidget = ({
   };
 
   return (
-    <WidgetWrapper m="2rem 0">
+    <WidgetWrapper m="2rem 0" marginLeft="15px" marginRight="15px">
       <Friend
         friendId={postUserId}
         name={name}
         subtitle={location}
         userPicturePath={userPicturePath}
       />
-      
+
       <Typography color={main} sx={{ mt: "1rem" }}>
         {description}
       </Typography>
@@ -90,12 +99,18 @@ const PostWidget = ({
             <Typography>{comments.length}</Typography>
           </FlexBetween>
         </FlexBetween>
-
+        <FlexBetween>
+          <Button
+            variant="contained"
+            onClick={() => navigate(`/show/${postId}`)}
+          >
+            See the offer
+          </Button>
+        </FlexBetween>
         <IconButton>
           <ShareOutlined />
         </IconButton>
       </FlexBetween>
-
       {isComments && (
         <Box mt="0.5rem">
           {comments.map((comment, i) => (
