@@ -22,7 +22,6 @@ import { useDispatch} from "react-redux";
 import { setFriends } from "state";
 import Friend from "components/Friend";
 
-
 const UserWidget = ({ userId, picturePath }) => {
   const [user, setUser] = useState(null);
   
@@ -47,19 +46,7 @@ const UserWidget = ({ userId, picturePath }) => {
     const data = await response.json();
     setUser(data);
   };
-  const patchFriend = async () => {
-    const response = await fetch(
-      `http://localhost:3001/users/${loggedInUserId}/${userId}`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );}
    
-  
   useEffect(() => {
     getUser();
     
@@ -70,9 +57,7 @@ const UserWidget = ({ userId, picturePath }) => {
   }
 
   const { firstName, lastName, location, isClient, friends,followers, bio } = user;
-
   if (bio !== "") hasBio = true;
-
 
   if (isClient === true) {
     return (

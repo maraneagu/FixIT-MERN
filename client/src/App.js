@@ -4,6 +4,7 @@ import LoginPage from "scenes/loginPage";
 import ProfilePage from "scenes/profilePage";
 import CreatePostPage from "scenes/createPostPage";
 import EditProfilePage from "scenes/edit/editProfilePage";
+import ShowMoreFriends from "scenes/showMoreFriends";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -37,6 +38,10 @@ function App() {
             <Route
               path="/edit/:userId"
               element={isAuth ? <EditProfilePage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/showMoreFriends/:userId"
+              element={isAuth ? <ShowMoreFriends /> : <Navigate to="/" />}
             />
           </Routes>
         </ThemeProvider>
