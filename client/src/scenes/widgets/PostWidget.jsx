@@ -48,7 +48,11 @@ import {
     };
   
     return (
-      <WidgetWrapper m="2rem 0">
+      <WidgetWrapper 
+        m="2rem 0"
+        marginLeft="15px"
+        marginRight="15px"
+      >
         <Friend
           friendId={postUserId}
           name={name}

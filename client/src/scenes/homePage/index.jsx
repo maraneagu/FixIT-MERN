@@ -5,6 +5,7 @@ import UserWidget from "scenes/widgets/UserWidget";
 import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
+import Categories from "scenes/widgets/Categories";
 
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
@@ -28,6 +29,7 @@ const HomePage = () => {
           flexBasis={isNonMobileScreens ? "42%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
+          <Categories />
           <PostsWidget userId={_id} />
         </Box>
 
