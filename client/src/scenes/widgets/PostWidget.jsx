@@ -111,7 +111,6 @@ const PostWidget = ({
           <ShareOutlined />
         </IconButton>
       </FlexBetween>
-
       {isComments && (
         <Box mt="0.5rem">
           {comments.map((comment, i) => (

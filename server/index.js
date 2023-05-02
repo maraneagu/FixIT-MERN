@@ -11,8 +11,10 @@ import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
+import tipRoutes from "./routes/tips.js";
 import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js";
+import { createTip } from "./controllers/tips.js";
 import { verifyToken } from "./middleware/auth.js";
 import { editUser } from "./controllers/users.js";
 
@@ -57,10 +59,14 @@ app.post(
   createPost
 );
 
+app.post("/tips", verifyToken, upload.single("picture"), createTip);
+//app.patch("/users/editUser", upload.single("picture"), editUser);
+
 /* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
+app.use("/tips", tipRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
