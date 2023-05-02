@@ -24,7 +24,7 @@ const FriendListWidget = ({ userId }) => {
       }
     );
     const data = await response.json();
-    setFriends(data );
+    setFriends(data);
   };
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const FriendListWidget = ({ userId }) => {
         Following
       </Typography>
       <Box display="flex" flexDirection="column" gap="1.5rem">
-      {friends.map((friend) => (
+        {friends.map((friend) =>
           isProfileUser ? (
             <Friend
               key={friend._id}
@@ -60,8 +60,7 @@ const FriendListWidget = ({ userId }) => {
               userPicturePath={friend.picturePath}
             />
           )
-        ))}
-        
+        )}
       </Box>
     </WidgetWrapper>
   );
