@@ -3,6 +3,7 @@ import {
   FavoriteBorderOutlined,
   FavoriteOutlined,
   ShareOutlined,
+  DeleteOutlined,
 } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import ClassIcon from '@mui/icons-material/Class';
@@ -23,6 +24,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
+import { setPosts } from "state";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const PostWidget = ({
@@ -68,7 +70,22 @@ const PostWidget = ({
     const updatedPost = await response.json();
     dispatch(setPost({ post: updatedPost }));
   };
-
+  const deletePost = async () => {
+    console.log("postid :", postId)
+    const response = await fetch(`http://localhost:3001/posts/${postId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        
+      },
+      body: JSON.stringify({ userId: loggedInUserId }),
+    });
+    if (response.ok) {
+      const restPosts = await response.json();
+      dispatch(setPosts({ posts: restPosts}));
+    }
+  };
   return (
     <WidgetWrapper 
       m="2rem 0"
@@ -131,7 +148,7 @@ const PostWidget = ({
             <Typography>{comments.length}</Typography>
           </FlexBetween>
         </FlexBetween>
-
+      <Box>
         {isProfileUser && (
           <IconButton
             onClick={() => navigate(`/editpost/${postId}`)}
@@ -144,8 +161,14 @@ const PostWidget = ({
             <EditIcon/>
           </IconButton>
         )}
-      </FlexBetween>
+        {isProfileUser && (
 
+          <IconButton onClick={deletePost}>
+            <DeleteOutlined />
+          </IconButton>
+        )}</Box>
+      </FlexBetween>
+      
       {isComments && (
         <Box mt="0.5rem">
           {comments.map((comment, i) => (
