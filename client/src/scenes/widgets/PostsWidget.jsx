@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import PostWidget from "./PostWidget";
 import PostWidgetProfile from "./PostWidgetProfile";
+
 const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts);
@@ -38,7 +39,6 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isProfile) {
-    //getUserPosts();
     return (
       <>
         {posts.map(
@@ -47,7 +47,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
             userId,
             firstName,
             lastName,
+            title,
             description,
+            category,
             location,
             picturePath,
             userPicturePath,
@@ -59,7 +61,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
               postId={_id}
               postUserId={userId}
               name={`${firstName} ${lastName}`}
+              title={title}
               description={description}
+              category={category}
               location={location}
               picturePath={picturePath}
               userPicturePath={userPicturePath}
@@ -71,7 +75,6 @@ const PostsWidget = ({ userId, isProfile = false }) => {
       </>
     );
   } else {
-    //getPosts();
     return (
       <>
         {posts.map(
@@ -80,7 +83,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
             userId,
             firstName,
             lastName,
+            title,
             description,
+            category,
             location,
             picturePath,
             userPicturePath,
@@ -92,7 +97,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
               postId={_id}
               postUserId={userId}
               name={`${firstName} ${lastName}`}
+              title={title}
               description={description}
+              category={category}
               location={location}
               picturePath={picturePath}
               userPicturePath={userPicturePath}

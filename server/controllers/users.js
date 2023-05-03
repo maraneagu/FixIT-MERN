@@ -100,9 +100,6 @@ export const editUser = async (req, res) => {
       // handle the error appropriately
     }
     
-
-    console.log("no crash");
-    console.log(updatedProfile);
     res.status(200).json(updatedProfile);
   } catch (err) {
     res.status(409).json({ message: err.message });

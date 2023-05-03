@@ -4,6 +4,8 @@ import {
   FavoriteOutlined,
   ShareOutlined,
 } from "@mui/icons-material";
+import EditIcon from "@mui/icons-material/Edit";
+import ClassIcon from '@mui/icons-material/Class';
 import {
   Box,
   Divider,
@@ -24,7 +26,9 @@ const PostWidgetProfile = ({
   postId,
   postUserId,
   name,
+  title,
   description,
+  category,
   location,
   picturePath,
   userPicturePath,
@@ -34,11 +38,15 @@ const PostWidgetProfile = ({
   const [isComments, setIsComments] = useState(false);
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
+
   const loggedInUserId = useSelector((state) => state.user._id);
+  const isProfileUser = postUserId === loggedInUserId;
+
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
   const navigate = useNavigate();
   const { palette } = useTheme();
+  const medium = palette.neutral.medium;
   const main = palette.neutral.main;
   const primary = palette.primary.main;
 
@@ -63,9 +71,26 @@ const PostWidgetProfile = ({
         subtitle={location}
         userPicturePath={userPicturePath}
       />
-      <Typography color={main} sx={{ mt: "1rem" }}>
-        {description}
+
+      <Typography 
+        color={main} 
+        variant="h5" 
+        fontWeight="500" 
+        sx={{ mt: "1rem", width: "100%", wordWrap: "break-word" }}
+      >
+        {title}
       </Typography>
+      
+      <Typography
+        color={medium}
+        display="flex"
+        alignItems="center"
+        sx={{ mt: "1.3rem", mb: "5px" }}
+      >
+        <ClassIcon sx={{ color: main, mr: "8px" }}/>
+        {category ? category.charAt(0).toUpperCase() + category.slice(1) : ''}
+      </Typography>
+
       {picturePath && (
         <img
           width="100%"
@@ -75,6 +100,7 @@ const PostWidgetProfile = ({
           src={`http://localhost:3001/assets/${picturePath}`}
         />
       )}
+
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
@@ -95,21 +121,21 @@ const PostWidgetProfile = ({
             <Typography>{comments.length}</Typography>
           </FlexBetween>
         </FlexBetween>
-        {/* Show the button only on the home page */}
 
-        <FlexBetween>
-          <Button
-            variant="contained"
-            onClick={() => navigate(`/show/${postId}`)}
+        {isProfileUser && (
+          <IconButton
+            onClick={() => navigate(`/editpost/${postId}`)}
+            sx={{
+              "&:hover": {
+                cursor: "pointer",
+              },
+            }}
           >
-            See the offer
-          </Button>
-        </FlexBetween>
-
-        <IconButton>
-          <ShareOutlined />
-        </IconButton>
+            <EditIcon/>
+          </IconButton>
+        )}
       </FlexBetween>
+
       {isComments && (
         <Box mt="0.5rem">
           {comments.map((comment, i) => (
@@ -123,6 +149,21 @@ const PostWidgetProfile = ({
           <Divider />
         </Box>
       )}
+
+      {/* Show the button only on the home page */}
+      <Box
+        marginTop="10px"
+        marginBottom="10px"
+        display="flex"
+        justifyContent="center"
+      >
+        <Button
+          variant="contained"
+          onClick={() => navigate(`/show/${postId}`)}
+        >
+          See the offer
+        </Button>
+      </Box>
     </WidgetWrapper>
   );
 };

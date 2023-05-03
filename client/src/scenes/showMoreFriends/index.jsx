@@ -1,4 +1,4 @@
-import EditNavbar from "scenes/edit/editProfilePage/editNavbar";
+import EditNavbar from "scenes/edit/editNavbar";
 import Friend from "components/Friend";
 import FriendOnPost from "components/FriendOnPost";
 import WidgetWrapper from "components/WidgetWrapper";

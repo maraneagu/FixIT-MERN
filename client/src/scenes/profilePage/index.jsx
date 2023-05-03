@@ -49,16 +49,18 @@ const ProfilePage = () => {
 
         {isProfileUser ? (
           <Box
-            flexBasis={isNonMobileScreens ? "42%" : undefined}
-            mt={isNonMobileScreens ? undefined : "2rem"}
+            maxWidth={isNonMobileScreens ? "46%" : undefined}
+            mt={isNonMobileScreens ? "-30px" : "1.5rem"}
+            ml={isNonMobileScreens ? "30px" : undefined}
           >
             <Box m="2rem 0" />
             <PostsWidget userId={userId} isProfile />
           </Box>
         ) : (
           <Box
-            flexBasis={isNonMobileScreens ? "42%" : undefined}
-            mt={isNonMobileScreens ? undefined : "2rem"}
+            maxWidth={isNonMobileScreens ? "46%" : undefined}
+            mt={isNonMobileScreens ? "-30px" : "2rem"}
+            ml={isNonMobileScreens ? "30px" : undefined}
           >
             <PostsWidget userId={userId} isProfile />
           </Box>

@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
+import EditPost from "scenes/edit/editPost";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -39,6 +40,10 @@ function App() {
             <Route
               path="/edit/:userId"
               element={isAuth ? <EditProfilePage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/editpost/:postId"
+              element={isAuth ? <EditPost /> : <Navigate to="/" />}
             />
             <Route
               path="/showMoreFriends/:userId"

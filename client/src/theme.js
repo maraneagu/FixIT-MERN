@@ -47,9 +47,11 @@ export const themeSettings = (mode) => {
               textHover: "#2671ab"
             },
             primary: {
-              dark: colorTokens.primary[200],
+              //dark: colorTokens.primary[200],
+              light: "#063152",
               main: "#2671ab",
-              light: colorTokens.primary[800],
+              //light: colorTokens.primary[800],
+              dark: "#4d9ddb"
             },
             neutral: {
               dark: colorTokens.grey[100],
@@ -76,9 +78,11 @@ export const themeSettings = (mode) => {
               textHover: "#000000"
             },
             primary: {
-              dark: colorTokens.primary[700],
+              //dark: colorTokens.primary[700],
+              dark: "#063152",
               main: "#2671ab",
-              light: colorTokens.primary[50]
+              //light: colorTokens.primary[50]
+              light: "#8dc9f7"
             },
             neutral: {
               dark: colorTokens.grey[700],
