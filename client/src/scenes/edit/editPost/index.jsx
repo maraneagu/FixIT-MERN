@@ -1,17 +1,17 @@
 import EditNavbar from "scenes/edit/editNavbar";
-import Form from "scenes/edit/editProfilePage/Form";
+import Form from "scenes/edit/editPost/Form";
 import {
   Box,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import React from 'react';
 
-const EditProfilePage = () => {
+const EditPost = () => {
   const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const { _id } = useSelector((state) => state.user);
+  const { postId } = useParams();
 
   return (
     <Box>
@@ -23,10 +23,10 @@ const EditProfilePage = () => {
           borderRadius="1.5rem"
           backgroundColor={theme.palette.login.box}
         >
-        <Form userId={_id}/>
+        <Form postId={postId}/>
       </Box>
     </Box>
   );
 };
 
-export default EditProfilePage;
+export default EditPost;

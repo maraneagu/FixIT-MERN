@@ -5,7 +5,7 @@ import User from "../models/User.js";
 export const createPost = async (req, res) => {
   try {
     console.log("body: ", req.body);
-    const { description, picturePath } = req.body;
+    const { title, description, category, picturePath } = req.body;
     const { id } = req.params;
     const user = await User.findById(id);
     const newPost = new Post({
@@ -13,9 +13,11 @@ export const createPost = async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       location: user.location,
+      title: title,
       description: description,
       userPicturePath: user.picturePath,
       picturePath: picturePath,
+      category: category,
       likes: {},
       comments: [],
     });
@@ -81,5 +83,22 @@ export const likePost = async (req, res) => {
     res.status(200).json(updatedPost);
   } catch (err) {
     res.status(404).json({ message: err.message });
+  }
+};
+
+export const editPost = async (req, res) => {
+  try {
+    const { title, description, picturePath } = req.body;
+    const { id } = req.params;
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      { title, description, picturePath },
+      { new: true }
+    );
+    
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    res.status(409).json({ message: err.message });
   }
 };

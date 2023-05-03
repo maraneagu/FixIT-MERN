@@ -13,6 +13,7 @@ import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
 import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js";
+import { editPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
 import { editUser } from "./controllers/users.js";
 
@@ -55,6 +56,12 @@ app.post(
   verifyToken,
   upload.single("picturePath"),
   createPost
+);
+app.post(
+  "/posts/:id/edit",
+  verifyToken,
+  upload.single("picturePath"),
+  editPost
 );
 
 /* ROUTES */

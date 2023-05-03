@@ -33,7 +33,7 @@ const HomePage = () => {
         </Box>
 
         <Box
-          flexBasis={isNonMobileScreens ? "42%" : undefined}
+          maxWidth={isNonMobileScreens ? "45%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
           <SearchBarPosts onSearch={handleSearch} />
@@ -43,7 +43,6 @@ const HomePage = () => {
 
         {isNonMobileScreens && (
           <Box flexBasis="26%">
-            {/*<AdvertWidget />*/}
             <Box m="0rem 0" />
             <FriendListWidget userId={_id} />
           </Box>

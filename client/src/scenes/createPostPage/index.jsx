@@ -1,4 +1,4 @@
-import EditNavbar from "scenes/edit/editProfilePage/editNavbar";
+import EditNavbar from "scenes/edit/editNavbar";
 import Form from "scenes/createPostPage/Form";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";

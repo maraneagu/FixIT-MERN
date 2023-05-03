@@ -61,7 +61,9 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
             userId,
             firstName,
             lastName,
+            title,
             description,
+            category,
             location,
             picturePath,
             userPicturePath,
@@ -73,7 +75,9 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
               postId={_id}
               postUserId={userId}
               name={`${firstName} ${lastName}`}
+              title={title}
               description={description}
+              category={category}
               location={location}
               picturePath={picturePath}
               userPicturePath={userPicturePath}
@@ -93,7 +97,9 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
             userId,
             firstName,
             lastName,
+            title,
             description,
+            category,
             location,
             picturePath,
             userPicturePath,
@@ -105,7 +111,9 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
               postId={_id}
               postUserId={userId}
               name={`${firstName} ${lastName}`}
+              title={title}
               description={description}
+              category={category}
               location={location}
               picturePath={picturePath}
               userPicturePath={userPicturePath}
