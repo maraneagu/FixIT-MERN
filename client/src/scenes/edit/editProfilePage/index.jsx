@@ -1,4 +1,4 @@
-import EditNavbar from "scenes/edit/editNavbar";
+import Navbar from "scenes/navbar";
 import Form from "scenes/edit/editProfilePage/Form";
 import {
   Box,
@@ -15,7 +15,7 @@ const EditProfilePage = () => {
 
   return (
     <Box>
-      <EditNavbar />
+      <Navbar />
       <Box
           width={isNonMobileScreens ? "50%" : "93%"}
           p="2rem"
