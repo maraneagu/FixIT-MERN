@@ -102,6 +102,7 @@ export const editPost = async (req, res) => {
     res.status(409).json({ message: err.message });
   }
 };
+
 /* DELETE */
 export const deletePost = async (req, res) => {
   const { postId } = req.params;

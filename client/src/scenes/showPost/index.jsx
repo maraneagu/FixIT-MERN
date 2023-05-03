@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import WidgetWrapper from "components/WidgetWrapper";
 import Friend from "components/Friend";
-import EditNavbar from "scenes/edit/editNavbar";
+import Navbar from "scenes/navbar";
 import FlexBetween from "components/FlexBetween";
 import { useNavigate } from "react-router-dom";
 import { setPost } from "state";
@@ -79,7 +79,7 @@ const ShowPost = () => {
 
   return (
     <Box>
-      <EditNavbar />
+      <Navbar />
       <Box
         width="100%"
         padding="1rem 6%"

@@ -57,7 +57,7 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
   if (isProfile) {
     return (
       <>
-        {posts.map(
+        {Array.isArray(posts) && posts.map(
           ({
             _id,
             userId,
@@ -93,7 +93,7 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
   } else {
     return (
       <>
-        {posts.map(
+        {Array.isArray(posts) && posts.map(
           ({
             _id,
             userId,
