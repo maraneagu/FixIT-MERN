@@ -2,9 +2,8 @@ import { Box, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import Navbar from "scenes/navbar";
+import EditNavbar from "scenes/edit/editNavbar";
 import FriendListWidgetProfile from "scenes/widgets/FriendListWidgetProfile";
-import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import UserWidget from "scenes/widgets/UserWidget";
 
@@ -33,7 +32,7 @@ const ProfilePage = () => {
 
   return (
     <Box>
-      <Navbar />
+      <EditNavbar />
       <Box
         width="100%"
         padding="2rem 6%"

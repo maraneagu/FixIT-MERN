@@ -44,7 +44,9 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
   useEffect(() => {
     if (searchQuery) {
       const filteredPosts = allPosts.filter((post) =>
-        post.description.toLowerCase().includes(searchQuery.toLowerCase())
+        post.description.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.category.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setPostsState(filteredPosts);
     } else {
