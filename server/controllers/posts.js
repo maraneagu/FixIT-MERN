@@ -102,3 +102,26 @@ export const editPost = async (req, res) => {
     res.status(409).json({ message: err.message });
   }
 };
+/* DELETE */
+export const deletePost = async (req, res) => {
+  const { postId } = req.params;
+  const { userId } = req.body;
+  console.log("userID :", userId);
+  console.log("aixci");
+  try {
+    const post = await Post.findById(postId);
+    console.log("post : ",post);
+    console.log("postid :",postId);
+    if (!post) {
+      return res.status(409).json({ message: "Post not found" });
+    }
+    await Post.findByIdAndRemove(postId);
+   
+    const allPosts = await Post.find(); // Get all posts from the database
+   
+    res.status(201).json(allPosts); // Return all posts as a response
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
