@@ -1,7 +1,7 @@
 import { Box, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import EditNavbar from "scenes/edit/editNavbar";
+import Navbar from "scenes/navbar";
 import UserWidget from "scenes/widgets/UserWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
@@ -19,7 +19,7 @@ const HomePage = () => {
 
   return (
     <Box>
-      <EditNavbar />
+      <Navbar />
       <Box
         width="100%"
         padding="2rem 6%"

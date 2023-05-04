@@ -19,6 +19,13 @@ const Category = ({ icon, size, text }) => {
                 style={{ objectFit: "cover", borderRadius: "50%" }}
                 marginLeft="13px"
                 marginRight="13px"
+                sx={{
+                    "&:hover": {
+                      color: palette.primary.light,
+                      cursor: "pointer",
+                    },
+                  }}
+
             >
                 <img
                     width={size}

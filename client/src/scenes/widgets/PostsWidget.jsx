@@ -4,11 +4,13 @@ import { setPosts } from "state";
 import PostWidget from "./PostWidget";
 import PostWidgetProfile from "./PostWidgetProfile";
 
-const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
+const PostsWidget = ({ userId, isProfile = false, searchQuery, selectedCategory }) => {
   const dispatch = useDispatch();
   const allPosts = useSelector((state) => state.posts);
   const [posts, setPostsState] = useState(allPosts);
   const token = useSelector((state) => state.token);
+
+
 
   const getPosts = async () => {
     const response = await fetch("http://localhost:3001/posts", {
@@ -52,7 +54,23 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
     } else {
       setPostsState(allPosts);
     }
+     console.log("postari bune");
+     console.log(posts);
   }, [allPosts, searchQuery]);
+
+  useEffect(() => {
+    if (selectedCategory) {
+      const filtered = allPosts.filter((post) => post.category === selectedCategory);
+      setPostsState(filtered);
+    } else {
+      setPostsState(allPosts);
+    }
+    // console.log("postari bune");
+    // console.log(posts);
+  }, [allPosts, selectedCategory]);
+
+
+
 
   if (isProfile) {
     return (
