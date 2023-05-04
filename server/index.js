@@ -14,7 +14,7 @@ import postRoutes from "./routes/posts.js";
 import tipRoutes from "./routes/tips.js";
 import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js";
-import { createTip } from "./controllers/tips.js";
+import { createTip, editTip } from "./controllers/tips.js";
 import { editPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
 import { editUser } from "./controllers/users.js";
@@ -46,48 +46,50 @@ const upload = multer({ storage });
 
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
+
 app.post("/posts", verifyToken, upload.single("picture"), createPost);
-app.post("/posts", verifyToken, upload.single("video"), createPost);
+// app.post("/posts", verifyToken, upload.single("video"), createPost);
+
 app.post(
   "/users/:id/edit",
   verifyToken,
   upload.single("picturePath"),
   editUser
 );
+
 app.post(
   "/posts/:id/create",
   verifyToken,
   upload.single("picturePath"),
   createPost
 );
-// app.post(
-//   "/posts/:id/create",
-//   verifyToken,
-//   upload.single("videoPath"),
-//   createPost
-// );
-
-app.post("/tips", verifyToken, upload.single("picture"), createTip);
-app.post("/tips", verifyToken, upload.single("video"), createTip);
-//app.patch("/users/editUser", upload.single("picture"), editUser);
-// app.post(
-//   "/tips/:id/create",
-//   verifyToken,
-//   upload.single("picturePath"),
-//   createTip
-// );
-// app.post(
-//   "/tips/:id/create",
-//   verifyToken,
-//   upload.single("videoPath"),
-//   createTip
-// );
 app.post(
   "/posts/:id/edit",
   verifyToken,
   upload.single("picturePath"),
   editPost
 );
+
+//app.patch("/users/editUser", upload.single("picture"), editUser);
+
+app.post("/tips", verifyToken, upload.single("picture"), createTip);
+app.post("/tips", verifyToken, upload.single("video"), createTip);
+
+app.post(
+  "/tips/:id/create",
+  verifyToken,
+  upload.single("picturePath"),
+  // upload.single("videoPath"),
+  createTip
+);
+app.post(
+  "/tips/:id/edit",
+  verifyToken,
+  upload.single("picturePath"),
+  // upload.single("videoPath"),
+  editTip
+);
+
 
 /* ROUTES */
 app.use("/auth", authRoutes);

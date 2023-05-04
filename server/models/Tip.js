@@ -15,10 +15,20 @@ const tipSchema = mongoose.Schema(
       required: true,
     },
     location: String,
+    title: String,
     description: String,
     picturePath: String,
     videoPath: String,
     userPicturePath: String,
+    category: {
+      type: String,
+      required: true,
+    },
+    components: {
+      type: Array,
+      of: String,
+      default: [],
+    },
     likes: {
       type: Map,
       of: Boolean,

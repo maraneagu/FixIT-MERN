@@ -1,16 +1,51 @@
-import { Box, useMediaQuery } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
 import Navbar from "scenes/navbar";
 import UserWidget from "scenes/widgets/UserWidget";
 import MyTipWidget from "scenes/widgets/MyTipWidget";
 import TipsWidget from "scenes/widgets/TipsWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
+import { Button } from "@mui/material";
+import FlexBetween from "components/FlexBetween";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  AttachFileOutlined,
+  GifBoxOutlined,
+  ImageOutlined,
+  MicOutlined,
+  MoreHorizOutlined,
+  OndemandVideo,
+} from "@mui/icons-material";
+
+import Dropzone from "react-dropzone";
+import UserImage from "components/UserImage";
+import WidgetWrapper from "components/WidgetWrapper";
+import { useState } from "react";
+import { setTips } from "state";
+
+// import { ToastContainer, toast } from "react-toastify";
+// import 'react-toastify/dist/ReactToastify.css';
+import React from 'react';
+import { useNavigate } from "react-router-dom";
+import SearchBarPosts from "scenes/widgets/SearchBarPosts";
 
 const TipsPage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  const { _id, picturePath } = useSelector((state) => state.user);
+  const { picturePath } = useSelector((state) => state.user);
   const { isClient } = useSelector((state) => state.user);
-  
+  const { palette } = useTheme();
+  const navigate = useNavigate();
+
+  const user = useSelector((state) => state.user);
+  // const fullName = `${user.firstName} ${user.lastName}`;
+  const userId = user._id;
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
   return (
     
     <Box>
@@ -22,29 +57,37 @@ const TipsPage = () => {
         gap="0.5rem"
         justifyContent="space-between"
       >
-        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
-          <UserWidget userId={_id} picturePath={picturePath} />
-        </Box>
-        
-        <Box
-          flexBasis={isNonMobileScreens ? "42%" : undefined}
-          mt={isNonMobileScreens ? undefined : "2rem"}
-        >
+        <Box flexBasis={isNonMobileScreens ? "20%" : undefined}>
+          <UserWidget userId={userId} picturePath={picturePath} />
+          <Box m="1.2rem" />
           {!isClient && (
-          <MyTipWidget 
-            picturePath={picturePath}
-          />
+            <Button
+              onClick={() => navigate(`/createtip/${userId}`)}
+              sx={{
+                color: palette.background.alt,
+                backgroundColor: palette.primary.main,
+                borderRadius: "0.7rem",
+                fontSize: 20,
+                width: 320,
+            }}
+            >Add a tutorial
+          </Button>
           )}
-          <TipsWidget userId={_id} />
+          <Box m="1.2rem" />
+          <FriendListWidget userId={userId} />
         </Box>
-
-        {isNonMobileScreens && (
-          <Box flexBasis="26%">
-            {/*<AdvertWidget />*/}
-            <Box m="0rem 0" />
-            <FriendListWidget userId={_id} />
-          </Box>
-        )}
+          <Box
+            flexBasis={isNonMobileScreens ? "77%" : undefined}
+            mt={isNonMobileScreens ? undefined : "2rem"}
+          >
+            {/* <SearchBarPosts onSearch={handleSearch} /> */}
+            <TipsWidget userId={userId}/>
+            {/* {!isClient && (
+            <MyTipWidget 
+              picturePath={picturePath}
+            />
+            )} */}
+        </Box>
       </Box>
     </Box>
   );

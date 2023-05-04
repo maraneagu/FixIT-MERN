@@ -7,6 +7,7 @@ import CreatePostPage from "scenes/createPostPage";
 import EditProfilePage from "scenes/edit/editProfilePage";
 import ShowMoreFriends from "scenes/showMoreFriends";
 import TipsPage from "scenes/tipsPage";
+import CreateTipPage from "scenes/createTipPage";
 
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -39,6 +40,10 @@ function App() {
             <Route
               path="/createpost/:userId"
               element={isAuth ? <CreatePostPage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/createtip/:userId"
+              element={isAuth ? <CreateTipPage /> : <Navigate to="/" />}
             />
             <Route
               path="/edit/:userId"
