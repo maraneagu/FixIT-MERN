@@ -46,6 +46,7 @@ const upload = multer({ storage });
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
 app.post("/posts", verifyToken, upload.single("picture"), createPost);
+app.post("/posts", verifyToken, upload.single("video"), createPost);
 app.post(
   "/users/:id/edit",
   verifyToken,
@@ -58,9 +59,28 @@ app.post(
   upload.single("picturePath"),
   createPost
 );
+// app.post(
+//   "/posts/:id/create",
+//   verifyToken,
+//   upload.single("videoPath"),
+//   createPost
+// );
 
 app.post("/tips", verifyToken, upload.single("picture"), createTip);
+app.post("/tips", verifyToken, upload.single("video"), createTip);
 //app.patch("/users/editUser", upload.single("picture"), editUser);
+// app.post(
+//   "/tips/:id/create",
+//   verifyToken,
+//   upload.single("picturePath"),
+//   createTip
+// );
+// app.post(
+//   "/tips/:id/create",
+//   verifyToken,
+//   upload.single("videoPath"),
+//   createTip
+// );
 
 /* ROUTES */
 app.use("/auth", authRoutes);

@@ -8,6 +8,7 @@ import {
   import FlexBetween from "components/FlexBetween";
   import FriendOnTip from "components/FriendOnTip";
   import WidgetWrapper from "components/WidgetWrapper";
+  import VideoPlayer from "components/VideoPlayer";
   import { useState } from "react";
   import { useDispatch, useSelector } from "react-redux";
   import { setTip } from "state";
@@ -19,6 +20,7 @@ import {
     description,
     location,
     picturePath,
+    videoPath,
     userPicturePath,
     likes,
     comments,
@@ -66,6 +68,9 @@ import {
             style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
             src={`http://localhost:3001/assets/${picturePath}`}
           />
+        )}
+        {videoPath && (
+            <VideoPlayer videoPath={videoPath} />
         )}
         <FlexBetween mt="0.25rem">
           <FlexBetween gap="1rem">

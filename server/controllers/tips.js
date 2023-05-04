@@ -4,7 +4,7 @@ import User from "../models/User.js";
 /* CREATE */
 export const createTip = async (req, res) => {
   try {
-    const { userId, description, picturePath } = req.body;
+    const { userId, description, picturePath, videoPath } = req.body;
     const user = await User.findById(userId);
     const newTip = new Tip({
       userId,
@@ -14,6 +14,7 @@ export const createTip = async (req, res) => {
       description,
       userPicturePath: user.picturePath,
       picturePath,
+      videoPath,
       likes: {},
       comments: [],
     });

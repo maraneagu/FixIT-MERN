@@ -6,6 +6,7 @@ import {
   ImageOutlined,
   MicOutlined,
   MoreHorizOutlined,
+  OndemandVideo,
 } from "@mui/icons-material";
 import {
   Box,
@@ -35,6 +36,8 @@ const MyTipWidget = ({ picturePath }) => {
   const dispatch = useDispatch();
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
+  const [isVideo, setIsVideo] = useState(false);
+  const [video, setVideo] = useState(null);
   const [tip, setTip] = useState("");
   const { palette } = useTheme();
   const { _id } = useSelector((state) => state.user);
@@ -53,6 +56,10 @@ const MyTipWidget = ({ picturePath }) => {
       formData.append("picture", image);
       formData.append("picturePath", image.name);
     }
+    if (video) {
+      formData.append("video", video);
+      formData.append("videoPath", video.name);
+    }
     const response = await fetch(`http://localhost:3001/tips`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
@@ -62,6 +69,7 @@ const MyTipWidget = ({ picturePath }) => {
     dispatch(setTips({ tips }));
     alert("Tip added successfully!");
     setImage(null);
+    setVideo(null);
     setTip("");
   };
 
@@ -81,6 +89,7 @@ const MyTipWidget = ({ picturePath }) => {
           }}
         />
       </FlexBetween>
+
       {isImage && (
         <Box
           border={`1px solid ${medium}`}
@@ -126,6 +135,51 @@ const MyTipWidget = ({ picturePath }) => {
         </Box>
       )}
 
+      {isVideo && (
+        <Box
+          border={`1px solid ${medium}`}
+          borderRadius="5px"
+          mt="1rem"
+          p="1rem"
+        >
+          <Dropzone
+            acceptedFiles=".mp4,.mov,.mkv,.flv"
+            multiple={false}
+            onDrop={(acceptedFiles) => setVideo(acceptedFiles[0])}
+          >
+            {({ getRootProps, getInputProps }) => (
+              <FlexBetween>
+                <Box
+                  {...getRootProps()}
+                  border={`2px dashed ${palette.primary.main}`}
+                  p="1rem"
+                  width="100%"
+                  sx={{ "&:hover": { cursor: "pointer" } }}
+                >
+                  <input {...getInputProps()} />
+                  {!video ? (
+                    <p>Add Video Here</p>
+                  ) : (
+                    <FlexBetween>
+                      <Typography>{video.name}</Typography>
+                      <EditOutlined />
+                    </FlexBetween>
+                  )}
+                </Box>
+                {video && (
+                  <IconButton
+                    onClick={() => setVideo(null)}
+                    sx={{ width: "15%" }}
+                  >
+                    <DeleteOutlined />
+                  </IconButton>
+                )}
+              </FlexBetween>
+            )}
+          </Dropzone>
+        </Box>
+      )}
+
       <Divider sx={{ margin: "1.25rem 0" }} />
 
       <FlexBetween>
@@ -139,7 +193,17 @@ const MyTipWidget = ({ picturePath }) => {
           </Typography>
         </FlexBetween>
 
-        {isNonMobileScreens ? (
+        <FlexBetween gap="0.25rem" onClick={() => setIsVideo(!isVideo)}>
+          <OndemandVideo sx={{ color: mediumMain }} />
+          <Typography
+            color={mediumMain}
+            sx={{ "&:hover": { cursor: "pointer", color: medium } }}
+          >
+            Video
+          </Typography>
+        </FlexBetween>
+
+        {/* {isNonMobileScreens ? (
           <>
             <FlexBetween gap="0.25rem">
               <GifBoxOutlined sx={{ color: mediumMain }} />
@@ -152,7 +216,7 @@ const MyTipWidget = ({ picturePath }) => {
           <FlexBetween gap="0.25rem">
             <MoreHorizOutlined sx={{ color: mediumMain }} />
           </FlexBetween>
-        )}
+        )} */}
 
         <Button
           disabled={!tip}

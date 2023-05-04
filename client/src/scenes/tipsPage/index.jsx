@@ -31,7 +31,9 @@ const TipsPage = () => {
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
           {!isClient && (
-          <MyTipWidget picturePath={picturePath} />
+          <MyTipWidget 
+            picturePath={picturePath}
+          />
           )}
           <TipsWidget userId={_id} />
         </Box>

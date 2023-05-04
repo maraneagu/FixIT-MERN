@@ -52,6 +52,7 @@ const TipsWidget = ({ userId, isProfile = false }) => {
             description,
             location,
             picturePath,
+            videoPath,
             userPicturePath,
             likes,
             comments,
@@ -64,6 +65,7 @@ const TipsWidget = ({ userId, isProfile = false }) => {
               description={description}
               location={location}
               picturePath={picturePath}
+              videoPath={videoPath}
               userPicturePath={userPicturePath}
               likes={likes}
               comments={comments}
@@ -85,6 +87,7 @@ const TipsWidget = ({ userId, isProfile = false }) => {
             description,
             location,
             picturePath,
+            videoPath,
             userPicturePath,
             likes,
             comments,
@@ -97,6 +100,7 @@ const TipsWidget = ({ userId, isProfile = false }) => {
               description={description}
               location={location}
               picturePath={picturePath}
+              videoPath={videoPath}
               userPicturePath={userPicturePath}
               likes={likes}
               comments={comments}
