@@ -1,4 +1,4 @@
-import EditNavbar from "scenes/edit/editProfilePage/editNavbar";
+import Navbar from "scenes/navbar";
 import Friend from "components/Friend";
 import FriendOnPost from "components/FriendOnPost";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -56,7 +56,7 @@ const ShowMoreFriends = () => {
 
   return (
     <Box>
-        <EditNavbar />
+        <Navbar />
 
         <WidgetWrapper
             width="65%"

@@ -44,7 +44,9 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
   useEffect(() => {
     if (searchQuery) {
       const filteredPosts = allPosts.filter((post) =>
-        post.description.toLowerCase().includes(searchQuery.toLowerCase())
+        post.description.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.category.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setPostsState(filteredPosts);
     } else {
@@ -55,13 +57,15 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
   if (isProfile) {
     return (
       <>
-        {posts.map(
+        {Array.isArray(posts) && posts.map(
           ({
             _id,
             userId,
             firstName,
             lastName,
+            title,
             description,
+            category,
             location,
             picturePath,
             userPicturePath,
@@ -73,7 +77,9 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
               postId={_id}
               postUserId={userId}
               name={`${firstName} ${lastName}`}
+              title={title}
               description={description}
+              category={category}
               location={location}
               picturePath={picturePath}
               userPicturePath={userPicturePath}
@@ -87,13 +93,15 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
   } else {
     return (
       <>
-        {posts.map(
+        {Array.isArray(posts) && posts.map(
           ({
             _id,
             userId,
             firstName,
             lastName,
+            title,
             description,
+            category,
             location,
             picturePath,
             userPicturePath,
@@ -105,7 +113,9 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
               postId={_id}
               postUserId={userId}
               name={`${firstName} ${lastName}`}
+              title={title}
               description={description}
+              category={category}
               location={location}
               picturePath={picturePath}
               userPicturePath={userPicturePath}

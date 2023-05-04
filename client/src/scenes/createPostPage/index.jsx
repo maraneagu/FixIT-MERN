@@ -1,4 +1,4 @@
-import EditNavbar from "scenes/edit/editProfilePage/editNavbar";
+import Navbar from "scenes/navbar";
 import Form from "scenes/createPostPage/Form";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
@@ -11,7 +11,7 @@ const CreatePostPage = () => {
 
   return (
     <Box>
-      <EditNavbar />
+      <Navbar />
       <Box
         width={isNonMobileScreens ? "50%" : "93%"}
         p="2rem"

@@ -190,15 +190,15 @@ const UserWidget = ({ userId, picturePath }) => {
             </FlexBetween>
           </FlexBetween>
           <EditIcon
-              onClick={() => navigate(`/edit/${userId}`)}
-              sx={{
-                marginTop: "-33px",
-                marginRight: "5px",
-                "&:hover": {
-                  cursor: "pointer",
-                },
-              }}
-            />
+            onClick={() => navigate(`/edit/${userId}`)}
+            sx={{
+              marginTop: "-33px",
+              marginRight: "5px",
+              "&:hover": {
+                cursor: "pointer",
+              },
+            }}
+          />
           
         </FlexBetween>
         ):(

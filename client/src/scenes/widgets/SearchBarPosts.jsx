@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Box, TextField } from "@mui/material";
+import { useMediaQuery, useTheme,  InputBase } from "@mui/material";
+import { Search } from "@mui/icons-material";
+import FlexBetween from "components/FlexBetween";
 
 const SearchBarPosts = ({ onSearch }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -7,18 +9,27 @@ const SearchBarPosts = ({ onSearch }) => {
     setSearchQuery(event.target.value);
     onSearch(event.target.value);
   };
+  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+  const { palette } = useTheme();
 
   return (
-    <Box mb={2}>
-      <TextField
-        label="Search posts"
-        variant="outlined"
-        fullWidth
+    <FlexBetween
+      backgroundColor={palette.background.alt}
+      borderRadius="9px"
+      gap="3rem"
+      padding="1rem 1.5rem"
+      mb="2rem"
+      ml={isNonMobileScreens ? "15px" : undefined} 
+      mr={isNonMobileScreens ? "15px" : undefined} 
+    >
+      <InputBase 
+        placeholder="Search..."
         value={searchQuery}
-        onChange={handleSearchChange}
+        onChange={handleSearchChange} 
       />
-    </Box>
+      <Search/>
+    </FlexBetween>
   );
 };
-
+    
 export default SearchBarPosts;

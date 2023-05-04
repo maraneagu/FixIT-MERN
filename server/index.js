@@ -15,6 +15,7 @@ import tipRoutes from "./routes/tips.js";
 import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js";
 import { createTip } from "./controllers/tips.js";
+import { editPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
 import { editUser } from "./controllers/users.js";
 
@@ -81,6 +82,12 @@ app.post("/tips", verifyToken, upload.single("video"), createTip);
 //   upload.single("videoPath"),
 //   createTip
 // );
+app.post(
+  "/posts/:id/edit",
+  verifyToken,
+  upload.single("picturePath"),
+  editPost
+);
 
 /* ROUTES */
 app.use("/auth", authRoutes);

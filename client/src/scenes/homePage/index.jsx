@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import Navbar from "scenes/navbar";
 import UserWidget from "scenes/widgets/UserWidget";
-import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
 import Categories from "scenes/widgets/Categories";
@@ -33,7 +32,7 @@ const HomePage = () => {
         </Box>
 
         <Box
-          flexBasis={isNonMobileScreens ? "42%" : undefined}
+          maxWidth={isNonMobileScreens ? "45%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
           <SearchBarPosts onSearch={handleSearch} />
@@ -43,7 +42,6 @@ const HomePage = () => {
 
         {isNonMobileScreens && (
           <Box flexBasis="26%">
-            {/*<AdvertWidget />*/}
             <Box m="0rem 0" />
             <FriendListWidget userId={_id} />
           </Box>

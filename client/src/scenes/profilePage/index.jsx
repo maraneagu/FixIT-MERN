@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Navbar from "scenes/navbar";
 import FriendListWidgetProfile from "scenes/widgets/FriendListWidgetProfile";
-import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import UserWidget from "scenes/widgets/UserWidget";
 
@@ -49,16 +48,18 @@ const ProfilePage = () => {
 
         {isProfileUser ? (
           <Box
-            flexBasis={isNonMobileScreens ? "42%" : undefined}
-            mt={isNonMobileScreens ? undefined : "2rem"}
+            maxWidth={isNonMobileScreens ? "46%" : undefined}
+            mt={isNonMobileScreens ? "-30px" : "1.5rem"}
+            ml={isNonMobileScreens ? "30px" : undefined}
           >
             <Box m="2rem 0" />
             <PostsWidget userId={userId} isProfile />
           </Box>
         ) : (
           <Box
-            flexBasis={isNonMobileScreens ? "42%" : undefined}
-            mt={isNonMobileScreens ? undefined : "2rem"}
+            maxWidth={isNonMobileScreens ? "46%" : undefined}
+            mt={isNonMobileScreens ? "-30px" : "2rem"}
+            ml={isNonMobileScreens ? "30px" : undefined}
           >
             <PostsWidget userId={userId} isProfile />
           </Box>
