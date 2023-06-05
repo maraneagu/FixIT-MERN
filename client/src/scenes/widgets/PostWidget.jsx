@@ -17,6 +17,10 @@ import {
   useTheme,
   Button,
   useMediaQuery,
+   Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
@@ -46,7 +50,7 @@ const PostWidget = ({
 
   const loggedInUserId = useSelector((state) => state.user._id);
   const isProfileUser = postUserId === loggedInUserId;
-
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
   const navigate = useNavigate();
@@ -69,6 +73,13 @@ const PostWidget = ({
     });
     const updatedPost = await response.json();
     dispatch(setPost({ post: updatedPost }));
+  };
+  const handleDeleteConfirmationOpen = () => {
+    setDeleteConfirmationOpen(true);
+  };
+
+  const handleDeleteConfirmationClose = () => {
+    setDeleteConfirmationOpen(false);
   };
   const deletePost = async () => {
     console.log("postid :", postId)
@@ -162,11 +173,11 @@ const PostWidget = ({
           </IconButton>
         )}
         {isProfileUser && (
-
-          <IconButton onClick={deletePost}>
+          <IconButton onClick={handleDeleteConfirmationOpen}>
             <DeleteOutlined />
           </IconButton>
         )}</Box>
+        
       </FlexBetween>
       
       {isComments && (
@@ -199,6 +210,22 @@ const PostWidget = ({
           </Button>
         </Box>
       )}
+    <Dialog open={deleteConfirmationOpen} onClose={handleDeleteConfirmationClose}>
+        <DialogTitle>Delete Post</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            Are you sure you want to delete this post?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteConfirmationClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={deletePost} color="primary">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </WidgetWrapper>
   );
 };
