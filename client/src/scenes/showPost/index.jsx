@@ -16,6 +16,7 @@ import Navbar from "scenes/navbar";
 import FlexBetween from "components/FlexBetween";
 import { useNavigate } from "react-router-dom";
 import { setPost } from "state";
+import ReviewsWidget from "scenes/widgets/ReviewsWidget";
 
 const ShowPost = () => {
   const { postId } = useParams();
@@ -81,102 +82,109 @@ const ShowPost = () => {
     <Box>
       <Navbar />
       <Box
-        width="100%"
-        padding="1rem 6%"
-        display={isNonMobileScreens ? "flex" : "block"}
-        gap="1rem"
-        justifyContent="center"
+        display="flex"
+        flexDirection={isNonMobileScreens ? "row" : "column"}
+        justifyContent={isNonMobileScreens ? "space-between" : "center"}
+        alignItems={isNonMobileScreens ? "flex-start" : "center"}
+        padding="2rem 6%"
+        gap="2rem"
       >
-        <WidgetWrapper m="2rem 0" marginLeft="15px" marginRight="15px" width={isNonMobileScreens ? "60%" : undefined}>
-          <Friend
-            friendId={currentPost.userId}
-            name={`${currentPost.firstName} ${currentPost.lastName}`}
-            subtitle={currentPost.location}
-            userPicturePath={currentPost.userPicturePath}
-          />
-
-          <Typography
-            color={medium}
-            display="flex"
-            alignItems="center"
-            sx={{ mt: "1.3rem", mb: "5px" }}
-          >
-            <ClassIcon sx={{ color: main, mr: "8px" }}/>
-            {currentPost.category ? currentPost.category.charAt(0).toUpperCase() + currentPost.category.slice(1) : ''}
-          </Typography>
-
-          <Typography 
-            color={main} 
-            variant="h5" 
-            fontWeight="500"  
-            sx={{ mt: "1rem", width: "100%", wordWrap: "break-word" }}
-          >
-            {currentPost.title}
-          </Typography>
-
-          <Typography color={main} marginBottom="5px" sx={{ mt: "1rem", width: "100%", wordWrap: "break-word" }}>
-            {currentPost.description}
-          </Typography>
-          
-          {currentPost.picturePath && (
-            <img
-              width="100%"
-              height="auto"
-              alt="post"
-              style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-              src={`http://localhost:3001/assets/${currentPost.picturePath}`}
+        <Box width={isNonMobileScreens ? "60%" : "100%"}>
+          <WidgetWrapper m="2rem 0" marginLeft={isNonMobileScreens ? "15px" : undefined} marginRight={isNonMobileScreens ? "15px" : undefined}>
+            <Friend
+              friendId={currentPost.userId}
+              name={`${currentPost.firstName} ${currentPost.lastName}`}
+              subtitle={currentPost.location}
+              userPicturePath={currentPost.userPicturePath}
             />
-          )}
-  
-          <FlexBetween mt="0.25rem" mb="0.25rem">
-            <FlexBetween gap="1rem">
-              <FlexBetween gap="0.3rem">
-                <IconButton onClick={patchLike}>
-                  {isLiked ? (
-                    <FavoriteOutlined sx={{ color: primary }} />
-                  ) : (
-                    <FavoriteBorderOutlined />
-                  )}
-                </IconButton>
-                <Typography>{likeCount}</Typography>
+
+            <Typography
+              color={medium}
+              display="flex"
+              alignItems="center"
+              sx={{ mt: "1.3rem", mb: "5px" }}
+            >
+              <ClassIcon sx={{ color: main, mr: "8px" }}/>
+              {currentPost.category ? currentPost.category.charAt(0).toUpperCase() + currentPost.category.slice(1) : ''}
+            </Typography>
+
+            <Typography 
+              color={main} 
+              variant="h5" 
+              fontWeight="500"  
+              sx={{ mt: "1rem", width: "100%", wordWrap: "break-word" }}
+            >
+              {currentPost.title}
+            </Typography>
+
+            <Typography color={main} marginBottom="5px" sx={{ mt: "1rem", width: "100%", wordWrap: "break-word" }}>
+              {currentPost.description}
+            </Typography>
+            
+            {currentPost.picturePath && (
+              <img
+                width="100%"
+                height="auto"
+                alt="post"
+                style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
+                src={`http://localhost:3001/assets/${currentPost.picturePath}`}
+              />
+            )}
+
+            <FlexBetween mt="0.25rem" mb="0.25rem">
+              <FlexBetween gap="1rem">
+                <FlexBetween gap="0.3rem">
+                  <IconButton onClick={patchLike}>
+                    {isLiked ? (
+                      <FavoriteOutlined sx={{ color: primary }} />
+                    ) : (
+                      <FavoriteBorderOutlined />
+                    )}
+                  </IconButton>
+                  <Typography>{likeCount}</Typography>
+                </FlexBetween>
+
+                <FlexBetween gap="0.3rem">
+                  <IconButton onClick={() => setIsComments(!isComments)}>
+                    <ChatBubbleOutlineOutlined />
+                  </IconButton>
+                  <Typography>{currentPost.comments.length}</Typography>
+                </FlexBetween>
               </FlexBetween>
 
-              <FlexBetween gap="0.3rem">
-                <IconButton onClick={() => setIsComments(!isComments)}>
-                  <ChatBubbleOutlineOutlined />
+              {isProfileUser && (
+                <IconButton
+                  onClick={() => navigate(`/editpost/${postId}`)}
+                  sx={{
+                    "&:hover": {
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <EditIcon/>
                 </IconButton>
-                <Typography>{currentPost.comments.length}</Typography>
-              </FlexBetween>
+              )}
             </FlexBetween>
 
-            {isProfileUser && (
-              <IconButton
-                onClick={() => navigate(`/editpost/${postId}`)}
-                sx={{
-                  "&:hover": {
-                    cursor: "pointer",
-                  },
-                }}
-              >
-                <EditIcon/>
-              </IconButton>
+            {isComments && (
+              <Box mt="0.5rem">
+                {currentPost.comments.map((comment, i) => (
+                  <Box key={`${currentPost.name}-${i}`}>
+                    <Divider />
+                    <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
+                      {comment}
+                    </Typography>
+                  </Box>
+                ))}
+                <Divider />
+              </Box>
             )}
-          </FlexBetween>
-
-          {isComments && (
-            <Box mt="0.5rem">
-              {currentPost.comments.map((comment, i) => (
-                <Box key={`${currentPost.name}-${i}`}>
-                  <Divider />
-                  <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                    {comment}
-                  </Typography>
-                </Box>
-              ))}
-              <Divider />
-            </Box>
-          )}
-        </WidgetWrapper>
+          </WidgetWrapper>
+        </Box>
+      
+        <Box width={isNonMobileScreens ? "40%" : "100%"}>
+          <ReviewsWidget postId={postId} />
+        </Box>
       </Box>
     </Box>
   );
