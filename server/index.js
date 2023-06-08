@@ -11,7 +11,9 @@ import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
+import reviewRoutes from "./routes/reviews.js";
 import tipRoutes from "./routes/tips.js";
+
 import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js";
 import { createTip, editTip } from "./controllers/tips.js";
@@ -95,6 +97,7 @@ app.post(
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
+app.use("/reviews", reviewRoutes);
 app.use("/tips", tipRoutes);
 
 /* MONGOOSE SETUP */

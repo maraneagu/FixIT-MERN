@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   token: null,
   posts: [],
+  reviews:[],
   tips: [],
 };
 
@@ -33,6 +34,9 @@ export const authSlice = createSlice({
     setPosts: (state, action) => {
       state.posts = action.payload.posts;
     },
+    setReviews: (state, action) => {
+      state.reviews = action.payload.reviews;
+    },
     setPost: (state, action) => {
       const updatedPosts = state.posts.map((post) => {
         if (post._id === action.payload.post._id) return action.payload.post;
@@ -53,9 +57,10 @@ export const authSlice = createSlice({
       });
       state.tips = updatedTips;
     }
+    
   },
 });
 
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setUser, setTips, setTip } =
+export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setUser, setTips, setTip, setReviews } =
   authSlice.actions;
 export default authSlice.reducer;
