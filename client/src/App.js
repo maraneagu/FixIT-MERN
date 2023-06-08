@@ -6,12 +6,16 @@ import ShowPost from "scenes/showPost";
 import CreatePostPage from "scenes/createPostPage";
 import EditProfilePage from "scenes/edit/editProfilePage";
 import ShowMoreFriends from "scenes/showMoreFriends";
+import TipsPage from "scenes/tipsPage";
+import CreateTipPage from "scenes/createTipPage";
+
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import EditPost from "scenes/edit/editPost";
+// import { ToastContainer, toast } from "react-toastify";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -38,6 +42,10 @@ function App() {
               element={isAuth ? <CreatePostPage /> : <Navigate to="/" />}
             />
             <Route
+              path="/createtip/:userId"
+              element={isAuth ? <CreateTipPage /> : <Navigate to="/" />}
+            />
+            <Route
               path="/edit/:userId"
               element={isAuth ? <EditProfilePage /> : <Navigate to="/" />}
             />
@@ -53,7 +61,12 @@ function App() {
               path="/show/:postId"
               element={isAuth ? <ShowPost /> : <Navigate to="/" />}
             />
+            <Route
+              path="/tips"
+              element={isAuth ? <TipsPage /> : <Navigate to="/" />}
+            />
           </Routes>
+          {/* <ToastContainer /> */}
         </ThemeProvider>
       </BrowserRouter>
     </div>
