@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   token: null,
   posts: [],
+  category: null,
 };
 
 export const authSlice = createSlice({
@@ -41,10 +42,13 @@ export const authSlice = createSlice({
     },
     setUser: (state, action) => {
       state.user = action.payload.user;
+    },
+    setCategory: (state, action) => {
+      state.category = action.payload.category;
     }
   },
 });
 
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setUser } =
+export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setUser, setCategory } =
   authSlice.actions;
 export default authSlice.reducer;

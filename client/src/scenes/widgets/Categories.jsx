@@ -4,14 +4,18 @@ import Category from "components/Category";
 import { useNavigate } from "react-router-dom";
 import PostsWidget from "./PostsWidget";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setCategory } from "state";
 
 const Categories = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const dispatch = useDispatch();
+  //const [selectedCategory, setSelectedCategory] = useState(null);
 
   const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
+    dispatch(setCategory({ category: category }));
+    //setSelectedCategory(category);
     //console.log()
   };
 
@@ -47,8 +51,7 @@ const Categories = () => {
     </WidgetWrapper>
     
 
-    { selectedCategory && 
-      <PostsWidget selectedCategory={selectedCategory} />}
+     
     </>
     
   );
