@@ -17,6 +17,12 @@ import {
   useTheme,
   Button,
   useMediaQuery,
+   Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Rating,
+  TextField
 } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
@@ -44,9 +50,13 @@ const PostWidget = ({
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
 
+  const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewDescription, setReviewDescription] = useState("");
+
   const loggedInUserId = useSelector((state) => state.user._id);
   const isProfileUser = postUserId === loggedInUserId;
-
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
   const navigate = useNavigate();
@@ -69,6 +79,62 @@ const PostWidget = ({
     });
     const updatedPost = await response.json();
     dispatch(setPost({ post: updatedPost }));
+  };
+
+
+  const handleReviewDialogOpen = () => {
+    setIsReviewDialogOpen(true);
+  };
+
+  const handleReviewDialogClose = () => {
+    setIsReviewDialogOpen(false);
+    setReviewRating(0);
+    setReviewDescription("");
+  };
+
+  const handleReviewRatingChange = (value) => {
+    setReviewRating(value);
+  };
+
+  const handleReviewDescriptionChange = (event) => {
+    setReviewDescription(event.target.value);
+  };
+
+  const handleAddReview = async () => {
+    if (reviewRating === 0 || reviewDescription === "") {
+      return;
+    }
+
+    const response = await fetch(`http://localhost:3001/reviews/${loggedInUserId}/${postId}/create`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        stars: reviewRating,
+        description: reviewDescription,
+      }),
+    });
+
+    if (response.ok) {
+      const updatedPost = await response.json();
+      dispatch(setPost({ post: updatedPost }));
+      setIsReviewDialogOpen(false);
+      setReviewRating(0);
+      setReviewDescription("");
+    }
+  };
+
+
+
+
+  const handleDeleteConfirmationOpen = () => {
+    setDeleteConfirmationOpen(true);
+  };
+
+  const handleDeleteConfirmationClose = () => {
+    setDeleteConfirmationOpen(false);
   };
   const deletePost = async () => {
     console.log("postid :", postId)
@@ -142,10 +208,10 @@ const PostWidget = ({
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">
-            <IconButton onClick={() => setIsComments(!isComments)}>
+            <IconButton onClick={handleReviewDialogOpen}>
               <ChatBubbleOutlineOutlined />
             </IconButton>
-            <Typography>{comments.length}</Typography>
+            <Typography>Add Review</Typography>
           </FlexBetween>
         </FlexBetween>
       <Box>
@@ -162,11 +228,11 @@ const PostWidget = ({
           </IconButton>
         )}
         {isProfileUser && (
-
-          <IconButton onClick={deletePost}>
+          <IconButton onClick={handleDeleteConfirmationOpen}>
             <DeleteOutlined />
           </IconButton>
         )}</Box>
+        
       </FlexBetween>
       
       {isComments && (
@@ -199,6 +265,60 @@ const PostWidget = ({
           </Button>
         </Box>
       )}
+    <Dialog open={deleteConfirmationOpen} onClose={handleDeleteConfirmationClose}>
+        <DialogTitle>Delete Post</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            Are you sure you want to delete this post?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteConfirmationClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={deletePost} color="primary">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
+
+      <Dialog
+        open={isReviewDialogOpen}
+        onClose={handleReviewDialogClose}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Add Review</DialogTitle>
+        <DialogContent>
+          <Box display="flex" justifyContent="center" mb={2}>
+            <Rating
+              name="review-rating"
+              value={reviewRating}
+              onChange={(event, newValue) => {
+                handleReviewRatingChange(newValue);
+              }}
+            />
+          </Box>
+          <TextField
+            autoFocus
+            multiline
+            rows={4}
+            variant="outlined"
+            fullWidth
+            placeholder="Write your review..."
+            value={reviewDescription}
+            onChange={handleReviewDescriptionChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleReviewDialogClose}>Cancel</Button>
+          <Button onClick={handleAddReview} variant="contained">
+            Add Review
+          </Button>
+        </DialogActions>
+      </Dialog>
     </WidgetWrapper>
   );
 };
