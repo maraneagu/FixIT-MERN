@@ -107,12 +107,10 @@ export const editPost = async (req, res) => {
 export const deletePost = async (req, res) => {
   const { postId } = req.params;
   const { userId } = req.body;
-  console.log("userID :", userId);
-  console.log("aixci");
+
   try {
     const post = await Post.findById(postId);
-    console.log("post : ",post);
-    console.log("postid :",postId);
+   
     if (!post) {
       return res.status(409).json({ message: "Post not found" });
     }
@@ -127,40 +125,3 @@ export const deletePost = async (req, res) => {
   }
 };
 
-// Assuming you are using Express.js
-const addReviewToPost = async (req, res) => {
-  try {
-    const { userId, stars, description } = req.body;
-    const { postId } = req.params;
-
-    // Find the post by its ID
-    const post = await Post.findById(postId);
-
-    if (!post) {
-      return res.status(404).json({ error: "Post not found" });
-    }
-
-    // Create a new review object
-    const review = {
-      user: userId,
-      stars,
-      description,
-    };
-
-    // Add the review to the post's reviews array
-    post.reviews.push(review);
-
-    // Save the updated post
-    await post.save();
-
-    // You can optionally populate the user field in the review
-    // if you want to send the complete user object in the response
-    await post.populate("reviews.user").execPopulate();
-
-    // Return the updated post
-    res.json(post);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
-  }
-};
