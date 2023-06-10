@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setTips } from "state";
 import TipWidget from "./TipWidget";
 import TipWidgetProfile from "./TipWidgetProfile";
+import OldTipWidget from "./OldTipWidget";
 
 
 const TipsWidget = ({ userId, isProfile = false }) => {
@@ -51,7 +52,6 @@ const TipsWidget = ({ userId, isProfile = false }) => {
             lastName,
             description,
             location,
-            picturePath,
             videoPath,
             userPicturePath,
             likes,
@@ -64,7 +64,6 @@ const TipsWidget = ({ userId, isProfile = false }) => {
               name={`${firstName} ${lastName}`}
               description={description}
               location={location}
-              picturePath={picturePath}
               videoPath={videoPath}
               userPicturePath={userPicturePath}
               likes={likes}
@@ -86,20 +85,18 @@ const TipsWidget = ({ userId, isProfile = false }) => {
             lastName,
             description,
             location,
-            picturePath,
             videoPath,
             userPicturePath,
             likes,
             comments,
           }) => (
-            <TipWidget
+            <OldTipWidget
               key={_id}
               tipId={_id}
               tipUserId={userId}
               name={`${firstName} ${lastName}`}
               description={description}
               location={location}
-              picturePath={picturePath}
               videoPath={videoPath}
               userPicturePath={userPicturePath}
               likes={likes}

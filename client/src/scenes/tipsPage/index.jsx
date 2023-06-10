@@ -76,17 +76,17 @@ const TipsPage = () => {
           <Box m="1.2rem" />
           <FriendListWidget userId={userId} />
         </Box>
-          <Box
-            flexBasis={isNonMobileScreens ? "77%" : undefined}
-            mt={isNonMobileScreens ? undefined : "2rem"}
-          >
-            {/* <SearchBarPosts onSearch={handleSearch} /> */}
-            <TipsWidget userId={userId}/>
-            {/* {!isClient && (
-            <MyTipWidget 
-              picturePath={picturePath}
-            />
-            )} */}
+        <Box
+          flexBasis={isNonMobileScreens ? "77%" : undefined}
+          mt={isNonMobileScreens ? undefined : "2rem"}
+        >
+          {/* <SearchBarPosts onSearch={handleSearch} /> */}
+          <TipsWidget userId={userId}/>
+          {/* {!isClient && (
+          <MyTipWidget 
+            picturePath={picturePath}
+          />
+          )} */}
         </Box>
       </Box>
     </Box>

@@ -5,7 +5,7 @@ import User from "../models/User.js";
 export const createTip = async (req, res) => {
   try {
     console.log("body: ", req.body);
-    const { title, description, category, picturePath, videoPath } = req.body;
+    const { title, description, category, videoPath } = req.body;
     const { id } = req.params;
     const user = await User.findById(id);
     const newTip = new Tip({
@@ -16,7 +16,7 @@ export const createTip = async (req, res) => {
       title: title,
       description: description,
       userPicturePath: user.picturePath,
-      picturePath: picturePath,
+      // picturePath: picturePath,
       videoPath: videoPath,
       category: category,
       components: [],
@@ -90,12 +90,12 @@ export const likeTip = async (req, res) => {
 
 export const editTip = async (req, res) => {
   try {
-    const { title, description, picturePath, videoPath } = req.body;
+    const { title, description, videoPath } = req.body;
     const { id } = req.params;
 
     const updatedTip = await Tip.findByIdAndUpdate(
       id,
-      { title, description, picturePath, videoPath },
+      { title, description, videoPath },
       { new: true }
     );
     
@@ -125,5 +125,43 @@ export const deleteTip = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Assuming you are using Express.js
+const addReviewToTip = async (req, res) => {
+  try {
+    const { userId, stars, description } = req.body;
+    const { tipId } = req.params;
+
+    // Find the tip by its ID
+    const tip = await Tip.findById(tipId);
+
+    if (!tip) {
+      return res.status(404).json({ error: "Tip not found" });
+    }
+
+    // Create a new review object
+    const review = {
+      user: userId,
+      stars,
+      description,
+    };
+
+    // Add the review to the tip's reviews array
+    tip.reviews.push(review);
+
+    // Save the updated tip
+    await tip.save();
+
+    // You can optionally populate the user field in the review
+    // if you want to send the complete user object in the response
+    await tip.populate("reviews.user").execPopulate();
+
+    // Return the updated tip
+    res.json(tip);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
   }
 };

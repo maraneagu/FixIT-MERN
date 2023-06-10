@@ -25,7 +25,7 @@ const CreateTipForm = () => {
     title: "",
     description: "",
     category:"",
-    picturePath: "",
+    videoPath: "",
   };
 
   const handleSubmit = async (values) => {
@@ -34,15 +34,16 @@ const CreateTipForm = () => {
       formData.append("title", values.title);
       formData.append("description", values.description);
       formData.append("category", values.category);
+      formData.append("videoPath", values.videoPath);
 
-      //daca schimbam poza,
-      if (values.picturePath.name)
-        formData.append("picturePath", values.picturePath.name);
-      // daca schimbam orice dar nu poza
-      else formData.append("picturePath", values.picturePath);
+      // //daca schimbam poza,
+      // if (values.picturePath.name)
+      //   formData.append("picturePath", values.picturePath.name);
+      // // daca schimbam orice dar nu poza
+      // else formData.append("picturePath", values.picturePath);
 
       const response = await fetch(
-        `http://localhost:3001/posts/${userId}/create`,
+        `http://localhost:3001/tips/${userId}/create`,
         {
           method: "POST",
           headers: {
@@ -58,7 +59,7 @@ const CreateTipForm = () => {
         console.log(data);
         navigate(`/profile/${userId}`);
       } else {
-        throw new Error("Error creating post");
+        throw new Error("Error creating tip");
       }
     } catch (error) {
       alert(error.message);
@@ -125,7 +126,20 @@ const CreateTipForm = () => {
               <MenuItem value="instalation" >Instalation</MenuItem>
             </Select>
 
-            <InputLabel id="picture-label" sx={{ marginBottom: "-22px" }}>
+            <TextField
+              label="VideoPath"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.videoPath}
+              name="videoPath"
+              error={
+                Boolean(touched.videoPath) && Boolean(errors.videoPath)
+              }
+              helperText={touched.videoPath && errors.videoPath}
+              sx={{ gridColumn: "span 4" }}
+            />
+
+            {/* <InputLabel id="picture-label" sx={{ marginBottom: "-22px" }}>
               Post Picture
             </InputLabel>
             <Box
@@ -164,7 +178,7 @@ const CreateTipForm = () => {
                   </Box>
                 )}
               </Dropzone>
-            </Box>
+            </Box> */}
 
             <Box sx={{ gridColumn: "span 4", placeSelf: "center" }}>
               <Button
@@ -181,7 +195,7 @@ const CreateTipForm = () => {
                   },
                 }}
               >
-                Create Post
+                Create Tutorial
               </Button>
             </Box>
           </Box>
