@@ -86,7 +86,6 @@ const Navbar = () => {
               />
             </IconButton>
           )}
-          <Notifications sx={{ fontSize: "25px" }} />
 
           <Help sx={{ fontSize: "25px" }} />
           <FormControl variant="standard" value={fullName}>
@@ -107,12 +106,11 @@ const Navbar = () => {
               }}
               input={<InputBase />}
             >
-
-              <MenuItem 
+              <MenuItem
                 onClick={() => {
                   navigate(`/profile/${userId}`);
                   navigate(0);
-                }} 
+                }}
                 value={fullName}
               >
                 <Typography>{fullName}</Typography>
@@ -169,7 +167,7 @@ const Navbar = () => {
               )}
             </IconButton>
             <Message sx={{ fontSize: "25px" }} />
-            <Notifications sx={{ fontSize: "25px" }} />
+
             <Help sx={{ fontSize: "25px" }} />
             <FormControl variant="standard" value={fullName}>
               <Select
@@ -189,13 +187,11 @@ const Navbar = () => {
                 }}
                 input={<InputBase />}
               >
-
-                <MenuItem 
+                <MenuItem
                   onClick={() => {
                     navigate(`/profile/${userId}`);
                     navigate(0);
-                  }} 
-
+                  }}
                   value={fullName}
                 >
                   <Typography>{fullName}</Typography>
