@@ -7,12 +7,10 @@ const router = express.Router();
 /* READ */
 router.get("/", verifyToken, getFeedTips);
 router.get("/:userId/tips", verifyToken, getUserTips);
-router.get("/:postId", verifyToken, getTip);
+router.get("/:tipId", verifyToken, getTip);
 
 /* UPDATE */
 router.patch("/:id/like", verifyToken, likeTip);
-// router.delete("/:tipId",verifyToken, deleteTip);
-//router.post("/:userId/create", verifyToken, createPost);
-router.delete("/:postId",verifyToken, deleteTip);
+router.delete("/:tipId",verifyToken, deleteTip);
 
 export default router;

@@ -70,7 +70,7 @@ const TipsPage = () => {
                 fontSize: 20,
                 width: 320,
             }}
-            >Add a tutorial
+            >Add a tip
           </Button>
           )}
           <Box m="1.2rem" />
@@ -78,15 +78,9 @@ const TipsPage = () => {
         </Box>
         <Box
           flexBasis={isNonMobileScreens ? "77%" : undefined}
-          mt={isNonMobileScreens ? undefined : "2rem"}
+          mt={isNonMobileScreens ? "-2rem" : undefined}
         >
-          {/* <SearchBarPosts onSearch={handleSearch} /> */}
           <TipsWidget userId={userId}/>
-          {/* {!isClient && (
-          <MyTipWidget 
-            picturePath={picturePath}
-          />
-          )} */}
         </Box>
       </Box>
     </Box>

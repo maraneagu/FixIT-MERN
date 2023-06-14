@@ -108,11 +108,8 @@ export const editTip = async (req, res) => {
 export const deleteTip = async (req, res) => {
   const { tipId } = req.params;
   const { userId } = req.body;
-  // console.log("userID :", userId);
   try {
     const tip = await Tip.findById(tipId);
-    // console.log("tip : ",tip);
-    // console.log("tipid :",tipId);
     if (!tip) {
       return res.status(409).json({ message: "Tip not found" });
     }
@@ -124,43 +121,5 @@ export const deleteTip = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
-  }
-};
-
-// Assuming you are using Express.js
-const addReviewToTip = async (req, res) => {
-  try {
-    const { userId, stars, description } = req.body;
-    const { tipId } = req.params;
-
-    // Find the tip by its ID
-    const tip = await Tip.findById(tipId);
-
-    if (!tip) {
-      return res.status(404).json({ error: "Tip not found" });
-    }
-
-    // Create a new review object
-    const review = {
-      user: userId,
-      stars,
-      description,
-    };
-
-    // Add the review to the tip's reviews array
-    tip.reviews.push(review);
-
-    // Save the updated tip
-    await tip.save();
-
-    // You can optionally populate the user field in the review
-    // if you want to send the complete user object in the response
-    await tip.populate("reviews.user").execPopulate();
-
-    // Return the updated tip
-    res.json(tip);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
   }
 };

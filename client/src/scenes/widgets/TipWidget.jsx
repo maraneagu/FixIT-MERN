@@ -32,8 +32,6 @@ import {
   import { setTip } from "state";
   import { setTips } from "state";
   import { useNavigate, useLocation } from "react-router-dom";
-import ReactPlayer from "react-player";
-import { Container } from "react-bootstrap";
 import PlayerComponent from "./PlayerComponent";
   
   const TipWidget = ({
@@ -49,14 +47,9 @@ import PlayerComponent from "./PlayerComponent";
     likes,
     comments,
   }) => {
-		// const videoPath = "https://www.youtube.com/watch?v=pSY3i5XHHXo&ab_channel=CentralCee";
     const [isComments, setIsComments] = useState(false);
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token);
-  
-    const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
-    const [reviewRating, setReviewRating] = useState(0);
-    const [reviewDescription, setReviewDescription] = useState("");
   
     const loggedInUserId = useSelector((state) => state.user._id);
     const isProfileUser = tipUserId === loggedInUserId;
@@ -85,54 +78,6 @@ import PlayerComponent from "./PlayerComponent";
       dispatch(setTip({ tip: updatedTip }));
     };
   
-  
-    const handleReviewDialogOpen = () => {
-      setIsReviewDialogOpen(true);
-    };
-  
-    const handleReviewDialogClose = () => {
-      setIsReviewDialogOpen(false);
-      setReviewRating(0);
-      setReviewDescription("");
-    };
-  
-    const handleReviewRatingChange = (value) => {
-      setReviewRating(value);
-    };
-  
-    const handleReviewDescriptionChange = (event) => {
-      setReviewDescription(event.target.value);
-    };
-  
-    const handleAddReview = async () => {
-      if (reviewRating === 0 || reviewDescription === "") {
-        return;
-      }
-  
-      const response = await fetch(`http://localhost:3001/reviews/${loggedInUserId}/${tipId}/create`, {
-        method: "TIP",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          stars: reviewRating,
-          description: reviewDescription,
-        }),
-      });
-  
-      if (response.ok) {
-        const updatedTip = await response.json();
-        dispatch(setTip({ tip: updatedTip }));
-        setIsReviewDialogOpen(false);
-        setReviewRating(0);
-        setReviewDescription("");
-      }
-    };
-  
-  
-  
-  
     const handleDeleteConfirmationOpen = () => {
       setDeleteConfirmationOpen(true);
     };
@@ -140,6 +85,7 @@ import PlayerComponent from "./PlayerComponent";
     const handleDeleteConfirmationClose = () => {
       setDeleteConfirmationOpen(false);
     };
+
     const deleteTip = async () => {
       console.log("tipid :", tipId)
       const response = await fetch(`http://localhost:3001/tips/${tipId}`, {
@@ -147,7 +93,6 @@ import PlayerComponent from "./PlayerComponent";
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
-          
         },
         body: JSON.stringify({ userId: loggedInUserId }),
       });
@@ -178,6 +123,10 @@ import PlayerComponent from "./PlayerComponent";
           >
             {title}
         </Typography>
+
+        <Typography color={main} sx={{ mt: "1rem" }}>
+          {description}
+        </Typography>
   
         <Typography
           color={medium}
@@ -186,23 +135,13 @@ import PlayerComponent from "./PlayerComponent";
           sx={{ mt: "1.3rem", mb: "5px" }}
         >
           <ClassIcon sx={{ color: main, mr: "8px" }}/>
-          {category ? category.charAt(0).toUpperCase() + category.slice(1) : ''}
+          {category ? category.charAt(0).toUpperCase() + category.slice(1) : ""}
         </Typography>
-        
-        {/* {picturePath && (
-          <img
-            width="100%"
-            height="auto"
-            alt="tip"
-            style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-            src={`http://localhost:3001/assets/${picturePath}`}
-          />
-        )} */}
-
-        
+        <br></br>
 				<PlayerComponent vid={videoPath} />
-        
-				
+
+        <Divider sx={{ mt: "1rem", mb: "1rem" }} />
+        	
         <FlexBetween mt="0.25rem">
           <FlexBetween gap="1rem">
             <FlexBetween gap="0.3rem">
@@ -215,66 +154,32 @@ import PlayerComponent from "./PlayerComponent";
               </IconButton>
               <Typography>{likeCount}</Typography>
             </FlexBetween>
-  
-            <FlexBetween gap="0.3rem">
-              <IconButton onClick={handleReviewDialogOpen}>
-                <ChatBubbleOutlineOutlined />
-              </IconButton>
-              <Typography>Add Review</Typography>
-            </FlexBetween>
           </FlexBetween>
-        <Box>
-          {isProfileUser && (
-            <IconButton
-              onClick={() => navigate(`/edittip/${tipId}`)}
-              sx={{
-                "&:hover": {
-                  cursor: "pointer",
-                },
-              }}
-            >
-              <EditIcon/>
-            </IconButton>
-          )}
-          {isProfileUser && (
-            <IconButton onClick={handleDeleteConfirmationOpen}>
-              <DeleteOutlined />
-            </IconButton>
-          )}</Box>
-          
+          <Box>
+            {isProfileUser && (
+              <IconButton
+                onClick={() => navigate(`/edittip/${tipId}`)}
+                sx={{
+                  "&:hover": {
+                    cursor: "pointer",
+                  },
+                }}
+              >
+                <EditIcon/>
+              </IconButton>
+            )}
+            {isProfileUser && (
+              <IconButton onClick={handleDeleteConfirmationOpen}>
+                <DeleteOutlined />
+              </IconButton>
+            )}
+          </Box>
         </FlexBetween>
-        
-        {isComments && (
-          <Box mt="0.5rem">
-            {comments.map((comment, i) => (
-              <Box key={`${name}-${i}`}>
-                <Divider />
-                <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                  {comment}
-                </Typography>
-              </Box>
-            ))}
-            <Divider />
-          </Box>
-        )}
-  
-        {/* Show the button only on the home page */}
-        {isHomePage && (
-          <Box
-            marginTop="10px"
-            marginBottom="10px"
-            display="flex"
-            justifyContent="center"
-          >
-            <Button
-              variant="contained"
-              onClick={() => navigate(`/show/${tipId}`)}
-            >
-              See the offer
-            </Button>
-          </Box>
-        )}
-      <Dialog open={deleteConfirmationOpen} onClose={handleDeleteConfirmationClose}>
+
+        <Dialog
+          open={deleteConfirmationOpen}
+          onClose={handleDeleteConfirmationClose}
+        >
           <DialogTitle>Delete Tip</DialogTitle>
           <DialogContent>
             <Typography variant="body1">
@@ -290,44 +195,39 @@ import PlayerComponent from "./PlayerComponent";
             </Button>
           </DialogActions>
         </Dialog>
+          
+        
+        
+        {isComments && (
+          <Box mt="0.5rem">
+            {comments.map((comment, i) => (
+              <Box key={`${name}-${i}`}>
+                <Divider />
+                <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
+                  {comment}
+                </Typography>
+              </Box>
+            ))}
+            <Divider />
+          </Box>
+        )}
   
-  
-  
-        <Dialog
-          open={isReviewDialogOpen}
-          onClose={handleReviewDialogClose}
-          fullWidth
-          maxWidth="sm"
-        >
-          <DialogTitle>Add Review</DialogTitle>
-          <DialogContent>
-            <Box display="flex" justifyContent="center" mb={2}>
-              <Rating
-                name="review-rating"
-                value={reviewRating}
-                onChange={(event, newValue) => {
-                  handleReviewRatingChange(newValue);
-                }}
-              />
-            </Box>
-            <TextField
-              autoFocus
-              multiline
-              rows={4}
-              variant="outlined"
-              fullWidth
-              placeholder="Write your review..."
-              value={reviewDescription}
-              onChange={handleReviewDescriptionChange}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleReviewDialogClose}>Cancel</Button>
-            <Button onClick={handleAddReview} variant="contained">
-              Add Review
+        {/* Show the button only on the home page
+        {isHomePage && (
+          <Box
+            marginTop="10px"
+            marginBottom="10px"
+            display="flex"
+            justifyContent="center"
+          >
+            <Button
+              variant="contained"
+              onClick={() => navigate(`/show/${tipId}`)}
+            >
+              See the offer
             </Button>
-          </DialogActions>
-        </Dialog>
+          </Box>
+        )} */}
       </WidgetWrapper>
     );
   };

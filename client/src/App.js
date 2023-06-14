@@ -14,6 +14,7 @@ import { themeSettings } from "./theme";
 import EditPost from "scenes/crud/edit/editPost";
 import CreateTipPage from "scenes/createTipPage";
 import TipsPage from "scenes/tipsPage";
+import EditTip from "scenes/crud/edit/editTip";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -50,6 +51,10 @@ function App() {
             <Route
               path="/editpost/:postId"
               element={isAuth ? <EditPost /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/edittip/:tipId"
+              element={isAuth ? <EditTip /> : <Navigate to="/" />}
             />
             <Route
               path="/showMoreFriends/:userId"

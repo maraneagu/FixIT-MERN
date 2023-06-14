@@ -72,23 +72,20 @@ app.post(
   editPost
 );
 
-//app.patch("/users/editUser", upload.single("picture"), editUser);
-
-app.post("/tips", verifyToken, upload.single("picture"), createTip);
-app.post("/tips", verifyToken, upload.single("video"), createTip);
+// app.patch("/users/editUser", upload.single("picture"), editUser);
+// app.post("/tips", verifyToken, upload.single("picture"), createTip);
+// app.post("/tips", verifyToken, upload.single("video"), createTip);
 
 app.post(
   "/tips/:id/create",
   verifyToken,
   upload.single("picturePath"),
-  // upload.single("videoPath"),
   createTip
 );
 app.post(
   "/tips/:id/edit",
   verifyToken,
   upload.single("picturePath"),
-  // upload.single("videoPath"),
   editTip
 );
 
