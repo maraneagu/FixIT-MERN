@@ -52,13 +52,13 @@ const ReviewsWidget = ({ postId }) => {
        // Adjust the height as per your requirements
     >
       <Typography 
-      align="center"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      paddingTop="30px"
-      fontSize="20px"
-      variant="h4"
+        align="center"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        paddingTop="30px"
+        fontSize="20px"
+        variant="h4"
         color={dark}
         fontWeight="500">
         Reviews
@@ -68,6 +68,7 @@ const ReviewsWidget = ({ postId }) => {
         reviews.map(({ _id, postId, userId, description, stars }) => (
           <ReviewWidget
             key={_id}
+            reviewId={_id}
             postId={postId}
             userId={userId}
             description={description}

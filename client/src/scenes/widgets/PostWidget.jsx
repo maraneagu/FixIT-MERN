@@ -126,9 +126,6 @@ const PostWidget = ({
     }
   };
 
-
-
-
   const handleDeleteConfirmationOpen = () => {
     setDeleteConfirmationOpen(true);
   };
@@ -136,6 +133,7 @@ const PostWidget = ({
   const handleDeleteConfirmationClose = () => {
     setDeleteConfirmationOpen(false);
   };
+
   const deletePost = async () => {
     console.log("postid :", postId)
     const response = await fetch(`http://localhost:3001/posts/${postId}`, {
@@ -152,6 +150,7 @@ const PostWidget = ({
       dispatch(setPosts({ posts: restPosts}));
     }
   };
+
   return (
     <WidgetWrapper 
       m="2rem 0"
@@ -193,6 +192,8 @@ const PostWidget = ({
           src={`http://localhost:3001/assets/${picturePath}`}
         />
       )}
+
+      <Divider sx={{ mt: "1rem", mb: "1rem" }} />
           
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
@@ -211,7 +212,16 @@ const PostWidget = ({
             <IconButton onClick={handleReviewDialogOpen}>
               <ChatBubbleOutlineOutlined />
             </IconButton>
-            <Typography>Add Review</Typography>
+            <Typography
+              onClick={handleReviewDialogOpen}
+              sx={{
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              }}
+            >
+              Add Review
+            </Typography>
           </FlexBetween>
         </FlexBetween>
       <Box>
@@ -234,25 +244,13 @@ const PostWidget = ({
         )}</Box>
         
       </FlexBetween>
-      
-      {isComments && (
-        <Box mt="0.5rem">
-          {comments.map((comment, i) => (
-            <Box key={`${name}-${i}`}>
-              <Divider />
-              <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                {comment}
-              </Typography>
-            </Box>
-          ))}
-          <Divider />
-        </Box>
-      )}
+
+      <Divider sx={{ mt: "1rem", mb: "1rem" }} />
 
       {/* Show the button only on the home page */}
       {isHomePage && (
         <Box
-          marginTop="10px"
+          marginTop="20px"
           marginBottom="10px"
           display="flex"
           justifyContent="center"
