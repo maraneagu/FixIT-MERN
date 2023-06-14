@@ -6,9 +6,9 @@ import {
   DeleteOutlined,
 } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
-import ClassIcon from '@mui/icons-material/Class';
-import TitleIcon from '@mui/icons-material/Title';
-import DescriptionIcon from '@mui/icons-material/Description';
+import ClassIcon from "@mui/icons-material/Class";
+import TitleIcon from "@mui/icons-material/Title";
+import DescriptionIcon from "@mui/icons-material/Description";
 import {
   Box,
   Divider,
@@ -17,12 +17,12 @@ import {
   useTheme,
   Button,
   useMediaQuery,
-   Dialog,
+  Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   Rating,
-  TextField
+  TextField,
 } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
@@ -63,10 +63,12 @@ const PostWidget = ({
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
+
   const primary = palette.primary.main;
   const location2 = useLocation();
   const isHomePage = location2.pathname === "/home";
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+  const user = useSelector((state) => state.user);
 
   const patchLike = async () => {
     const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
@@ -80,7 +82,6 @@ const PostWidget = ({
     const updatedPost = await response.json();
     dispatch(setPost({ post: updatedPost }));
   };
-
 
   const handleReviewDialogOpen = () => {
     setIsReviewDialogOpen(true);
@@ -105,17 +106,20 @@ const PostWidget = ({
       return;
     }
 
-    const response = await fetch(`http://localhost:3001/reviews/${loggedInUserId}/${postId}/create`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        stars: reviewRating,
-        description: reviewDescription,
-      }),
-    });
+    const response = await fetch(
+      `http://localhost:3001/reviews/${loggedInUserId}/${postId}/create`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          stars: reviewRating,
+          description: reviewDescription,
+        }),
+      }
+    );
 
     if (response.ok) {
       const updatedPost = await response.json();
@@ -135,27 +139,26 @@ const PostWidget = ({
   };
 
   const deletePost = async () => {
-    console.log("postid :", postId)
+    console.log("postid :", postId);
     const response = await fetch(`http://localhost:3001/posts/${postId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-        
       },
       body: JSON.stringify({ userId: loggedInUserId }),
     });
     if (response.ok) {
       const restPosts = await response.json();
-      dispatch(setPosts({ posts: restPosts}));
+      dispatch(setPosts({ posts: restPosts }));
     }
   };
 
   return (
-    <WidgetWrapper 
+    <WidgetWrapper
       m="2rem 0"
-      ml={isNonMobileScreens ? "15px" : undefined} 
-      mr={isNonMobileScreens ? "15px" : undefined} 
+      ml={isNonMobileScreens ? "15px" : undefined}
+      mr={isNonMobileScreens ? "15px" : undefined}
     >
       <Friend
         friendId={postUserId}
@@ -164,13 +167,13 @@ const PostWidget = ({
         userPicturePath={userPicturePath}
       />
 
-      <Typography 
-          color={main} 
-          variant="h5" 
-          fontWeight="500" 
-          sx={{ mt: "1rem", width: "100%", wordWrap: "break-word" }}
-        >
-          {title}
+      <Typography
+        color={main}
+        variant="h5"
+        fontWeight="500"
+        sx={{ mt: "1rem", width: "100%", wordWrap: "break-word" }}
+      >
+        {title}
       </Typography>
 
       <Typography
@@ -179,10 +182,10 @@ const PostWidget = ({
         alignItems="center"
         sx={{ mt: "1.3rem", mb: "5px" }}
       >
-        <ClassIcon sx={{ color: main, mr: "8px" }}/>
-        {category ? category.charAt(0).toUpperCase() + category.slice(1) : ''}
+        <ClassIcon sx={{ color: main, mr: "8px" }} />
+        {category ? category.charAt(0).toUpperCase() + category.slice(1) : ""}
       </Typography>
-      
+
       {picturePath && (
         <img
           width="100%"
@@ -194,7 +197,7 @@ const PostWidget = ({
       )}
 
       <Divider sx={{ mt: "1rem", mb: "1rem" }} />
-          
+
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
@@ -209,44 +212,36 @@ const PostWidget = ({
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">
-            <IconButton onClick={handleReviewDialogOpen}>
-              <ChatBubbleOutlineOutlined />
-            </IconButton>
-            <Typography
-              onClick={handleReviewDialogOpen}
+            {user.isClient === true && (
+              <IconButton onClick={handleReviewDialogOpen}>
+                <ChatBubbleOutlineOutlined />
+              </IconButton>
+            )}
+            {user.isClient === true && <Typography>Add Review</Typography>}
+          </FlexBetween>
+        </FlexBetween>
+        <Box>
+          {isProfileUser && (
+            <IconButton
+              onClick={() => navigate(`/editpost/${postId}`)}
               sx={{
                 "&:hover": {
                   cursor: "pointer",
                 },
               }}
             >
-              Add Review
-            </Typography>
-          </FlexBetween>
-        </FlexBetween>
-      <Box>
-        {isProfileUser && (
-          <IconButton
-            onClick={() => navigate(`/editpost/${postId}`)}
-            sx={{
-              "&:hover": {
-                cursor: "pointer",
-              },
-            }}
-          >
-            <EditIcon/>
-          </IconButton>
-        )}
-        {isProfileUser && (
-          <IconButton onClick={handleDeleteConfirmationOpen}>
-            <DeleteOutlined />
-          </IconButton>
-        )}</Box>
-        
+              <EditIcon />
+            </IconButton>
+          )}
+          {isProfileUser && (
+            <IconButton onClick={handleDeleteConfirmationOpen}>
+              <DeleteOutlined />
+            </IconButton>
+          )}
+        </Box>
       </FlexBetween>
 
       <Divider sx={{ mt: "1rem", mb: "1rem" }} />
-
       {/* Show the button only on the home page */}
       {isHomePage && (
         <Box
@@ -263,7 +258,10 @@ const PostWidget = ({
           </Button>
         </Box>
       )}
-    <Dialog open={deleteConfirmationOpen} onClose={handleDeleteConfirmationClose}>
+      <Dialog
+        open={deleteConfirmationOpen}
+        onClose={handleDeleteConfirmationClose}
+      >
         <DialogTitle>Delete Post</DialogTitle>
         <DialogContent>
           <Typography variant="body1">
@@ -279,8 +277,6 @@ const PostWidget = ({
           </Button>
         </DialogActions>
       </Dialog>
-
-
 
       <Dialog
         open={isReviewDialogOpen}

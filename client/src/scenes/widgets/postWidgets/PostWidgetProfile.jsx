@@ -64,6 +64,7 @@ const PostWidgetProfile = ({
   const main = palette.neutral.main;
   const primary = palette.primary.main;
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+  const user = useSelector((state) => state.user);
   const patchLike = async () => {
     const response = await fetch(
       `http://localhost:3001/posts/${postId}/like`,
@@ -206,29 +207,22 @@ const PostWidgetProfile = ({
           )}
         </IconButton>
 
+        {isNonMobileScreens ? (
+          <>
+          {user.isClient === true && (
             <FlexBetween gap="0.3rem">
-              <IconButton onClick={handleReviewDialogOpen} sx={{ color: main }}>
+              <IconButton onClick={handleReviewDialogOpen}>
                 <ChatBubbleOutlineOutlined />
               </IconButton>
-              <Typography
-                onClick={handleReviewDialogOpen}
-                sx={{
-                  color: main,
-                  "&:hover": {
-                    cursor: "pointer",
-                  },
-                }}
-              >
-                Add Review
-              </Typography>
-            </FlexBetween>
+              <Typography>Add Review</Typography>
+            </FlexBetween>)}
 
             {isProfileUser && (
               <>
                 <IconButton
                   size="small"
                   onClick={() =>
-                    navigate(`/editpost/${postId}`, { state: { post: { postId } } })
+                    navigate(`/edit-post/${postId}`, { state: { post: { postId } } })
                   }
                   sx={{ color: main }}
                 >
@@ -244,24 +238,22 @@ const PostWidgetProfile = ({
                 </IconButton>
               </>
             )}
-
-      </FlexBetween>
-
-      <Divider sx={{ mt: "1.2rem", mb: "1rem" }} />
-
-      <Box
-          marginTop="1.5rem"
-          marginBottom="1rem"
-          display="flex"
-          justifyContent="center"
-        >
+          </>
+        ) : (
           <Button
-            variant="contained"
-            onClick={() => navigate(`/show/${postId}`)}
+            variant="outlined"
+            size="small"
+            startIcon={<ChatBubbleOutlineOutlined />}
+            onClick={() => navigate(`/post/${postId}`)}
           >
-            See the offer
+            Comments ({comments.length})
           </Button>
-        </Box>
+        )}
+
+        <IconButton size="small">
+          <ShareOutlined fontSize="small" />
+        </IconButton>
+      </FlexBetween>
 
       <Dialog
         open={deleteConfirmationOpen}

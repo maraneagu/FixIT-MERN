@@ -4,9 +4,15 @@ import {
   FavoriteOutlined,
 } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
-import ClassIcon from '@mui/icons-material/Class';
-import { 
-  Box, useMediaQuery, Typography, useTheme, Divider, IconButton, Dialog,
+import ClassIcon from "@mui/icons-material/Class";
+import {
+  Box,
+  useMediaQuery,
+  Typography,
+  useTheme,
+  Divider,
+  IconButton,
+  Dialog,
   DialogTitle,
   Button,
   DialogContent,
@@ -16,7 +22,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, useLocation  } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import WidgetWrapper from "components/WidgetWrapper";
 import Friend from "components/Friend";
 import Navbar from "components/navbar";
@@ -38,7 +44,7 @@ const ShowPost = () => {
   const [reviewDescription, setReviewDescription] = useState("");
 
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  
+
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
@@ -52,7 +58,7 @@ const ShowPost = () => {
   const likeCount = Object.keys(currentPost.likes).length;
   const isLiked = Boolean(currentPost.likes[loggedInUserId]);
   const isProfileUser = currentPost.userId === loggedInUserId;
-
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const getPost = async () => {
@@ -100,17 +106,20 @@ const ShowPost = () => {
       return;
     }
 
-    const response = await fetch(`http://localhost:3001/reviews/${loggedInUserId}/${postId}/create`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        stars: reviewRating,
-        description: reviewDescription,
-      }),
-    });
+    const response = await fetch(
+      `http://localhost:3001/reviews/${loggedInUserId}/${postId}/create`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          stars: reviewRating,
+          description: reviewDescription,
+        }),
+      }
+    );
 
     if (response.ok) {
       const updatedPost = await response.json();
@@ -124,7 +133,7 @@ const ShowPost = () => {
 
   useEffect(() => {
     // fetch post whenever postId changes
-    if (!currentPost){
+    if (!currentPost) {
       getPost();
     }
     console.log(currentPost.firstName);
@@ -146,7 +155,11 @@ const ShowPost = () => {
         gap="2rem"
       >
         <Box width={isNonMobileScreens ? "60%" : "100%"}>
-          <WidgetWrapper m="2rem 0" marginLeft={isNonMobileScreens ? "15px" : undefined} marginRight={isNonMobileScreens ? "15px" : undefined}>
+          <WidgetWrapper
+            m="2rem 0"
+            marginLeft={isNonMobileScreens ? "15px" : undefined}
+            marginRight={isNonMobileScreens ? "15px" : undefined}
+          >
             <Friend
               friendId={currentPost.userId}
               name={`${currentPost.firstName} ${currentPost.lastName}`}
@@ -160,30 +173,46 @@ const ShowPost = () => {
               alignItems="center"
               sx={{ mt: "1.3rem", mb: "5px" }}
             >
-              <ClassIcon sx={{ color: main, mr: "8px" }}/>
-              {currentPost.category ? currentPost.category.charAt(0).toUpperCase() + currentPost.category.slice(1) : ''}
+              <ClassIcon sx={{ color: main, mr: "8px" }} />
+              {currentPost.category
+                ? currentPost.category.charAt(0).toUpperCase() +
+                  currentPost.category.slice(1)
+                : ""}
             </Typography>
 
-            <Typography 
-              color={main} 
-              variant="h5" 
-              fontWeight="500"  
-              sx={{ mt: "1.5rem", mb: "0.80rem", width: "100%", wordWrap: "break-word" }}
+            <Typography
+              color={main}
+              variant="h5"
+              fontWeight="500"
+              sx={{
+                mt: "1.5rem",
+                mb: "0.80rem",
+                width: "100%",
+                wordWrap: "break-word",
+              }}
             >
               {currentPost.title}
             </Typography>
-            
+
             {currentPost.picturePath && (
               <img
                 width="100%"
                 height="auto"
                 alt="post"
-                style={{ borderRadius: "0.75rem", marginTop: "0.75rem", marginBottom: "0.5rem" }}
+                style={{
+                  borderRadius: "0.75rem",
+                  marginTop: "0.75rem",
+                  marginBottom: "0.5rem",
+                }}
                 src={`http://localhost:3001/assets/${currentPost.picturePath}`}
               />
             )}
 
-            <Typography color={main} marginBottom="5px" sx={{ mt: "1rem", width: "100%", wordWrap: "break-word" }}>
+            <Typography
+              color={main}
+              marginBottom="5px"
+              sx={{ mt: "1rem", width: "100%", wordWrap: "break-word" }}
+            >
               {currentPost.description}
             </Typography>
 
@@ -201,23 +230,27 @@ const ShowPost = () => {
                   </IconButton>
                   <Typography>{likeCount}</Typography>
                 </FlexBetween>
-
-                <FlexBetween gap="0.3rem">
-                  <IconButton onClick={handleReviewDialogOpen} sx={{ color: main }}>
-                    <ChatBubbleOutlineOutlined />
-                  </IconButton>
-                  <Typography 
-                    onClick={handleReviewDialogOpen}
-                    sx={{
-                      color: main,
-                      "&:hover": {
-                        cursor: "pointer",
-                      },
-                    }}
-                  >
-                    Add Review
-                  </Typography>
-                </FlexBetween>
+                {user.isClient === true && (
+                  <FlexBetween gap="0.3rem">
+                    <IconButton
+                      onClick={handleReviewDialogOpen}
+                      sx={{ color: main }}
+                    >
+                      <ChatBubbleOutlineOutlined />
+                    </IconButton>
+                    <Typography
+                      onClick={handleReviewDialogOpen}
+                      sx={{
+                        color: main,
+                        "&:hover": {
+                          cursor: "pointer",
+                        },
+                      }}
+                    >
+                      Add Review
+                    </Typography>
+                  </FlexBetween>
+                )}
               </FlexBetween>
 
               {isProfileUser && (
@@ -230,13 +263,13 @@ const ShowPost = () => {
                     },
                   }}
                 >
-                  <EditIcon/>
+                  <EditIcon />
                 </IconButton>
               )}
             </FlexBetween>
           </WidgetWrapper>
         </Box>
-      
+
         <Box width={isNonMobileScreens ? "40%" : "100%"}>
           <ReviewsWidget postId={postId} />
         </Box>

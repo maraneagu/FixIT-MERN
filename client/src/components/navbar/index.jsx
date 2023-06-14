@@ -118,7 +118,7 @@ const Navbar = () => {
                 onClick={() => {
                   navigate(`/profile/${userId}`);
                   navigate(0);
-                }} 
+                }}
                 value={fullName}
               >
                 <Typography>{fullName}</Typography>
