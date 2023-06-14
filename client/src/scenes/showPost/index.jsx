@@ -6,10 +6,18 @@ import {
 } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import ClassIcon from '@mui/icons-material/Class';
-import { Box, useMediaQuery, Typography, useTheme, Divider, IconButton} from "@mui/material";
+import { 
+  Box, useMediaQuery, Typography, useTheme, Divider, IconButton, Dialog,
+  DialogTitle,
+  Button,
+  DialogContent,
+  DialogActions,
+  Rating,
+  TextField,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation  } from "react-router-dom";
 import WidgetWrapper from "components/WidgetWrapper";
 import Friend from "components/Friend";
 import Navbar from "scenes/navbar";
@@ -26,7 +34,10 @@ const ShowPost = () => {
   const token = useSelector((state) => state.token);
   const navigate = useNavigate();
 
-  const [isComments, setIsComments] = useState(false);
+  const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewDescription, setReviewDescription] = useState("");
+
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   
   const { palette } = useTheme();
@@ -34,12 +45,16 @@ const ShowPost = () => {
   const medium = palette.neutral.medium;
   const primary = palette.primary.main;
 
+  const location = useLocation();
+
   const currentPost = useSelector((state) =>
     state.posts.find((post) => post._id === postId)
   );
 
-  const isLiked = Boolean(currentPost.likes[loggedInUserId]);
+  console.log(currentPost);
+  console.log("postId: ", postId);
   const likeCount = Object.keys(currentPost.likes).length;
+  const isLiked = Boolean(currentPost.likes[loggedInUserId]);
   const isProfileUser = currentPost.userId === loggedInUserId;
 
   const dispatch = useDispatch();
@@ -66,13 +81,58 @@ const ShowPost = () => {
     dispatch(setPost({ post: updatedPost }));
   };
 
+  const handleReviewDialogOpen = () => {
+    setIsReviewDialogOpen(true);
+  };
+
+  const handleReviewDialogClose = () => {
+    setIsReviewDialogOpen(false);
+    setReviewRating(0);
+    setReviewDescription("");
+  };
+
+  const handleReviewRatingChange = (value) => {
+    setReviewRating(value);
+  };
+
+  const handleReviewDescriptionChange = (event) => {
+    setReviewDescription(event.target.value);
+  };
+
+  const handleAddReview = async () => {
+    if (reviewRating === 0 || reviewDescription === "") {
+      return;
+    }
+
+    const response = await fetch(`http://localhost:3001/reviews/${loggedInUserId}/${postId}/create`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        stars: reviewRating,
+        description: reviewDescription,
+      }),
+    });
+
+    if (response.ok) {
+      const updatedPost = await response.json();
+      dispatch(setPost({ post: updatedPost }));
+      setIsReviewDialogOpen(false);
+      setReviewRating(0);
+      setReviewDescription("");
+      window.location.reload();
+    }
+  };
+
   useEffect(() => {
     // fetch post whenever postId changes
-    if (!currentPost) {
+    if (!currentPost){
       getPost();
     }
     console.log(currentPost.firstName);
-  }, [postId]);
+  }, [postId, location]);
 
   if (!currentPost) {
     return <div>Loading...</div>;
@@ -112,13 +172,9 @@ const ShowPost = () => {
               color={main} 
               variant="h5" 
               fontWeight="500"  
-              sx={{ mt: "1rem", width: "100%", wordWrap: "break-word" }}
+              sx={{ mt: "1.5rem", mb: "0.80rem", width: "100%", wordWrap: "break-word" }}
             >
               {currentPost.title}
-            </Typography>
-
-            <Typography color={main} marginBottom="5px" sx={{ mt: "1rem", width: "100%", wordWrap: "break-word" }}>
-              {currentPost.description}
             </Typography>
             
             {currentPost.picturePath && (
@@ -126,17 +182,23 @@ const ShowPost = () => {
                 width="100%"
                 height="auto"
                 alt="post"
-                style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
+                style={{ borderRadius: "0.75rem", marginTop: "0.75rem", marginBottom: "0.5rem" }}
                 src={`http://localhost:3001/assets/${currentPost.picturePath}`}
               />
             )}
 
+            <Typography color={main} marginBottom="5px" sx={{ mt: "1rem", width: "100%", wordWrap: "break-word" }}>
+              {currentPost.description}
+            </Typography>
+
+            <Divider sx={{ mt: "1.2rem", mb: "1rem" }} />
+
             <FlexBetween mt="0.25rem" mb="0.25rem">
               <FlexBetween gap="1rem">
                 <FlexBetween gap="0.3rem">
-                  <IconButton onClick={patchLike}>
+                  <IconButton onClick={patchLike} sx={{ color: main }}>
                     {isLiked ? (
-                      <FavoriteOutlined sx={{ color: primary }} />
+                      <FavoriteOutlined sx={{ color: main }} />
                     ) : (
                       <FavoriteBorderOutlined />
                     )}
@@ -145,10 +207,20 @@ const ShowPost = () => {
                 </FlexBetween>
 
                 <FlexBetween gap="0.3rem">
-                  <IconButton onClick={() => setIsComments(!isComments)}>
+                  <IconButton onClick={handleReviewDialogOpen} sx={{ color: main }}>
                     <ChatBubbleOutlineOutlined />
                   </IconButton>
-                  <Typography>{currentPost.comments.length}</Typography>
+                  <Typography 
+                    onClick={handleReviewDialogOpen}
+                    sx={{
+                      color: main,
+                      "&:hover": {
+                        cursor: "pointer",
+                      },
+                    }}
+                  >
+                    Add Review
+                  </Typography>
                 </FlexBetween>
               </FlexBetween>
 
@@ -156,6 +228,7 @@ const ShowPost = () => {
                 <IconButton
                   onClick={() => navigate(`/editpost/${postId}`)}
                   sx={{
+                    color: main,
                     "&:hover": {
                       cursor: "pointer",
                     },
@@ -165,20 +238,6 @@ const ShowPost = () => {
                 </IconButton>
               )}
             </FlexBetween>
-
-            {isComments && (
-              <Box mt="0.5rem">
-                {currentPost.comments.map((comment, i) => (
-                  <Box key={`${currentPost.name}-${i}`}>
-                    <Divider />
-                    <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                      {comment}
-                    </Typography>
-                  </Box>
-                ))}
-                <Divider />
-              </Box>
-            )}
           </WidgetWrapper>
         </Box>
       
@@ -186,6 +245,42 @@ const ShowPost = () => {
           <ReviewsWidget postId={postId} />
         </Box>
       </Box>
+
+      <Dialog
+        open={isReviewDialogOpen}
+        onClose={handleReviewDialogClose}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Add Review</DialogTitle>
+        <DialogContent>
+          <Box display="flex" justifyContent="center" mb={2}>
+            <Rating
+              name="review-rating"
+              value={reviewRating}
+              onChange={(event, newValue) => {
+                handleReviewRatingChange(newValue);
+              }}
+            />
+          </Box>
+          <TextField
+            autoFocus
+            multiline
+            rows={4}
+            variant="outlined"
+            fullWidth
+            placeholder="Write your review..."
+            value={reviewDescription}
+            onChange={handleReviewDescriptionChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleReviewDialogClose}>Cancel</Button>
+          <Button onClick={handleAddReview} variant="contained">
+            Add Review
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

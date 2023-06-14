@@ -210,10 +210,12 @@ const PostWidgetProfile = ({
         {isNonMobileScreens ? (
           <>
           {user.isClient === true && (
+
             <FlexBetween gap="0.3rem">
-              <IconButton onClick={handleReviewDialogOpen}>
+              <IconButton onClick={handleReviewDialogOpen} sx={{ color: main }}>
                 <ChatBubbleOutlineOutlined />
               </IconButton>
+
               <Typography>Add Review</Typography>
             </FlexBetween>)}
 
@@ -222,7 +224,7 @@ const PostWidgetProfile = ({
                 <IconButton
                   size="small"
                   onClick={() =>
-                    navigate(`/edit-post/${postId}`, { state: { post: { postId } } })
+                    navigate(`/editpost/${postId}`, { state: { post: { postId } } })
                   }
                   sx={{ color: main }}
                 >
@@ -238,22 +240,24 @@ const PostWidgetProfile = ({
                 </IconButton>
               </>
             )}
-          </>
-        ) : (
-          <Button
-            variant="outlined"
-            size="small"
-            startIcon={<ChatBubbleOutlineOutlined />}
-            onClick={() => navigate(`/post/${postId}`)}
-          >
-            Comments ({comments.length})
-          </Button>
-        )}
 
-        <IconButton size="small">
-          <ShareOutlined fontSize="small" />
-        </IconButton>
       </FlexBetween>
+
+      <Divider sx={{ mt: "1.2rem", mb: "1rem" }} />
+
+      <Box
+          marginTop="1.5rem"
+          marginBottom="1rem"
+          display="flex"
+          justifyContent="center"
+        >
+          <Button
+            variant="contained"
+            onClick={() => navigate(`/show/${postId}`)}
+          >
+            See the offer
+          </Button>
+        </Box>
 
       <Dialog
         open={deleteConfirmationOpen}

@@ -7,6 +7,7 @@ import PostsWidget from "scenes/widgets/PostsWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
 import Categories from "scenes/widgets/Categories";
 import SearchBarPosts from "scenes/widgets/SearchBarPosts";
+import WidgetWrapper from "components/WidgetWrapper";
 
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");

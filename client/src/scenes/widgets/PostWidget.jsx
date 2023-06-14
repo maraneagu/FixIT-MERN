@@ -127,9 +127,6 @@ const PostWidget = ({
     }
   };
 
-
-
-
   const handleDeleteConfirmationOpen = () => {
     setDeleteConfirmationOpen(true);
   };
@@ -137,6 +134,7 @@ const PostWidget = ({
   const handleDeleteConfirmationClose = () => {
     setDeleteConfirmationOpen(false);
   };
+
   const deletePost = async () => {
     console.log("postid :", postId)
     const response = await fetch(`http://localhost:3001/posts/${postId}`, {
@@ -153,6 +151,7 @@ const PostWidget = ({
       dispatch(setPosts({ posts: restPosts}));
     }
   };
+
   return (
     <WidgetWrapper 
       m="2rem 0"
@@ -194,6 +193,8 @@ const PostWidget = ({
           src={`http://localhost:3001/assets/${picturePath}`}
         />
       )}
+
+      <Divider sx={{ mt: "1rem", mb: "1rem" }} />
           
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
@@ -212,10 +213,12 @@ const PostWidget = ({
             {user.isClient === true &&(
             <IconButton onClick={handleReviewDialogOpen}>
               <ChatBubbleOutlineOutlined />
+
             </IconButton>)}
             {user.isClient === true &&(
             <Typography>Add Review</Typography>)}
             
+
           </FlexBetween>
         </FlexBetween>
       <Box>
@@ -238,13 +241,12 @@ const PostWidget = ({
         )}</Box>
         
       </FlexBetween>
-      
-      
+
 
       {/* Show the button only on the home page */}
       {isHomePage && (
         <Box
-          marginTop="10px"
+          marginTop="20px"
           marginBottom="10px"
           display="flex"
           justifyContent="center"
