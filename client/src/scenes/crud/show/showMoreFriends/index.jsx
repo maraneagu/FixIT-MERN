@@ -87,6 +87,7 @@ const ShowMoreFriends = () => {
         </Typography>
 
         <Box display="flex" flexDirection="column" gap="1.5rem">
+          
           {/* Render the list of friends */}
           {friends.map((friend) => (
             isProfileUser ? (

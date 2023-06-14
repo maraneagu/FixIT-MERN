@@ -8,7 +8,6 @@ import {
   useTheme,
   Select,
   MenuItem,
-  InputBase,
   InputLabel,
 } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -23,6 +22,7 @@ import React from 'react';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import PsychologyAltIcon from '@mui/icons-material/PsychologyAlt';
 
+// Validation schema for registration form
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
   lastName: yup.string().required("required"),
@@ -33,11 +33,13 @@ const registerSchema = yup.object().shape({
   isClient: yup.boolean().required("required"),
 });
 
+// Validation schema for login form
 const loginSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required"),
   password: yup.string().required("required"),
 });
 
+// Initial values for registration form
 const initialValuesRegister = {
   firstName: "",
   lastName: "",
@@ -49,29 +51,35 @@ const initialValuesRegister = {
   isClient: true,
 };
 
+// Initial values for login form
 const initialValuesLogin = {
   email: "",
   password: "",
 };
 
 const Form = () => {
+  // State for controlling the page type (login or register)
   const [pageType, setPageType] = useState("login");
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Media query to check if the screen size is greater than or equal to 600px
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
 
+  // Registration function to handle form submission
   const register = async (values, onSubmitProps) => {
-    // this allows us to send form info with image
-    
+    // Create a new FormData object
     const formData = new FormData();
     for (let value in values) {
+      // Append form values to the formData object
       formData.append(value, values[value]);
     }
     formData.append("picturePath", values.picture.name);
 
+    // Send the form data to the server for registration
     const savedUserResponse = await fetch(
       "http://localhost:3001/auth/register",
       {
@@ -80,24 +88,31 @@ const Form = () => {
       }
     );
 
-    const savedUser = await savedUserResponse.json();
+    // Reset the form after submission
     onSubmitProps.resetForm();
 
-    if (savedUser) {
+    // If the user is successfully registered, change the page type to login
+    if (savedUserResponse) {
       setPageType("login");
     }
   };
 
+  // Login function to handle form submission
   const login = async (values, onSubmitProps) => {
+    // Send the login credentials to the server for authentication
     const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
     });
 
+    // Get the logged-in user and token from the server response
     const loggedIn = await loggedInResponse.json();
+
+    // Reset the form after submission
     onSubmitProps.resetForm();
 
+    // If the user is successfully logged in, dispatch the login action and navigate to the home page
     if (loggedIn) {
       dispatch(
         setLogin({
@@ -109,6 +124,7 @@ const Form = () => {
     }
   };
 
+  // Function to handle form submission based on the current page type
   const handleFormSubmit = async (values, onSubmitProps) => {
     if (isLogin) await login(values, onSubmitProps);
     if (isRegister) await register(values, onSubmitProps);
@@ -139,21 +155,22 @@ const Form = () => {
               "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
             }}
           >
+            {/* Registration Fields */}
             {isRegister && (
               <>
+                {/* First Name */}
                 <TextField
                   label="First Name"
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.firstName}
                   name="firstName"
-                  error={
-                    Boolean(touched.firstName) && Boolean(errors.firstName)
-                  }
+                  error={Boolean(touched.firstName) && Boolean(errors.firstName)}
                   helperText={touched.firstName && errors.firstName}
                   sx={{ gridColumn: "span 2" }}
                 />
-
+  
+                {/* Last Name */}
                 <TextField
                   label="Last Name"
                   onBlur={handleBlur}
@@ -164,7 +181,8 @@ const Form = () => {
                   helperText={touched.lastName && errors.lastName}
                   sx={{ gridColumn: "span 2" }}
                 />
-
+  
+                {/* Location */}
                 <TextField
                   label="Location"
                   onBlur={handleBlur}
@@ -175,7 +193,8 @@ const Form = () => {
                   helperText={touched.location && errors.location}
                   sx={{ gridColumn: "span 4" }}
                 />
-
+  
+                {/* Picture Upload */}
                 <Box
                   gridColumn="span 4"
                   border={`1px solid ${palette.neutral.medium}`}
@@ -209,7 +228,8 @@ const Form = () => {
                     )}
                   </Dropzone>
                 </Box>
-
+  
+                {/* Role Selection */}
                 <InputLabel id="role-label" sx={{ marginBottom: '-22px' }}>Role</InputLabel>
                 <Select
                   value={values.isClient}
@@ -226,10 +246,11 @@ const Form = () => {
                   <MenuItem value="client" ><PsychologyAltIcon style={{ marginRight: '9px', marginBottom: '-3px' }}/>Client</MenuItem>
                   <MenuItem value="master" ><EngineeringIcon style={{ marginRight: '9px', marginBottom: '-3px'}}/>Master</MenuItem>
                 </Select>
-
               </>
             )}
-
+  
+            {/* Common Fields (for both Login and Registration) */}
+            {/* Email */}
             <TextField
               label="Email"
               onBlur={handleBlur}
@@ -240,7 +261,8 @@ const Form = () => {
               helperText={touched.email && errors.email}
               sx={{ gridColumn: "span 4" }}
             />
-
+  
+            {/* Password */}
             <TextField
               label="Password"
               type="password"
@@ -252,11 +274,12 @@ const Form = () => {
               helperText={touched.password && errors.password}
               sx={{ gridColumn: "span 4" }}
             />
-
+  
           </Box>
-
+  
           {/* BUTTONS */}
           <Box>
+            {/* Submit Button */}
             <Button
               fullWidth
               type="submit"
@@ -265,13 +288,16 @@ const Form = () => {
                 p: "1rem",
                 backgroundColor: palette.login.button,
                 color: palette.background.alt,
-                "&:hover": { backgroundColor: palette.login.buttonHover,
-                             color: palette.login.buttonTextHover },
+                "&:hover": {
+                  backgroundColor: palette.login.buttonHover,
+                  color: palette.login.buttonTextHover,
+                },
               }}
             >
               {isLogin ? "LOGIN" : "REGISTER"}
             </Button>
-
+  
+            {/* Link to Switch between Login and Registration */}
             <Typography
               onClick={() => {
                 setPageType(isLogin ? "register" : "login");
@@ -294,7 +320,7 @@ const Form = () => {
         </form>
       )}
     </Formik>
-  );
+  );  
 };
 
 export default Form;

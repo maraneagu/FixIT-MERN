@@ -1,4 +1,4 @@
-import { Box, useMediaQuery } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import WidgetWrapper from "components/WidgetWrapper";
 import Category from "components/Category";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCategory } from "state";
 
 const Categories = () => {
+  // Check if the screen is a non-mobile screen using MUI's useMediaQuery hook
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -46,11 +47,7 @@ const Categories = () => {
     <Box onClick={() => handleCategorySelect("installation")}>
         <Category icon="sink-icon.png" size="60%" text="Installation"  />
     </Box>
-      
-    </WidgetWrapper>
-    
-
-     
+    </WidgetWrapper> 
     </>
     
   );
