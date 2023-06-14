@@ -1,4 +1,4 @@
-import { useMediaQuery } from "@mui/material";
+import { useMediaQuery, Box } from "@mui/material";
 import WidgetWrapper from "components/WidgetWrapper";
 import Category from "components/Category";
 import { useNavigate } from "react-router-dom";
