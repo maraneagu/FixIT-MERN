@@ -2,7 +2,6 @@ import {
   ChatBubbleOutlineOutlined,
   FavoriteBorderOutlined,
   FavoriteOutlined,
-  ShareOutlined,
   DeleteOutlined,
 } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -44,27 +43,35 @@ const PostWidgetProfile = ({
   likes,
   comments,
 }) => {
-  const [isComments, setIsComments] = useState(false);
+  // State variables
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
-  const dispatch = useDispatch();
-  const token = useSelector((state) => state.token);
-
   const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
   const [reviewRating, setReviewRating] = useState(0);
   const [reviewDescription, setReviewDescription] = useState("");
 
+  // Redux hooks
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.token);
+  const user = useSelector((state) => state.user);
   const loggedInUserId = useSelector((state) => state.user._id);
-  const isProfileUser = postUserId === loggedInUserId;
 
-  const isLiked = Boolean(likes[loggedInUserId]);
-  const likeCount = Object.keys(likes).length;
+  // Utility hooks
   const navigate = useNavigate();
   const { palette } = useTheme();
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
   const primary = palette.primary.main;
+  const location2 = useLocation();
+
+  // Check if the current user is the owner of the post
+  const isProfileUser = postUserId === loggedInUserId;
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  const user = useSelector((state) => state.user);
+
+  // Check if the current user has liked the post
+  const likeCount = Object.keys(likes).length;
+  const isLiked = Boolean(likes[loggedInUserId]);
+
+  // Function to handle the like action on the post
   const patchLike = async () => {
     const response = await fetch(
       `http://localhost:3001/posts/${postId}/like`,
@@ -81,41 +88,48 @@ const PostWidgetProfile = ({
     dispatch(setPost({ post: updatedPost }));
   };
 
-
+  // Open the review dialog
   const handleReviewDialogOpen = () => {
     setIsReviewDialogOpen(true);
   };
 
+  // Close the review dialog and reset the review inputs
   const handleReviewDialogClose = () => {
     setIsReviewDialogOpen(false);
     setReviewRating(0);
     setReviewDescription("");
   };
 
+  // Handle the change in the review rating
   const handleReviewRatingChange = (value) => {
     setReviewRating(value);
   };
 
+  // Handle the change in the review description
   const handleReviewDescriptionChange = (event) => {
     setReviewDescription(event.target.value);
   };
 
+  // Add a new review to the post
   const handleAddReview = async () => {
     if (reviewRating === 0 || reviewDescription === "") {
       return;
     }
 
-    const response = await fetch(`http://localhost:3001/reviews/${loggedInUserId}/${postId}/create`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        stars: reviewRating,
-        description: reviewDescription,
-      }),
-    });
+    const response = await fetch(
+      `http://localhost:3001/reviews/${loggedInUserId}/${postId}/create`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          stars: reviewRating,
+          description: reviewDescription,
+        }),
+      }
+    );
 
     if (response.ok) {
       const updatedPost = await response.json();
@@ -126,14 +140,17 @@ const PostWidgetProfile = ({
     }
   };
 
+  // Open the delete confirmation dialog
   const handleDeleteConfirmationOpen = () => {
     setDeleteConfirmationOpen(true);
   };
 
+  // Close the delete confirmation dialog
   const handleDeleteConfirmationClose = () => {
     setDeleteConfirmationOpen(false);
   };
 
+  // Delete the post
   const deletePost = async () => {
     const response = await fetch(`http://localhost:3001/posts/${postId}`, {
       method: "DELETE",
@@ -147,9 +164,10 @@ const PostWidgetProfile = ({
     if (response.ok) {
       const restPosts = await response.json();
       dispatch(setPosts({ posts: restPosts }));
-      window.location.reload(); 
+      window.location.reload();
     }
   };
+
   return (
     <WidgetWrapper m="2rem 0">
       <FriendOnPost
@@ -209,20 +227,23 @@ const PostWidgetProfile = ({
 
         {isNonMobileScreens ? (
           <>
-          {user.isClient === true && (
-            <FlexBetween gap="0.3rem">
-              <IconButton onClick={handleReviewDialogOpen}>
-                <ChatBubbleOutlineOutlined />
-              </IconButton>
-              <Typography>Add Review</Typography>
-            </FlexBetween>)}
+            {user.isClient === true && (
+              <FlexBetween gap="0.3rem">
+                <IconButton onClick={handleReviewDialogOpen}>
+                  <ChatBubbleOutlineOutlined />
+                </IconButton>
+                <Typography>Add Review</Typography>
+              </FlexBetween>
+            )}
 
             {isProfileUser && (
               <>
                 <IconButton
                   size="small"
                   onClick={() =>
-                    navigate(`/edit-post/${postId}`, { state: { post: { postId } } })
+                    navigate(`/editpost/${postId}`, {
+                      state: { post: { postId } },
+                    })
                   }
                   sx={{ color: main }}
                 >
@@ -250,18 +271,20 @@ const PostWidgetProfile = ({
           </Button>
         )}
 
-        
       </FlexBetween>
 
-      <Dialog
-        open={deleteConfirmationOpen}
-        onClose={handleDeleteConfirmationClose}
-      >
+      <Divider sx={{ mt: "1rem", mb: "1rem" }} />
+
+      <Box marginTop="20px" marginBottom="10px" display="flex" justifyContent="center">
+        <Button variant="contained" onClick={() => navigate(`/show/${postId}`)}>
+          See the offer
+        </Button>
+      </Box>
+
+      <Dialog open={deleteConfirmationOpen} onClose={handleDeleteConfirmationClose}>
         <DialogTitle>Delete Confirmation</DialogTitle>
         <DialogContent>
-          <Typography>
-            Are you sure you want to delete this post?
-          </Typography>
+          <Typography>Are you sure you want to delete this post?</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDeleteConfirmationClose} color="primary">
@@ -308,8 +331,6 @@ const PostWidgetProfile = ({
           </Button>
         </DialogActions>
       </Dialog>
-
-
     </WidgetWrapper>
   );
 };

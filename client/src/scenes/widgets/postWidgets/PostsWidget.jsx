@@ -6,13 +6,19 @@ import PostWidgetProfile from "./PostWidgetProfile";
 
 const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
+
+  // Get all posts from the Redux store
   const allPosts = useSelector((state) => state.posts);
+
   const category = useSelector((state) => state.category);
   const searchQuery = useSelector((state) => state.searchQuery);
   const [posts, setPostsState] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // Get the token from the Redux store
   const token = useSelector((state) => state.token);
 
+  // Function to fetch all posts
   const getPosts = async () => {
     try {
       dispatch(setCategory({ category: null })); // Reset category filter
@@ -31,6 +37,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     }
   };
 
+  // Function to fetch user-specific posts
   const getUserPosts = async () => {
     try {
       dispatch(setSearchQuery({ searchQuery: "" })); // Reset search query
@@ -53,7 +60,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
 
   useEffect(() => {
     setLoading(true); // Set loading state to true before fetching data
-
+    
     if (isProfile) {
       getUserPosts();
     } else {
@@ -75,7 +82,6 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     if (category) {
       filteredPosts = filteredPosts.filter((post) => post.category === category);
     }
-
     setPostsState(filteredPosts);
   }, [searchQuery, category, allPosts]);
 
@@ -83,6 +89,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     return <div>Loading...</div>; // Render a loading state while fetching data
   }
 
+  // Render PostWidgetProfile if it's a profile widget, otherwise render PostWidget
   if (isProfile) {
     return (
       <>
