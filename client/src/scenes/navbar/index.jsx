@@ -71,16 +71,20 @@ const Navbar = () => {
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
             )}
           </IconButton>
-          <Message
-            onClick={() => navigate(`/createpost/${userId}`)}
-            sx={{
-              fontSize: "25px",
-              "&:hover": {
-                color: primaryLight,
-                cursor: "pointer",
-              },
-            }}
-          />
+          {user.isClient === false && (
+            <IconButton>
+              <Message
+                onClick={() => navigate(`/createpost/${userId}`)}
+                sx={{
+                  fontSize: "25px",
+                  "&:hover": {
+                    color: primaryLight,
+                    cursor: "pointer",
+                  },
+                }}
+              />
+            </IconButton>
+          )}
           <Notifications sx={{ fontSize: "25px" }} />
           <Help sx={{ fontSize: "25px" }} />
           <FormControl variant="standard" value={fullName}>

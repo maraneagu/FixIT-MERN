@@ -64,6 +64,7 @@ const PostWidgetProfile = ({
   const main = palette.neutral.main;
   const primary = palette.primary.main;
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+  const user = useSelector((state) => state.user);
   const patchLike = async () => {
     const response = await fetch(
       `http://localhost:3001/posts/${postId}/like`,
@@ -208,12 +209,13 @@ const PostWidgetProfile = ({
 
         {isNonMobileScreens ? (
           <>
+          {user.isClient === true && (
             <FlexBetween gap="0.3rem">
               <IconButton onClick={handleReviewDialogOpen}>
                 <ChatBubbleOutlineOutlined />
               </IconButton>
               <Typography>Add Review</Typography>
-            </FlexBetween>
+            </FlexBetween>)}
 
             {isProfileUser && (
               <>
