@@ -4,12 +4,11 @@ import User from "../models/User.js";
 /* CREATE */
 export const createTip = async (req, res) => {
   try {
-    console.log("body: ", req.body);
     const { title, description, category, videoPath } = req.body;
     const { id } = req.params;
-    const user = await User.findById(id);
+    const user = await User.findById(id); // Find the user by ID
     const newTip = new Tip({
-      userId: user._id,
+      userId: user._id, // Assign the user ID to the new tip
       firstName: user.firstName,
       lastName: user.lastName,
       location: user.location,
@@ -22,42 +21,42 @@ export const createTip = async (req, res) => {
       likes: {},
       comments: [],
     });
-    await newTip.save();
+    await newTip.save(); // Save the new tip to the database
 
-    const tip = await Tip.find();
-    res.status(201).json(tip);
+    const tip = await Tip.find(); // Retrieve all tips
+    res.status(201).json(tip); // Return all tips as a response
   } catch (err) {
-    res.status(409).json({ message: err.message });
+    res.status(409).json({ message: err.message }); // Handle conflict error
   }
 };
 
 /* READ */
 export const getFeedTips = async (req, res) => {
   try {
-    const tip = await Tip.find();
-    res.status(200).json(tip);
+    const tip = await Tip.find(); // Retrieve all tips
+    res.status(200).json(tip); // Return all tips as a response
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ message: err.message }); // Handle not found error
   }
 };
 
 export const getUserTips = async (req, res) => {
   try {
     const { userId } = req.params;
-    const tip = await Tip.find({ userId });
-    res.status(200).json(tip);
+    const tip = await Tip.find({ userId }); // Retrieve tips by user ID
+    res.status(200).json(tip); // Return the user's tips as a response
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ message: err.message }); // Handle not found error
   }
 };
 
 export const getTip = async (req, res) => {
   try {
     const { tipId } = req.params;
-    const tip = await Tip.findOne({ _id: tipId });
-    res.status(200).json(tip);
+    const tip = await Tip.findOne({ _id: tipId }); // Find a tip by its ID
+    res.status(200).json(tip); // Return the tip as a response
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ message: err.message }); // Handle not found error
   }
 };
 
@@ -66,24 +65,24 @@ export const likeTip = async (req, res) => {
   try {
     const { id } = req.params;
     const { userId } = req.body;
-    const tip = await Tip.findById(id);
+    const tip = await Tip.findById(id); // Find the tip by ID
     const isLiked = tip.likes.get(userId);
 
     if (isLiked) {
-      tip.likes.delete(userId);
+      tip.likes.delete(userId); // Remove the user's like
     } else {
-      tip.likes.set(userId, true);
+      tip.likes.set(userId, true); // Add the user's like
     }
 
     const updatedTip = await Tip.findByIdAndUpdate(
       id,
-      { likes: tip.likes },
+      { likes: tip.likes }, // Update the likes of the tip
       { new: true }
     );
 
-    res.status(200).json(updatedTip);
+    res.status(200).json(updatedTip); // Return the updated tip as a response
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ message: err.message }); // Handle not found error
   }
 };
 
@@ -94,13 +93,13 @@ export const editTip = async (req, res) => {
 
     const updatedTip = await Tip.findByIdAndUpdate(
       id,
-      { title, description, videoPath },
+      { title, description, videoPath }, // Update the title, description, and videoPath of the tip
       { new: true }
     );
-    
-    res.status(200).json(updatedTip);
+
+    res.status(200).json(updatedTip); // Return the updated tip as a response
   } catch (err) {
-    res.status(409).json({ message: err.message });
+    res.status(409).json({ message: err.message }); // Handle conflict error
   }
 };
 
@@ -109,17 +108,17 @@ export const deleteTip = async (req, res) => {
   const { tipId } = req.params;
   const { userId } = req.body;
   try {
-    const tip = await Tip.findById(tipId);
+    const tip = await Tip.findById(tipId); // Find the tip by ID
     if (!tip) {
-      return res.status(409).json({ message: "Tip not found" });
+      return res.status(409).json({ message: "Tip not found" }); // Handle not found error
     }
-    await Tip.findByIdAndRemove(tipId);
-   
+    await Tip.findByIdAndRemove(tipId); // Remove the tip from the database
+
     const allTips = await Tip.find(); // Get all tips from the database
-   
+
     res.status(201).json(allTips); // Return all tips as a response
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error" }); // Handle server error
   }
 };

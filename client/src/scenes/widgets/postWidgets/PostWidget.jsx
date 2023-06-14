@@ -6,8 +6,6 @@ import {
 } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import ClassIcon from "@mui/icons-material/Class";
-import TitleIcon from "@mui/icons-material/Title";
-import DescriptionIcon from "@mui/icons-material/Description";
 import {
   Box,
   Divider,
@@ -150,7 +148,6 @@ const PostWidget = ({
 
   const deletePost = async () => {
     // Function to handle deleting a post
-    console.log("postid :", postId);
     const response = await fetch(`http://localhost:3001/posts/${postId}`, {
       method: "DELETE",
       headers: {

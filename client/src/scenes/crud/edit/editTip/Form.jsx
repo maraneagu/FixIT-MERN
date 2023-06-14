@@ -3,18 +3,13 @@ import {
   Box,
   Button,
   TextField,
-  Typography,
   useTheme,
-  InputLabel,
 } from "@mui/material";
 import { Formik, Field, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { setTip as setTipRedux } from "state";
-import Dropzone from "react-dropzone";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import FlexBetween from "components/FlexBetween";
 
 const EditTipForm = ({ tipId }) => {
   // State for storing the tip
@@ -109,7 +104,6 @@ const EditTipForm = ({ tipId }) => {
         touched,
         handleBlur,
         handleChange,
-        setFieldValue,
       }) => (
         <Form>
           <Box
