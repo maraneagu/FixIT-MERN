@@ -1,5 +1,4 @@
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -7,42 +6,82 @@ import {
   Typography,
   useTheme,
   InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material";
-import { Formik, Form } from "formik";
+import { Formik, Field, Form } from "formik";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { setPost as setPostRedux } from "state";
 import Dropzone from "react-dropzone";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import FlexBetween from "components/FlexBetween";
 
-const CreatePostForm = () => {
-  const userId = useSelector((state) => state.user._id);
+const EditPostForm = ({ postId }) => {
+  // State for storing the post
+  const [post, setPost] = useState(null);
+
+  // Retrieve the token from the Redux store
   const token = useSelector((state) => state.token);
+
+  // Access the theme palette and navigation function from Material-UI
   const { palette } = useTheme();
   const navigate = useNavigate();
 
+  // Dispatch function for updating the post in Redux store
+  const dispatch = useDispatch();
+
+  // Fetch the post data from the server upon component mount
+  useEffect(() => {
+    const getPost = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/posts/${postId}`, {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await response.json();
+
+        // Update the post in Redux store
+        dispatch(setPost(data));
+
+        if (response.ok) {
+          // Set the post in component state
+          setPost(data);
+        } else {
+          throw new Error("Error fetching post data");
+        }
+      } catch (error) {
+        console.log("Error fetching post:", error);
+      }
+    };
+
+    getPost();
+  }, [postId, token]);
+
+  // Set initial form values based on the fetched post data
   const initialValues = {
-    title: "",
-    description: "",
-    category:"",
-    picturePath: "",
+    title: post?.title || "",
+    description: post?.description || "",
+    picturePath: post?.picturePath || "",
   };
 
+  // Handle form submission
   const handleSubmit = async (values) => {
     try {
       const formData = new FormData();
       formData.append("title", values.title);
       formData.append("description", values.description);
-      formData.append("category", values.category);
 
-      //daca schimbam poza,
-      if (values.picturePath.name)
+      // If the picturePath has a name, it means the picture was changed
+      if (values.picturePath.name) {
         formData.append("picturePath", values.picturePath.name);
-      // daca schimbam orice dar nu poza
-      else formData.append("picturePath", values.picturePath);
+      }
+      // If we changed any other field but not the picture
+      else {
+        formData.append("picturePath", values.picturePath);
+      }
 
       const response = await fetch(
-        `http://localhost:3001/posts/${userId}/create`,
+        `http://localhost:3001/posts/${postId}/edit`,
         {
           method: "POST",
           headers: {
@@ -50,20 +89,25 @@ const CreatePostForm = () => {
           },
           body: formData,
         }
-        //"Content-Type": "application/json", asta imi dadea eroarea cu cors.
       );
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
-        navigate(`/profile/${userId}`);
+        setPost(data);
+        dispatch(setPostRedux({ post: data }));
+        navigate(`/show/${postId}`);
       } else {
-        throw new Error("Error creating post");
+        throw new Error("Error updating user");
       }
     } catch (error) {
       alert(error.message);
     }
   };
+
+  // If post data is not fetched yet, show a loading message
+  if (!post) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
@@ -74,7 +118,6 @@ const CreatePostForm = () => {
         handleBlur,
         handleChange,
         setFieldValue,
-        handleSubmit,
       }) => (
         <Form>
           <Box
@@ -82,49 +125,31 @@ const CreatePostForm = () => {
             gap="30px"
             gridTemplateColumns="repeat(4, minmax(0, 1fr))"
           >
+            {/* Title field */}
             <TextField
               label="Title"
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.title}
               name="title"
-              error={
-                Boolean(touched.title) && Boolean(errors.title)
-              }
+              error={Boolean(touched.title) && Boolean(errors.title)}
               helperText={touched.title && errors.title}
               sx={{ gridColumn: "span 4" }}
             />
 
+            {/* Description field */}
             <TextField
               label="Description"
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.description}
               name="description"
-              error={
-                Boolean(touched.description) && Boolean(errors.description)
-              }
+              error={Boolean(touched.description) && Boolean(errors.description)}
               helperText={touched.description && errors.description}
               sx={{ gridColumn: "span 4" }}
             />
 
-            <InputLabel sx={{ marginBottom: '-22px' }}>Category</InputLabel>
-            <Select
-              value={values.category}
-              onBlur={handleBlur}
-              name="category"
-              error={Boolean(touched.category) && Boolean(errors.category)}
-              helperText={touched.category && errors.category}
-              onChange={handleChange}
-              sx={{ gridColumn: 'span 4' }}
-            >
-              <MenuItem value="auto" >Auto</MenuItem>
-              <MenuItem value="tailoring" >Tailoring</MenuItem>
-              <MenuItem value="furniture" >Furniture</MenuItem>
-              <MenuItem value="electronics" >Electronics</MenuItem>
-              <MenuItem value="instalation" >Instalation</MenuItem>
-            </Select>
-
+            {/* Post Picture dropzone */}
             <InputLabel id="picture-label" sx={{ marginBottom: "-22px" }}>
               Post Picture
             </InputLabel>
@@ -166,6 +191,7 @@ const CreatePostForm = () => {
               </Dropzone>
             </Box>
 
+            {/* Submit button */}
             <Box sx={{ gridColumn: "span 4", placeSelf: "center" }}>
               <Button
                 fullWidth
@@ -181,7 +207,7 @@ const CreatePostForm = () => {
                   },
                 }}
               >
-                Create Post
+                Edit post
               </Button>
             </Box>
           </Box>
@@ -191,4 +217,4 @@ const CreatePostForm = () => {
   );
 };
 
-export default CreatePostForm;
+export default EditPostForm;

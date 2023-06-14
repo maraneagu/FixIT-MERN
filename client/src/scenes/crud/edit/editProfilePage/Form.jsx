@@ -7,67 +7,83 @@ import {
   useTheme,
   InputLabel,
 } from "@mui/material";
-import { Formik, Field, Form } from "formik";
+import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { setPost as setPostRedux } from "state";
+import { setUser as setUserRedux } from "state";
 import Dropzone from "react-dropzone";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import FlexBetween from "components/FlexBetween";
 
-const EditPostForm = ({ postId }) => {
-  const [post, setPost] = useState(null);
+const EditUserForm = ({ userId }) => {
+  // State for storing the user data
+  const [user, setUser] = useState(null);
+
+  // Access the token from the Redux store
   const token = useSelector((state) => state.token);
+
+  // Access the theme and navigation functions from Material-UI
   const { palette } = useTheme();
   const navigate = useNavigate();
+
+  // Access the Redux dispatch function
   const dispatch = useDispatch();
 
+  // Fetch user data from the server upon component mount
   useEffect(() => {
-    const getPost = async () => {
-        try {
-            const response = await fetch(`http://localhost:3001/posts/${postId}`, {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-            });
-            const data = await response.json();
-            dispatch(setPost(data));
+    const getUser = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/users/${userId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-            if (response.ok) {
-            const data = await response.json();
-
-            setPost(data);
-            } else {
-            throw new Error("Error fetching post data");
-            }
-        } catch (error) {
-            console.log("Error fetching post:", error);
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data);
+        } else {
+          throw new Error("Error fetching user data");
         }
+      } catch (error) {
+        console.log("Error fetching user:", error);
+      }
     };
 
-    getPost();
-  }, [postId, token]);
+    getUser();
+  }, [userId, token]);
 
+  // Set the initial form values based on the user data
   const initialValues = {
-    title: post?.title || "",
-    description: post?.description || "",
-    picturePath: post?.picturePath || "",
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    location: user?.location || "",
+    bio: user?.bio || "",
+    picturePath: user?.picturePath || "",
   };
 
+  // Log the picturePath value to the console
+  console.log(initialValues.picturePath);
+
+  // Handle form submission
   const handleSubmit = async (values) => {
     try {
       const formData = new FormData();
-      formData.append("title", values.title);
-      formData.append("description", values.description);
+      formData.append("firstName", values.firstName);
+      formData.append("lastName", values.lastName);
+      formData.append("location", values.location);
+      formData.append("bio", values.bio);
 
-      //daca schimbam poza,
+      // Check if the picturePath value has changed
       if (values.picturePath.name)
         formData.append("picturePath", values.picturePath.name);
-      // daca schimbam orice dar nu poza
       else formData.append("picturePath", values.picturePath);
-      
+      console.log("FormData :", formData.firstName);
+
       const response = await fetch(
-        `http://localhost:3001/posts/${postId}/edit`,
+        `http://localhost:3001/users/${userId}/edit`,
         {
           method: "POST",
           headers: {
@@ -79,9 +95,9 @@ const EditPostForm = ({ postId }) => {
 
       if (response.ok) {
         const data = await response.json();
-        setPost(data);
-        dispatch(setPostRedux({ post: data }));
-        navigate(`/show/${postId}`);
+        setUser(data);
+        dispatch(setUserRedux({ user: data }));
+        navigate(`/profile/${userId}`);
       } else {
         throw new Error("Error updating user");
       }
@@ -90,7 +106,8 @@ const EditPostForm = ({ postId }) => {
     }
   };
 
-  if (!post) {
+  // Render loading message if user data is not available yet
+  if (!user) {
     return <div>Loading...</div>;
   }
 
@@ -112,30 +129,57 @@ const EditPostForm = ({ postId }) => {
             gap="30px"
             gridTemplateColumns="repeat(4, minmax(0, 1fr))"
           >
+            {/* First Name field */}
             <TextField
-              label="Title"
+              label="First Name"
               onBlur={handleBlur}
               onChange={handleChange}
-              value={values.title}
-              name="title"
-              error={Boolean(touched.title) && Boolean(errors.title)}
-              helperText={touched.title && errors.title}
+              value={values.firstName}
+              name="firstName"
+              error={Boolean(touched.firstName) && Boolean(errors.firstName)}
+              helperText={touched.firstName && errors.firstName}
+              sx={{ gridColumn: "span 2" }}
+            />
+
+            {/* Last Name field */}
+            <TextField
+              label="Last Name"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.lastName}
+              name="lastName"
+              error={Boolean(touched.lastName) && Boolean(errors.lastName)}
+              helperText={touched.lastName && errors.lastName}
+              sx={{ gridColumn: "span 2" }}
+            />
+
+            {/* Location field */}
+            <TextField
+              label="Location"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.location}
+              name="location"
+              error={Boolean(touched.location) && Boolean(errors.location)}
+              helperText={touched.location && errors.location}
               sx={{ gridColumn: "span 4" }}
             />
 
+            {/* Bio field */}
             <TextField
-              label="Description"
+              label="Bio"
               onBlur={handleBlur}
               onChange={handleChange}
-              value={values.description}
-              name="description"
-              error={Boolean(touched.description) && Boolean(errors.description)}
-              helperText={touched.description && errors.description}
+              value={values.bio}
+              name="bio"
+              error={Boolean(touched.bio) && Boolean(errors.bio)}
+              helperText={touched.bio && errors.bio}
               sx={{ gridColumn: "span 4" }}
             />
 
+            {/* Profile Picture field */}
             <InputLabel id="picture-label" sx={{ marginBottom: "-22px" }}>
-              Post Picture
+              Profile Picture
             </InputLabel>
             <Box
               gridColumn="span 4"
@@ -158,6 +202,7 @@ const EditPostForm = ({ postId }) => {
                     p="1rem"
                     sx={{ "&:hover": { cursor: "pointer" } }}
                   >
+                    {/* Display the current picture path or the new file name */}
                     {!values.picturePath.name ? (
                       <FlexBetween>
                         <Typography>{values.picturePath}</Typography>
@@ -175,6 +220,7 @@ const EditPostForm = ({ postId }) => {
               </Dropzone>
             </Box>
 
+            {/* Edit profile button */}
             <Box sx={{ gridColumn: "span 4", placeSelf: "center" }}>
               <Button
                 fullWidth
@@ -190,7 +236,7 @@ const EditPostForm = ({ postId }) => {
                   },
                 }}
               >
-                Edit post
+                Edit profile
               </Button>
             </Box>
           </Box>
@@ -200,4 +246,4 @@ const EditPostForm = ({ postId }) => {
   );
 };
 
-export default EditPostForm;
+export default EditUserForm;
