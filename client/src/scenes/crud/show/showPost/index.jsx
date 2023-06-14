@@ -1,3 +1,4 @@
+// Importing required dependencies and components
 import {
   ChatBubbleOutlineOutlined,
   FavoriteBorderOutlined,
@@ -31,19 +32,21 @@ import { useNavigate } from "react-router-dom";
 import { setPost } from "state";
 import ReviewsWidget from "scenes/widgets/reviewWidgets/ReviewsWidget";
 
+// Define the ShowPost component
 const ShowPost = () => {
-  const { postId } = useParams();
+  const { postId } = useParams(); // Get the postId from the URL parameters
 
-  const loggedInUserId = useSelector((state) => state.user._id);
+  const loggedInUserId = useSelector((state) => state.user._id); // Get the logged-in user's ID from the Redux state
 
-  const token = useSelector((state) => state.token);
-  const navigate = useNavigate();
+  const token = useSelector((state) => state.token); // Get the token from the Redux state
+  const navigate = useNavigate(); // Get the navigation function from react-router-dom
 
+  // State variables for review dialog
   const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
   const [reviewRating, setReviewRating] = useState(0);
   const [reviewDescription, setReviewDescription] = useState("");
 
-  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width:1000px)"); // Check if the screen size is larger than 1000px
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
@@ -53,23 +56,25 @@ const ShowPost = () => {
 
   const currentPost = useSelector((state) =>
     state.posts.find((post) => post._id === postId)
-  );
+  ); // Find the current post from the Redux state based on the postId
 
-  const likeCount = Object.keys(currentPost.likes).length;
-  const isLiked = Boolean(currentPost.likes[loggedInUserId]);
-  const isProfileUser = currentPost.userId === loggedInUserId;
-  const user = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+  const likeCount = Object.keys(currentPost.likes).length; // Get the number of likes for the current post
+  const isLiked = Boolean(currentPost.likes[loggedInUserId]); // Check if the logged-in user has liked the current post
+  const isProfileUser = currentPost.userId === loggedInUserId; // Check if the current post belongs to the logged-in user
+  const user = useSelector((state) => state.user); // Get the user object from the Redux state
+  const dispatch = useDispatch(); // Get the dispatch function from react-redux
 
+  // Function to fetch the post from the server
   const getPost = async () => {
     const response = await fetch(`http://localhost:3001/posts/${postId}`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await response.json();
-    dispatch(setPost(data));
+    dispatch(setPost(data)); // Dispatch an action to update the post in the Redux state
   };
 
+  // Function to handle the like button click
   const patchLike = async () => {
     const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
       method: "PATCH",
@@ -80,27 +85,32 @@ const ShowPost = () => {
       body: JSON.stringify({ userId: loggedInUserId }),
     });
     const updatedPost = await response.json();
-    dispatch(setPost({ post: updatedPost }));
+    dispatch(setPost({ post: updatedPost })); // Dispatch an action to update the post in the Redux state
   };
 
+  // Function to handle the opening of the review dialog
   const handleReviewDialogOpen = () => {
     setIsReviewDialogOpen(true);
   };
 
+  // Function to handle the closing of the review dialog
   const handleReviewDialogClose = () => {
     setIsReviewDialogOpen(false);
     setReviewRating(0);
     setReviewDescription("");
   };
 
+  // Function to handle the change of the review rating
   const handleReviewRatingChange = (value) => {
     setReviewRating(value);
   };
 
+  // Function to handle the change of the review description
   const handleReviewDescriptionChange = (event) => {
     setReviewDescription(event.target.value);
   };
 
+  // Function to handle the addition of a review
   const handleAddReview = async () => {
     if (reviewRating === 0 || reviewDescription === "") {
       return;
@@ -123,7 +133,7 @@ const ShowPost = () => {
 
     if (response.ok) {
       const updatedPost = await response.json();
-      dispatch(setPost({ post: updatedPost }));
+      dispatch(setPost({ post: updatedPost })); // Dispatch an action to update the post in the Redux state
       setIsReviewDialogOpen(false);
       setReviewRating(0);
       setReviewDescription("");
@@ -132,7 +142,7 @@ const ShowPost = () => {
   };
 
   useEffect(() => {
-    // fetch post whenever postId changes
+    // Fetch post whenever postId changes
     if (!currentPost) {
       getPost();
     }
@@ -146,6 +156,9 @@ const ShowPost = () => {
   return (
     <Box>
       <Navbar />
+  
+      {/* The following code is responsible for rendering the post details */}
+  
       <Box
         display="flex"
         flexDirection={isNonMobileScreens ? "row" : "column"}
@@ -155,18 +168,23 @@ const ShowPost = () => {
         gap="2rem"
       >
         <Box width={isNonMobileScreens ? "60%" : "100%"}>
+          {/* WidgetWrapper is a custom component used to wrap the post details */}
+
           <WidgetWrapper
             m="2rem 0"
             marginLeft={isNonMobileScreens ? "15px" : undefined}
             marginRight={isNonMobileScreens ? "15px" : undefined}
           >
+
+            {/* Friend component displays the post author's details */}
             <Friend
               friendId={currentPost.userId}
               name={`${currentPost.firstName} ${currentPost.lastName}`}
               subtitle={currentPost.location}
               userPicturePath={currentPost.userPicturePath}
             />
-
+  
+            {/* Displaying the category of the post */}
             <Typography
               color={medium}
               display="flex"
@@ -179,7 +197,8 @@ const ShowPost = () => {
                   currentPost.category.slice(1)
                 : ""}
             </Typography>
-
+  
+            {/* Displaying the title of the post */}
             <Typography
               color={main}
               variant="h5"
@@ -193,7 +212,8 @@ const ShowPost = () => {
             >
               {currentPost.title}
             </Typography>
-
+  
+            {/* Displaying the picture associated with the post, if any */}
             {currentPost.picturePath && (
               <img
                 width="100%"
@@ -207,7 +227,8 @@ const ShowPost = () => {
                 src={`http://localhost:3001/assets/${currentPost.picturePath}`}
               />
             )}
-
+  
+            {/* Displaying the description of the post */}
             <Typography
               color={main}
               marginBottom="5px"
@@ -215,12 +236,15 @@ const ShowPost = () => {
             >
               {currentPost.description}
             </Typography>
-
+  
+            {/* A divider line to separate the post details from the reviews */}
             <Divider sx={{ mt: "1.2rem", mb: "1rem" }} />
-
+  
+            {/* Displaying the like count and an option to like the post */}
             <FlexBetween mt="0.25rem" mb="0.25rem">
               <FlexBetween gap="1rem">
                 <FlexBetween gap="0.3rem">
+                  {/* The like button */}
                   <IconButton onClick={patchLike} sx={{ color: main }}>
                     {isLiked ? (
                       <FavoriteOutlined sx={{ color: main }} />
@@ -228,16 +252,23 @@ const ShowPost = () => {
                       <FavoriteBorderOutlined />
                     )}
                   </IconButton>
+                  {/* Displaying the like count */}
                   <Typography>{likeCount}</Typography>
                 </FlexBetween>
+  
+                {/* Add review option available for client users */}
                 {user.isClient === true && (
                   <FlexBetween gap="0.3rem">
+                    
+                    {/* The add review button */}
                     <IconButton
                       onClick={handleReviewDialogOpen}
                       sx={{ color: main }}
                     >
                       <ChatBubbleOutlineOutlined />
                     </IconButton>
+                    
+                    {/* Text indicating the option to add a review */}
                     <Typography
                       onClick={handleReviewDialogOpen}
                       sx={{
@@ -252,7 +283,8 @@ const ShowPost = () => {
                   </FlexBetween>
                 )}
               </FlexBetween>
-
+  
+              {/* Edit post option available for the post owner */}
               {isProfileUser && (
                 <IconButton
                   onClick={() => navigate(`/editpost/${postId}`)}
@@ -269,21 +301,28 @@ const ShowPost = () => {
             </FlexBetween>
           </WidgetWrapper>
         </Box>
-
+  
+        {/* The following code is responsible for rendering the reviews */}
         <Box width={isNonMobileScreens ? "40%" : "100%"}>
+          {/* ReviewsWidget component displays the reviews associated with the post */}
           <ReviewsWidget postId={postId} />
         </Box>
       </Box>
-
+  
+      {/* The following code is responsible for rendering the add review dialog */}
+  
       <Dialog
         open={isReviewDialogOpen}
         onClose={handleReviewDialogClose}
         fullWidth
         maxWidth="sm"
       >
+        {/* DialogTitle displays the title of the add review dialog */}
         <DialogTitle>Add Review</DialogTitle>
         <DialogContent>
           <Box display="flex" justifyContent="center" mb={2}>
+            
+            {/* Rating component allows users to select a rating for their review */}
             <Rating
               name="review-rating"
               value={reviewRating}
@@ -292,6 +331,8 @@ const ShowPost = () => {
               }}
             />
           </Box>
+          
+          {/* TextField allows users to enter the review description */}
           <TextField
             autoFocus
             multiline
@@ -304,14 +345,18 @@ const ShowPost = () => {
           />
         </DialogContent>
         <DialogActions>
+
+          {/* Cancel button to close the add review dialog */}
           <Button onClick={handleReviewDialogClose}>Cancel</Button>
+
+          {/* Button to submit the review */}
           <Button onClick={handleAddReview} variant="contained">
             Add Review
           </Button>
         </DialogActions>
       </Dialog>
     </Box>
-  );
+  );  
 };
 
 export default ShowPost;

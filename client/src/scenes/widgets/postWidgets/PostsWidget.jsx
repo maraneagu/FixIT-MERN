@@ -6,10 +6,17 @@ import PostWidgetProfile from "./PostWidgetProfile";
 
 const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
   const dispatch = useDispatch();
+
+  // Get all posts from the Redux store
   const allPosts = useSelector((state) => state.posts);
+
+  // State to hold the filtered posts
   const [posts, setPostsState] = useState(allPosts);
+
+  // Get the token from the Redux store
   const token = useSelector((state) => state.token);
 
+  // Function to fetch all posts
   const getPosts = async () => {
     const response = await fetch("http://localhost:3001/posts", {
       method: "GET",
@@ -20,6 +27,7 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
     setPostsState(data);
   };
 
+  // Function to fetch user-specific posts
   const getUserPosts = async () => {
     const response = await fetch(
       `http://localhost:3001/posts/${userId}/posts`,
@@ -34,17 +42,19 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
   };
 
   useEffect(() => {
+    // Fetch the posts based on the widget type (profile or all posts)
     if (isProfile) {
       getUserPosts();
     } else {
       getPosts();
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
+    // Filter posts based on search query
     if (searchQuery) {
       const filteredPosts = allPosts.filter((post) =>
-        post.description.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        post.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.category.toLowerCase().includes(searchQuery.toLowerCase())
       );
@@ -54,6 +64,7 @@ const PostsWidget = ({ userId, isProfile = false, searchQuery }) => {
     }
   }, [allPosts, searchQuery]);
 
+  // Render PostWidgetProfile if it's a profile widget, otherwise render PostWidget
   if (isProfile) {
     return (
       <>
