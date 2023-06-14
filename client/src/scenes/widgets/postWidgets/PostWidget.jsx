@@ -2,7 +2,6 @@ import {
   ChatBubbleOutlineOutlined,
   FavoriteBorderOutlined,
   FavoriteOutlined,
-  ShareOutlined,
   DeleteOutlined,
 } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -38,38 +37,42 @@ const PostWidget = ({
   postUserId,
   name,
   title,
-  description,
   category,
   location,
   picturePath,
   userPicturePath,
   likes,
-  comments,
 }) => {
-  const [isComments, setIsComments] = useState(false);
+  // Redux hooks
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const token = useSelector((state) => state.token);
 
-  const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
-  const [reviewRating, setReviewRating] = useState(0);
-  const [reviewDescription, setReviewDescription] = useState("");
+  const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false); // State for review dialog
+  const [reviewRating, setReviewRating] = useState(0); // State for review rating
+  const [reviewDescription, setReviewDescription] = useState(""); // State for review description
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false); // State for delete confirmation dialog
 
-  const loggedInUserId = useSelector((state) => state.user._id);
-  const isProfileUser = postUserId === loggedInUserId;
-  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
-  const isLiked = Boolean(likes[loggedInUserId]);
-  const likeCount = Object.keys(likes).length;
-  const navigate = useNavigate();
+  // Utility hooks
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
-
   const primary = palette.primary.main;
+
   const location2 = useLocation();
   const isHomePage = location2.pathname === "/home";
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  const user = useSelector((state) => state.user);
 
+  // Check if the current user is the owner of the post
+  const user = useSelector((state) => state.user);
+  const loggedInUserId = useSelector((state) => state.user._id);
+  const isProfileUser = postUserId === loggedInUserId;
+
+  // Check if the current user has liked the post
+  const isLiked = Boolean(likes[loggedInUserId]);
+  const likeCount = Object.keys(likes).length;
+
+  // Function to handle the like action on the post
   const patchLike = async () => {
     const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
       method: "PATCH",
@@ -84,24 +87,29 @@ const PostWidget = ({
   };
 
   const handleReviewDialogOpen = () => {
+    // Open the review dialog
     setIsReviewDialogOpen(true);
   };
 
   const handleReviewDialogClose = () => {
+    // Close the review dialog and reset the review rating and description
     setIsReviewDialogOpen(false);
     setReviewRating(0);
     setReviewDescription("");
   };
 
   const handleReviewRatingChange = (value) => {
+    // Handle changes in the review rating
     setReviewRating(value);
   };
 
   const handleReviewDescriptionChange = (event) => {
+    // Handle changes in the review description
     setReviewDescription(event.target.value);
   };
 
   const handleAddReview = async () => {
+    // Function to handle adding a review to the post
     if (reviewRating === 0 || reviewDescription === "") {
       return;
     }
@@ -131,14 +139,17 @@ const PostWidget = ({
   };
 
   const handleDeleteConfirmationOpen = () => {
+    // Open the delete confirmation dialog
     setDeleteConfirmationOpen(true);
   };
 
   const handleDeleteConfirmationClose = () => {
+    // Close the delete confirmation dialog
     setDeleteConfirmationOpen(false);
   };
 
   const deletePost = async () => {
+    // Function to handle deleting a post
     console.log("postid :", postId);
     const response = await fetch(`http://localhost:3001/posts/${postId}`, {
       method: "DELETE",
@@ -160,6 +171,7 @@ const PostWidget = ({
       ml={isNonMobileScreens ? "15px" : undefined}
       mr={isNonMobileScreens ? "15px" : undefined}
     >
+      {/* Display the friend information */}
       <Friend
         friendId={postUserId}
         name={name}
@@ -167,6 +179,7 @@ const PostWidget = ({
         userPicturePath={userPicturePath}
       />
 
+      {/* Display the post title */}
       <Typography
         color={main}
         variant="h5"
@@ -176,6 +189,7 @@ const PostWidget = ({
         {title}
       </Typography>
 
+      {/* Display the post category */}
       <Typography
         color={medium}
         display="flex"
@@ -186,6 +200,7 @@ const PostWidget = ({
         {category ? category.charAt(0).toUpperCase() + category.slice(1) : ""}
       </Typography>
 
+      {/* Display the post picture */}
       {picturePath && (
         <img
           width="100%"
@@ -200,6 +215,7 @@ const PostWidget = ({
 
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
+          {/* Display the like button */}
           <FlexBetween gap="0.3rem">
             <IconButton onClick={patchLike}>
               {isLiked ? (
@@ -212,6 +228,7 @@ const PostWidget = ({
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">
+            {/* Display the review button */}
             {user.isClient === true && (
               <IconButton onClick={handleReviewDialogOpen}>
                 <ChatBubbleOutlineOutlined />
@@ -220,7 +237,9 @@ const PostWidget = ({
             {user.isClient === true && <Typography>Add Review</Typography>}
           </FlexBetween>
         </FlexBetween>
+
         <Box>
+          {/* Display the edit button for the profile user */}
           {isProfileUser && (
             <IconButton
               onClick={() => navigate(`/editpost/${postId}`)}
@@ -233,6 +252,7 @@ const PostWidget = ({
               <EditIcon />
             </IconButton>
           )}
+          {/* Display the delete button for the profile user */}
           {isProfileUser && (
             <IconButton onClick={handleDeleteConfirmationOpen}>
               <DeleteOutlined />
@@ -242,6 +262,7 @@ const PostWidget = ({
       </FlexBetween>
 
       <Divider sx={{ mt: "1rem", mb: "1rem" }} />
+
       {/* Show the button only on the home page */}
       {isHomePage && (
         <Box
@@ -258,6 +279,8 @@ const PostWidget = ({
           </Button>
         </Box>
       )}
+
+      {/* Delete confirmation dialog */}
       <Dialog
         open={deleteConfirmationOpen}
         onClose={handleDeleteConfirmationClose}
@@ -278,6 +301,7 @@ const PostWidget = ({
         </DialogActions>
       </Dialog>
 
+      {/* Review dialog */}
       <Dialog
         open={isReviewDialogOpen}
         onClose={handleReviewDialogClose}
@@ -287,6 +311,7 @@ const PostWidget = ({
         <DialogTitle>Add Review</DialogTitle>
         <DialogContent>
           <Box display="flex" justifyContent="center" mb={2}>
+            {/* Rating component for the review */}
             <Rating
               name="review-rating"
               value={reviewRating}
@@ -295,6 +320,7 @@ const PostWidget = ({
               }}
             />
           </Box>
+          {/* Text field for the review description */}
           <TextField
             autoFocus
             multiline

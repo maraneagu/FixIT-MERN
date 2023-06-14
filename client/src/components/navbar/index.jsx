@@ -19,6 +19,7 @@ import {
   Menu,
   Close,
 } from "@mui/icons-material";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
@@ -80,7 +81,7 @@ const Navbar = () => {
           </IconButton>
 
           {/* Create post button */}
-          <Message
+          <AddCircleIcon
             onClick={() => navigate(`/createpost/${userId}`)}
             sx={{
               fontSize: "25px",
