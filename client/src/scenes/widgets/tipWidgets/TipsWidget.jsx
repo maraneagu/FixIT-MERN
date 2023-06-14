@@ -1,38 +1,42 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setTips, setCategory, setSearchQuery } from "state";
+import { setTips, setSearchQuery } from "state";
 import TipWidget from "./TipWidget";
 
 const TipsWidget = ({ userId, isProfile = false }) => {
-  const dispatch = useDispatch();
-  const allTips = useSelector((state) => state.tips);
-  const category = useSelector((state) => state.category);
-  const searchQuery = useSelector((state) => state.searchQuery);
+  // Import necessary hooks and components
+  const dispatch = useDispatch(); // Hook for dispatching actions to Redux store
+  const token = useSelector((state) => state.token); // Access token from Redux store
+
+  // Set up component state using useState hook
   const [tips, setTipsState] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = useSelector((state) => state.token);
 
+  // Function to fetch all tips from the server
   const getTips = async () => {
     try {
-      dispatch(setCategory({ category: null })); // Reset category filter
-      dispatch(setSearchQuery({ searchQuery: "" })); // Reset search query
+      // Send GET request to the server to fetch tips
       const response = await fetch("http://localhost:3001/tips", {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      // Parse the response as JSON
       const data = await response.json();
-      dispatch(setTips({ tips: data }));
-      setTipsState(data);
+
+      // Reverse the order of tips and update Redux store and component state
+      const reversedData = data.reverse();
+      dispatch(setTips({ tips: reversedData }));
+      setTipsState(reversedData);
     } catch (error) {
       console.error("Failed to fetch tips:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
+  // Function to fetch tips for a specific user from the server
   const getUserTips = async () => {
     try {
-      dispatch(setSearchQuery({ searchQuery: "" })); // Reset search query
+      // Send GET request to the server to fetch user-specific tips
       const response = await fetch(
         `http://localhost:3001/tips/${userId}/tips`,
         {
@@ -41,87 +45,80 @@ const TipsWidget = ({ userId, isProfile = false }) => {
         }
       );
       const data = await response.json();
-      dispatch(setTips({ tips: data }));
-      setTipsState(data);
+
+      // Reverse the order of tips and update Redux store and component state
+      const reversedData = data.reverse();
+      dispatch(setTips({ tips: reversedData }));
+      setTipsState(reversedData);
     } catch (error) {
       console.error("Failed to fetch user tips:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
+  // useEffect hook to fetch data when the component mounts or dependencies change
   useEffect(() => {
-    setLoading(true); // Set loading state to true before fetching data
-
     if (isProfile) {
+      // If the component is in profile mode, fetch user-specific tips
       getUserTips();
     } else {
+      // Otherwise, fetch all tips
       getTips();
     }
   }, [isProfile, userId]); // Include isProfile and userId as dependencies
 
-  useEffect(() => {
-    let filteredTips = allTips;
-
-    if (searchQuery) {
-      filteredTips = filteredTips.filter(
-        (tip) =>
-          tip.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          tip.title.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    if (category) {
-      filteredTips = filteredTips.filter((tip) => tip.category === category);
-    }
-
-    setTipsState(filteredTips);
-  }, [searchQuery, category, allTips]);
-
   if (loading) {
-    return <div>Loading...</div>; // Render a loading state while fetching data
-  }
-
-  if (!isProfile) 
-  {
+    // Render a loading state while fetching data
     return (
-      <>
-        {Array.isArray(tips) &&
-          tips.map(
-            // Render the tips
-            ({
-              _id,
-              userId,
-              firstName,
-              lastName,
-              title,
-              description,
-              category,
-              location,
-              videoPath,
-              userPicturePath,
-              likes,
-              comments,
-            }) => (
-              <TipWidget
-                key={_id}
-                tipId={_id}
-                tipUserId={userId}
-                name={`${firstName} ${lastName}`}
-                title={title}
-                description={description}
-                category={category}
-                location={location}
-                videoPath={videoPath}
-                userPicturePath={userPicturePath}
-                likes={likes}
-                comments={comments}
-              />
-            )
-          )}
-      </>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "15px",
+          marginTop: "4rem",
+        }}
+      >
+        Loading...
+      </div>
     );
   }
-};
+
+  // Render the tips if available
+  return (
+    <>
+      {Array.isArray(tips) &&
+        tips.map(
+          // Render the tips
+          ({
+            _id,
+            userId,
+            firstName,
+            lastName,
+            title,
+            description,
+            category,
+            location,
+            videoPath,
+            userPicturePath,
+            likes,
+          }) => (
+            <TipWidget
+              key={_id}
+              tipId={_id}
+              tipUserId={userId}
+              name={`${firstName} ${lastName}`}
+              title={title}
+              description={description}
+              category={category}
+              location={location}
+              videoPath={videoPath}
+              userPicturePath={userPicturePath}
+              likes={likes}
+            />
+          )
+        )}
+    </>
+  );
+}
 
 export default TipsWidget;

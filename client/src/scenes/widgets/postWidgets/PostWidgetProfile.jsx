@@ -164,6 +164,7 @@ const PostWidgetProfile = ({
     if (response.ok) {
       const restPosts = await response.json();
       dispatch(setPosts({ posts: restPosts }));
+      // Reload the page
       window.location.reload();
     }
   };

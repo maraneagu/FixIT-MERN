@@ -11,11 +11,11 @@ const Categories = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null); // Track the currently selected category
 
   const handleCategorySelect = (category) => {
-    dispatch(setCategory({ category: category }));
-    setSelectedCategory(category);
+    dispatch(setCategory({ category: category })); // Dispatch an action to update the selected category in Redux store
+    setSelectedCategory(category); // Update the selected category state
   };
 
   return (
@@ -47,7 +47,6 @@ const Categories = () => {
     </Box>
     </WidgetWrapper> 
     </>
-    
   );
 };
 

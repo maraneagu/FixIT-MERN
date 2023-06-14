@@ -4,22 +4,18 @@ import {
   Box,
   Button,
   TextField,
-  Typography,
   useTheme,
   InputLabel,
   Select,
   MenuItem,
 } from "@mui/material";
 import { Formik, Form } from "formik";
-import Dropzone from "react-dropzone";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import FlexBetween from "components/FlexBetween";
 
 const CreateTipForm = () => {
-  const userId = useSelector((state) => state.user._id);
-  const token = useSelector((state) => state.token);
+  const userId = useSelector((state) => state.user._id); // Get the user ID from the Redux store
+  const token = useSelector((state) => state.token); // Get the authentication token from the Redux store
   const { palette } = useTheme();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook for programmatic navigation
 
   const initialValues = {
     title: "",
@@ -36,33 +32,26 @@ const CreateTipForm = () => {
       formData.append("category", values.category);
       formData.append("videoPath", values.videoPath);
 
-      // //daca schimbam poza,
-      // if (values.picturePath.name)
-      //   formData.append("picturePath", values.picturePath.name);
-      // // daca schimbam orice dar nu poza
-      // else formData.append("picturePath", values.picturePath);
-
       const response = await fetch(
-        `http://localhost:3001/tips/${userId}/create`,
+        `http://localhost:3001/tips/${userId}/create`, // API endpoint for tip creation
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // Include the authentication token in the headers
           },
-          body: formData,
+          body: formData, // Send form data as the request body
         }
-        //"Content-Type": "application/json", asta imi dadea eroarea cu cors.
       );
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
-        navigate(`/profile/${userId}`);
+        console.log(data); // Log the response data
+        navigate(`/profile/${userId}`); // Navigate to the user's profile page
       } else {
         throw new Error("Error creating tip");
       }
     } catch (error) {
-      alert(error.message);
+      alert(error.message); // Show an alert if there's an error
     }
   };
 
@@ -74,8 +63,6 @@ const CreateTipForm = () => {
         touched,
         handleBlur,
         handleChange,
-        setFieldValue,
-        handleSubmit,
       }) => (
         <Form>
           <Box

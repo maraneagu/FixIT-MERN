@@ -28,8 +28,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
-      dispatch(setPosts({ posts: data }));
-      setPostsState(data);
+      const reversedData = data.reverse(); // Sort the data in reverse order
+      dispatch(setPosts({ posts: reversedData }));
+      setPostsState(reversedData);
     } catch (error) {
       console.error("Failed to fetch posts:", error);
     } finally {
@@ -49,8 +50,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
         }
       );
       const data = await response.json();
-      dispatch(setPosts({ posts: data }));
-      setPostsState(data);
+      const reversedData = data.reverse(); // Sort the data in reverse order
+      dispatch(setPosts({ posts: reversedData }));
+      setPostsState(reversedData);
     } catch (error) {
       console.error("Failed to fetch user posts:", error);
     } finally {

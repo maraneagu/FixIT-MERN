@@ -3,84 +3,56 @@ import { useSelector } from "react-redux";
 import Navbar from "components/navbar";
 import UserWidget from "scenes/widgets/UserWidget";
 import TipsWidget from "scenes/widgets/tipWidgets/TipsWidget";
-import FriendListWidget from "scenes/widgets/friendListWidgets/FriendListWidget";
 import { Button } from "@mui/material";
-import FlexBetween from "components/FlexBetween";
-import {
-  EditOutlined,
-  DeleteOutlined,
-  AttachFileOutlined,
-  GifBoxOutlined,
-  ImageOutlined,
-  MicOutlined,
-  MoreHorizOutlined,
-  OndemandVideo,
-} from "@mui/icons-material";
-
-import Dropzone from "react-dropzone";
-import UserImage from "components/UserImage";
-import WidgetWrapper from "components/WidgetWrapper";
-import { useState } from "react";
-import { setTips } from "state";
-
-// import { ToastContainer, toast } from "react-toastify";
-// import 'react-toastify/dist/ReactToastify.css';
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import SearchBarPosts from "scenes/widgets/SearchBarPosts";
 
 const TipsPage = () => {
-  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  const { picturePath } = useSelector((state) => state.user);
-  const { isClient } = useSelector((state) => state.user);
-  const { palette } = useTheme();
-  const navigate = useNavigate();
+  const isNonMobileScreens = useMediaQuery("(min-width:1000px)"); // Check if the screen width is greater than 1000px
+  const { picturePath } = useSelector((state) => state.user); // Get the user's picture path from the Redux store
+  const { isClient } = useSelector((state) => state.user); // Check if the user is a client
+  const { palette } = useTheme(); // Get the theme palette
+  const navigate = useNavigate(); // Get the navigate function from react-router-dom
 
-  const user = useSelector((state) => state.user);
-  // const fullName = `${user.firstName} ${user.lastName}`;
-  const userId = user._id;
-  const [searchQuery, setSearchQuery] = useState("");
+  const user = useSelector((state) => state.user); // Get the user object from the Redux store
+  const userId = user._id; // Get the user ID
 
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-  };
-
-  return (
-    
+  return ( 
     <Box>
-      <Navbar />
+      <Navbar /> {/* Render the navbar component */}
       <Box
         width="100%"
         padding="2rem 6%"
-        display={isNonMobileScreens ? "flex" : "block"}
-        gap="0.5rem"
-        justifyContent="space-between"
+        display={isNonMobileScreens ? "flex" : "block"} // Set the display property based on the screen size
+        gap="2rem"
+        justifyContent="center"
       >
-        <Box flexBasis={isNonMobileScreens ? "20%" : undefined}>
-          <UserWidget userId={userId} picturePath={picturePath} />
-          <Box m="1.2rem" />
+        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
+          <UserWidget userId={userId} picturePath={picturePath} /> {/* Render the user widget component and pass the user ID and picture path as props */}
+
+          <Box m="2.3em" />
           {!isClient && (
             <Button
-              onClick={() => navigate(`/createtip/${userId}`)}
+              onClick={() => navigate(`/createtip/${userId}`)} // Navigate to the create tip page for the current user
               sx={{
                 color: palette.background.alt,
                 backgroundColor: palette.primary.main,
                 borderRadius: "0.7rem",
-                fontSize: 20,
-                width: 320,
-            }}
-            >Add a tip
-          </Button>
+                fontSize: 15,
+                width: "100%",
+              }}
+            >
+              Add a tip
+            </Button>
           )}
-          <Box m="1.2rem" />
-          <FriendListWidget userId={userId} />
         </Box>
+
         <Box
-          flexBasis={isNonMobileScreens ? "77%" : undefined}
-          mt={isNonMobileScreens ? "-2rem" : undefined}
-          mr={isNonMobileScreens ? "-1rem" : undefined}
+          width={isNonMobileScreens ? "47%" : undefined}
+          mt={isNonMobileScreens ? "-30px" : "1.5rem"}
+          ml={isNonMobileScreens ? "30px" : undefined}
         >
-          <TipsWidget userId={userId}/>
+          <TipsWidget userId={userId}/> {/* Render the tips widget component and pass the user ID as a prop */}
         </Box>
       </Box>
     </Box>
