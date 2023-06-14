@@ -79,6 +79,7 @@ const TipsPage = () => {
         <Box
           flexBasis={isNonMobileScreens ? "77%" : undefined}
           mt={isNonMobileScreens ? "-2rem" : undefined}
+          mr={isNonMobileScreens ? "-1rem" : undefined}
         >
           <TipsWidget userId={userId}/>
         </Box>
