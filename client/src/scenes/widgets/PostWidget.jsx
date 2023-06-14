@@ -67,6 +67,7 @@ const PostWidget = ({
   const location2 = useLocation();
   const isHomePage = location2.pathname === "/home";
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+  const user = useSelector((state) => state.user);
 
   const patchLike = async () => {
     const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
@@ -209,19 +210,15 @@ const PostWidget = ({
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">
+            {user.isClient === true &&(
             <IconButton onClick={handleReviewDialogOpen}>
               <ChatBubbleOutlineOutlined />
-            </IconButton>
-            <Typography
-              onClick={handleReviewDialogOpen}
-              sx={{
-                "&:hover": {
-                  cursor: "pointer",
-                },
-              }}
-            >
-              Add Review
-            </Typography>
+
+            </IconButton>)}
+            {user.isClient === true &&(
+            <Typography>Add Review</Typography>)}
+            
+
           </FlexBetween>
         </FlexBetween>
       <Box>
@@ -245,7 +242,6 @@ const PostWidget = ({
         
       </FlexBetween>
 
-      <Divider sx={{ mt: "1rem", mb: "1rem" }} />
 
       {/* Show the button only on the home page */}
       {isHomePage && (
