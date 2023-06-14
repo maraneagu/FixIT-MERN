@@ -250,9 +250,7 @@ const PostWidgetProfile = ({
           </Button>
         )}
 
-        <IconButton size="small">
-          <ShareOutlined fontSize="small" />
-        </IconButton>
+        
       </FlexBetween>
 
       <Dialog
