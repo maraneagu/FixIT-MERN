@@ -6,6 +6,7 @@ const initialState = {
   token: null,
   posts: [],
   reviews:[],
+  tips: [],
 };
 
 export const authSlice = createSlice({
@@ -52,11 +53,21 @@ export const authSlice = createSlice({
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload.searchQuery;
     },
+    setTips: (state, action) => {
+      state.tips = action.payload.tips;
+    },
+    setTip: (state, action) => {
+      const updatedTips = state.tips.map((tip) => {
+        if (tip._id === action.payload.tip._id) return action.payload.tip;
+        return tip;
+      });
+      state.tips = updatedTips;
+    }
     
   },
 });
 
 export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setUser, setReviews, setCategory,
-  setSearchQuery } =
+  setSearchQuery, setTips, setTip } =
   authSlice.actions;
 export default authSlice.reducer;

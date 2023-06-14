@@ -12,6 +12,9 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import EditPost from "scenes/crud/edit/editPost";
+import CreateTipPage from "scenes/createTipPage";
+import TipsPage from "scenes/tipsPage";
+import EditTip from "scenes/crud/edit/editTip";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -38,6 +41,10 @@ function App() {
               element={isAuth ? <CreatePostPage /> : <Navigate to="/" />}
             />
             <Route
+              path="/createtip/:userId"
+              element={isAuth ? <CreateTipPage /> : <Navigate to="/" />}
+            />
+            <Route
               path="/edit/:userId"
               element={isAuth ? <EditProfilePage /> : <Navigate to="/" />}
             />
@@ -46,12 +53,20 @@ function App() {
               element={isAuth ? <EditPost /> : <Navigate to="/" />}
             />
             <Route
+              path="/edittip/:tipId"
+              element={isAuth ? <EditTip /> : <Navigate to="/" />}
+            />
+            <Route
               path="/showMoreFriends/:userId"
               element={isAuth ? <ShowMoreFriends /> : <Navigate to="/" />}
             />
             <Route
               path="/show/:postId"
               element={isAuth ? <ShowPost /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/tips"
+              element={isAuth ? <TipsPage /> : <Navigate to="/" />}
             />
           </Routes>
         </ThemeProvider>
