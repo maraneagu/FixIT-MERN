@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setTips, setCategory, setSearchQuery } from "state";
 import TipWidget from "./TipWidget";
-import TipWidgetProfile from "./TipWidgetProfile";
 
 const TipsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();

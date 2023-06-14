@@ -12,8 +12,8 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import EditPost from "scenes/crud/edit/editPost";
-import CreateTipPage from "scenes/createTipPage";
-import TipsPage from "scenes/tipsPage";
+import CreateTipPage from "scenes/crud/create/createTipPage";
+import TipsPage from "scenes/pages/tipsPage";
 import EditTip from "scenes/crud/edit/editTip";
 
 function App() {

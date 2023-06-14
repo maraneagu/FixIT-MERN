@@ -32,7 +32,7 @@ import {
   import { setTip } from "state";
   import { setTips } from "state";
   import { useNavigate, useLocation } from "react-router-dom";
-import PlayerComponent from "./PlayerComponent";
+import PlayerComponent from "../PlayerComponent";
   
   const TipWidget = ({
     tipId,
