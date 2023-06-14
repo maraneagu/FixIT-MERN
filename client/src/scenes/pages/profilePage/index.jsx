@@ -1,6 +1,7 @@
 import { Box, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setPosts } from "state";
 import { useParams } from "react-router-dom";
 import Navbar from "components/navbar";
 import FriendListWidgetProfile from "scenes/widgets/friendListWidgets/FriendListWidgetProfile";
@@ -16,6 +17,7 @@ const ProfilePage = () => {
 
   // Get the token from the Redux store
   const token = useSelector((state) => state.token);
+  const dispatch = useDispatch();
 
   // Check if the screen width is larger than 1000px
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
@@ -25,6 +27,27 @@ const ProfilePage = () => {
 
   // Check if the profile page belongs to the logged-in user
   const isProfileUser = userId === loggedInUserId;
+
+  const [posts, setPostsState] = useState([]);
+  const hasPosts = posts.length > 0;
+
+  // Function to fetch user-specific posts
+  const getUserPosts = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/posts/${userId}/posts`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const data = await response.json();
+      dispatch(setPosts({ posts: data }));
+      setPostsState(data);
+    } catch (error) {
+      console.error("Failed to fetch user posts:", error);
+    }
+  };
 
   // Function to fetch user data from the server
   const getUser = async () => {
@@ -39,6 +62,7 @@ const ProfilePage = () => {
   useEffect(() => {
     // Fetch the user data when the component mounts
     getUser();
+    getUserPosts();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Render nothing if the user data is not available yet
@@ -57,13 +81,23 @@ const ProfilePage = () => {
         justifyContent="center"
       >
         {/* Left section */}
-        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
-          {/* Render the user widget component */}
-          <UserWidget userId={userId} picturePath={user.picturePath} />
-          <Box m="2rem 0" />
-          {/* Render the friend list widget component */}
-          <FriendListWidgetProfile userId={userId} />
-        </Box>
+        {hasPosts ? (
+          <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
+            {/* Render the user widget component */}
+            <UserWidget userId={userId} picturePath={user.picturePath} />
+            <Box m="2rem 0" />
+            {/* Render the friend list widget component */}
+            <FriendListWidgetProfile userId={userId} />
+          </Box>
+        ) : (
+          <Box flexBasis="60%">
+            {/* Render the user widget component */}
+            <UserWidget userId={userId} picturePath={user.picturePath} />
+            <Box m="2rem 0" />
+            {/* Render the friend list widget component */}
+            <FriendListWidgetProfile userId={userId} />
+          </Box>
+        )}
 
         {/* Right section */}
         {isProfileUser ? (

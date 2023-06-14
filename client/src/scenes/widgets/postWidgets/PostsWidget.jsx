@@ -86,7 +86,18 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   }, [searchQuery, category, allPosts]);
 
   if (loading) {
-    return <div>Loading...</div>; // Render a loading state while fetching data
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "15px",
+          marginTop: "4rem",
+        }}
+      >
+        Loading...
+      </div>); // Render a loading state while fetching data
   }
 
   // Render PostWidgetProfile if it's a profile widget, otherwise render PostWidget

@@ -108,7 +108,18 @@ const EditUserForm = ({ userId }) => {
 
   // Render loading message if user data is not available yet
   if (!user) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "15px",
+          marginTop: "4rem",
+        }}
+      >
+        Loading...
+      </div>); // Render a loading state while fetching data
   }
 
   return (

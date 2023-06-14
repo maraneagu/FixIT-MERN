@@ -16,9 +16,7 @@ const Categories = () => {
   const handleCategorySelect = (category) => {
     dispatch(setCategory({ category: category }));
     setSelectedCategory(category);
-    //console.log()
   };
-
 
   return (
     <>

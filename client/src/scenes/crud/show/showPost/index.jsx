@@ -31,15 +31,23 @@ import FlexBetween from "components/FlexBetween";
 import { useNavigate } from "react-router-dom";
 import { setPost } from "state";
 import ReviewsWidget from "scenes/widgets/reviewWidgets/ReviewsWidget";
+import { setReviews } from "state";
 
 // Define the ShowPost component
 const ShowPost = () => {
   const { postId } = useParams(); // Get the postId from the URL parameters
 
+  const currentPost = useSelector((state) =>
+    state.posts.find((post) => post._id === postId)
+  ); // Find the current post from the Redux state based on the postId
+
   const loggedInUserId = useSelector((state) => state.user._id); // Get the logged-in user's ID from the Redux state
+  const isProfileUser = currentPost.userId === loggedInUserId; // Check if the current post belongs to the logged-in user
+  const user = useSelector((state) => state.user); // Get the user object from the Redux state
 
   const token = useSelector((state) => state.token); // Get the token from the Redux state
   const navigate = useNavigate(); // Get the navigation function from react-router-dom
+  const dispatch = useDispatch(); // Get the dispatch function from react-redux
 
   // State variables for review dialog
   const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
@@ -54,15 +62,12 @@ const ShowPost = () => {
 
   const location = useLocation();
 
-  const currentPost = useSelector((state) =>
-    state.posts.find((post) => post._id === postId)
-  ); // Find the current post from the Redux state based on the postId
-
   const likeCount = Object.keys(currentPost.likes).length; // Get the number of likes for the current post
   const isLiked = Boolean(currentPost.likes[loggedInUserId]); // Check if the logged-in user has liked the current post
-  const isProfileUser = currentPost.userId === loggedInUserId; // Check if the current post belongs to the logged-in user
-  const user = useSelector((state) => state.user); // Get the user object from the Redux state
-  const dispatch = useDispatch(); // Get the dispatch function from react-redux
+  
+  const allReviews = useSelector((state) => state.reviews);
+  const [reviews, setReviewsState] = useState(allReviews);
+  const hasReviews = reviews.length > 0;
 
   // Function to fetch the post from the server
   const getPost = async () => {
@@ -115,7 +120,6 @@ const ShowPost = () => {
     if (reviewRating === 0 || reviewDescription === "") {
       return;
     }
-
     const response = await fetch(
       `http://localhost:3001/reviews/${loggedInUserId}/${postId}/create`,
       {
@@ -141,13 +145,30 @@ const ShowPost = () => {
     }
   };
 
+  const getPostReviews = async () => {
+    const response = await fetch(
+      `http://localhost:3001/reviews/${postId}/postReviews`,
+      {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    const data = await response.json();
+    dispatch(setReviews({ reviews: data }));
+    setReviewsState(data);
+  };
+
   useEffect(() => {
     // Fetch post whenever postId changes
     if (!currentPost) {
       getPost();
     }
-    console.log(currentPost.firstName);
   }, [postId, location]);
+
+  useEffect(() => {
+    // Fetch the post reviews when the component mounts
+    getPostReviews();
+  }, []);
 
   if (!currentPost) {
     return <div>Loading...</div>;
@@ -162,7 +183,7 @@ const ShowPost = () => {
       <Box
         display="flex"
         flexDirection={isNonMobileScreens ? "row" : "column"}
-        justifyContent={isNonMobileScreens ? "space-between" : "center"}
+        justifyContent={hasReviews ? "space-between" : "center"} // Center the post if there are no reviews
         alignItems={isNonMobileScreens ? "flex-start" : "center"}
         padding="2rem 6%"
         gap="2rem"
@@ -303,10 +324,12 @@ const ShowPost = () => {
         </Box>
   
         {/* The following code is responsible for rendering the reviews */}
-        <Box width={isNonMobileScreens ? "40%" : "100%"}>
-          {/* ReviewsWidget component displays the reviews associated with the post */}
-          <ReviewsWidget postId={postId} />
-        </Box>
+        {hasReviews && (
+          <Box width={isNonMobileScreens ? "40%" : "100%"}>
+            {/* ReviewsWidget component displays the reviews associated with the post */}
+            <ReviewsWidget postId={postId} />
+          </Box>
+        )}
       </Box>
   
       {/* The following code is responsible for rendering the add review dialog */}

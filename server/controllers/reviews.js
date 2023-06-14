@@ -35,6 +35,7 @@ export const createReview = async (req, res) => {
   }
 };
 
+/* GET */
 export const getPostReviews = async (req, res) => {
   try {
     // Extract the post ID from the request params
@@ -51,7 +52,7 @@ export const getPostReviews = async (req, res) => {
   }
 };
 
-// DELETE
+/* DELETE */
 export const deleteReview = async (req, res) => {
   const { reviewId } = req.params;
   const { postId } = req.body;
