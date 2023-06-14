@@ -90,11 +90,20 @@ const Navbar = () => {
               },
             }}
           />
+<<<<<<< HEAD:client/src/components/navbar/index.jsx
 
           {/* Help button */}
           <Help sx={{ fontSize: "25px" }} />
 
           {/* User profile dropdown */}
+=======
+          <Notifications sx={{ fontSize: "25px" }} />
+          <IconButton
+          onClick={() => navigate("/tips")}
+          >
+            <Help sx={{ fontSize: "25px" }} />
+          </IconButton>
+>>>>>>> d910b8166797c6f16874b3ec0514230e66b8f64b:client/src/scenes/navbar/index.jsx
           <FormControl variant="standard" value={fullName}>
             <Select
               value={fullName}
