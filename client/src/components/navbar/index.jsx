@@ -91,11 +91,11 @@ const Navbar = () => {
               },
             }}
           />
-
-          {/* Help button */}
-          <Help sx={{ fontSize: "25px" }} />
-
-          {/* User profile dropdown */}
+          <IconButton
+          onClick={() => navigate("/tips")}
+          >
+            <Help sx={{ fontSize: "25px" }} />
+          </IconButton>
           <FormControl variant="standard" value={fullName}>
             <Select
               value={fullName}
