@@ -2,7 +2,6 @@ import {
   ChatBubbleOutlineOutlined,
   FavoriteBorderOutlined,
   FavoriteOutlined,
-  ShareOutlined,
 } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import ClassIcon from '@mui/icons-material/Class';
@@ -20,11 +19,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams, useLocation  } from "react-router-dom";
 import WidgetWrapper from "components/WidgetWrapper";
 import Friend from "components/Friend";
-import Navbar from "scenes/navbar";
+import Navbar from "components/navbar";
 import FlexBetween from "components/FlexBetween";
 import { useNavigate } from "react-router-dom";
 import { setPost } from "state";
-import ReviewsWidget from "scenes/widgets/ReviewsWidget";
+import ReviewsWidget from "scenes/widgets/reviewWidgets/ReviewsWidget";
 
 const ShowPost = () => {
   const { postId } = useParams();
@@ -43,7 +42,6 @@ const ShowPost = () => {
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
-  const primary = palette.primary.main;
 
   const location = useLocation();
 
@@ -51,8 +49,6 @@ const ShowPost = () => {
     state.posts.find((post) => post._id === postId)
   );
 
-  console.log(currentPost);
-  console.log("postId: ", postId);
   const likeCount = Object.keys(currentPost.likes).length;
   const isLiked = Boolean(currentPost.likes[loggedInUserId]);
   const isProfileUser = currentPost.userId === loggedInUserId;

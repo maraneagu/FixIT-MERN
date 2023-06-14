@@ -11,7 +11,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import {
-  Search,
   Message,
   DarkMode,
   LightMode,
@@ -26,12 +25,15 @@ import { useNavigate } from "react-router-dom";
 import FlexBetween from "components/FlexBetween";
 
 const Navbar = () => {
-  const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
+  // Get the user data from the Redux store
+  const user = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user);
+  const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
+  // Get the MUI theme and define some color variables
   const theme = useTheme();
   const neutralLight = theme.palette.neutral.light;
   const dark = theme.palette.neutral.dark;
@@ -39,11 +41,14 @@ const Navbar = () => {
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
+  // Extract the user's full name and ID from the user object
   const fullName = `${user.firstName} ${user.lastName}`;
   const userId = user._id;
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
+
+      {/* Desktop Logo */}
       <FlexBetween gap="1.75rem">
         <Typography
           fontWeight="bold"
@@ -61,9 +66,11 @@ const Navbar = () => {
         </Typography>
       </FlexBetween>
 
-      {/* DESKTOP NAV */}
+      {/* Desktop Navigation */}
       {isNonMobileScreens ? (
         <FlexBetween gap="2rem">
+
+          {/* Dark/Light mode toggle */}
           <IconButton onClick={() => dispatch(setMode())}>
             {theme.palette.mode === "dark" ? (
               <DarkMode sx={{ fontSize: "25px" }} />
@@ -71,6 +78,8 @@ const Navbar = () => {
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
             )}
           </IconButton>
+
+          {/* Create post button */}
           <Message
             onClick={() => navigate(`/createpost/${userId}`)}
             sx={{
@@ -81,7 +90,11 @@ const Navbar = () => {
               },
             }}
           />
+
+          {/* Help button */}
           <Help sx={{ fontSize: "25px" }} />
+
+          {/* User profile dropdown */}
           <FormControl variant="standard" value={fullName}>
             <Select
               value={fullName}
@@ -100,7 +113,7 @@ const Navbar = () => {
               }}
               input={<InputBase />}
             >
-
+              {/* User profile link */}
               <MenuItem 
                 onClick={() => {
                   navigate(`/profile/${userId}`);
@@ -110,11 +123,15 @@ const Navbar = () => {
               >
                 <Typography>{fullName}</Typography>
               </MenuItem>
+
+              {/* Logout option */}
               <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
             </Select>
           </FormControl>
         </FlexBetween>
       ) : (
+        
+        // Mobile Menu Toggle Button
         <IconButton
           onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
         >
@@ -122,7 +139,8 @@ const Navbar = () => {
         </IconButton>
       )}
 
-      {/* MOBILE NAV */}
+      {/* Mobile Navigation */}
+      {/* Display mobile menu if on a non-mobile screen */}
       {!isNonMobileScreens && isMobileMenuToggled && (
         <Box
           position="fixed"
@@ -134,7 +152,7 @@ const Navbar = () => {
           minWidth="300px"
           backgroundColor={background}
         >
-          {/* CLOSE ICON */}
+          {/* Close icon */}
           <Box display="flex" justifyContent="flex-end" p="1rem">
             <IconButton
               onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
@@ -143,7 +161,7 @@ const Navbar = () => {
             </IconButton>
           </Box>
 
-          {/* MENU ITEMS */}
+          {/* Mobile menu items */}
           <FlexBetween
             display="flex"
             flexDirection="column"
@@ -151,6 +169,7 @@ const Navbar = () => {
             alignItems="center"
             gap="3rem"
           >
+            {/* Dark/Light mode toggle */}
             <IconButton
               onClick={() => dispatch(setMode())}
               sx={{ fontSize: "25px" }}
@@ -161,9 +180,17 @@ const Navbar = () => {
                 <LightMode sx={{ color: dark, fontSize: "25px" }} />
               )}
             </IconButton>
+
+            {/* Create post button */}
             <Message sx={{ fontSize: "25px" }} />
+
+            {/* Notifications button */}
             <Notifications sx={{ fontSize: "25px" }} />
+
+            {/* Help button */}
             <Help sx={{ fontSize: "25px" }} />
+
+            {/* User profile dropdown */}
             <FormControl variant="standard" value={fullName}>
               <Select
                 value={fullName}
@@ -182,17 +209,18 @@ const Navbar = () => {
                 }}
                 input={<InputBase />}
               >
-
+                {/* User profile link */}
                 <MenuItem 
                   onClick={() => {
                     navigate(`/profile/${userId}`);
                     navigate(0);
                   }} 
-
                   value={fullName}
                 >
                   <Typography>{fullName}</Typography>
                 </MenuItem>
+
+                {/* Logout option */}
                 <MenuItem onClick={() => dispatch(setLogout())}>
                   Log Out
                 </MenuItem>

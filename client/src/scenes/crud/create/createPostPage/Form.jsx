@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   Box,
   Button,
@@ -6,101 +7,70 @@ import {
   Typography,
   useTheme,
   InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
-import { Formik, Field, Form } from "formik";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { setUser as setUserRedux } from "state";
+import { Formik, Form } from "formik";
 import Dropzone from "react-dropzone";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import FlexBetween from "components/FlexBetween";
 
-const EditUserForm = ({ userId }) => {
-  const [user, setUser] = useState(null);
+const CreatePostForm = () => {
+  // Retrieve user ID and token from Redux store
+  const userId = useSelector((state) => state.user._id);
   const token = useSelector((state) => state.token);
+
+  // Access the theme palette
   const { palette } = useTheme();
+
+  // Use the navigation function from react-router-dom
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await fetch(`http://localhost:3001/users/${userId}`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-
-          setUser(data);
-        } else {
-          throw new Error("Error fetching user data");
-        }
-      } catch (error) {
-        console.log("Error fetching user:", error);
-      }
-    };
-
-    getUser();
-  }, [userId, token]);
-
+  // Set initial form values
   const initialValues = {
-    firstName: user?.firstName || "",
-    lastName: user?.lastName || "",
-    location: user?.location || "",
-    bio: user?.bio || "",
-    picturePath: user?.picturePath || "",
+    title: "",
+    description: "",
+    category: "",
+    picturePath: "",
   };
 
-  console.log(initialValues.picturePath);
-
+  // Handle form submission
   const handleSubmit = async (values) => {
     try {
       const formData = new FormData();
-      formData.append("firstName", values.firstName);
-      formData.append("lastName", values.lastName);
-      formData.append("location", values.location);
-      formData.append("bio", values.bio);
+      formData.append("title", values.title);
+      formData.append("description", values.description);
+      formData.append("category", values.category);
 
-      //daca schimbam poza,
+      // If a new picture is selected, append the file name to the form data
       if (values.picturePath.name)
         formData.append("picturePath", values.picturePath.name);
-      // daca schimbam orice dar nu poza
+      // If no new picture is selected, append the existing picture path
       else formData.append("picturePath", values.picturePath);
-      console.log("FormData :", formData.firstName);
-      const response = await fetch(
-        `http://localhost:3001/users/${userId}/edit`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
+
+      // Make a POST request to create a new post
+      const response = await fetch(`http://localhost:3001/posts/${userId}/create`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
 
       if (response.ok) {
         const data = await response.json();
-        setUser(data);
-        dispatch(setUserRedux({ user: data }));
+        // Navigate to the user's profile page after successful post creation
         navigate(`/profile/${userId}`);
       } else {
-        throw new Error("Error updating user");
+        throw new Error("Error creating post");
       }
     } catch (error) {
       alert(error.message);
     }
   };
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-
   return (
+    // Wrap the form using Formik for form state management
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {({
         values,
@@ -108,63 +78,62 @@ const EditUserForm = ({ userId }) => {
         touched,
         handleBlur,
         handleChange,
-        handleSubmit,
         setFieldValue,
-        resetForm,
       }) => (
         <Form>
+          {/* Create a grid layout for the form */}
           <Box
             display="grid"
             gap="30px"
             gridTemplateColumns="repeat(4, minmax(0, 1fr))"
           >
+            {/* Title field */}
             <TextField
-              label="First Name"
+              label="Title"
               onBlur={handleBlur}
               onChange={handleChange}
-              value={values.firstName}
-              name="firstName"
-              error={Boolean(touched.firstName) && Boolean(errors.firstName)}
-              helperText={touched.firstName && errors.firstName}
-              sx={{ gridColumn: "span 2" }}
-            />
-
-            <TextField
-              label="Last Name"
-              onBlur={handleBlur}
-              onChange={handleChange}
-              value={values.lastName}
-              name="lastName"
-              error={Boolean(touched.lastName) && Boolean(errors.lastName)}
-              helperText={touched.lastName && errors.lastName}
-              sx={{ gridColumn: "span 2" }}
-            />
-
-            <TextField
-              label="Location"
-              onBlur={handleBlur}
-              onChange={handleChange}
-              value={values.location}
-              name="location"
-              error={Boolean(touched.location) && Boolean(errors.location)}
-              helperText={touched.location && errors.location}
+              value={values.title}
+              name="title"
+              error={Boolean(touched.title) && Boolean(errors.title)}
+              helperText={touched.title && errors.title}
               sx={{ gridColumn: "span 4" }}
             />
 
+            {/* Description field */}
             <TextField
-              label="Bio"
+              label="Description"
               onBlur={handleBlur}
               onChange={handleChange}
-              value={values.bio}
-              name="bio"
-              error={Boolean(touched.bio) && Boolean(errors.bio)}
-              helperText={touched.bio && errors.bio}
+              value={values.description}
+              name="description"
+              error={Boolean(touched.description) && Boolean(errors.description)}
+              helperText={touched.description && errors.description}
               sx={{ gridColumn: "span 4" }}
             />
 
+            {/* Category dropdown */}
+            <InputLabel sx={{ marginBottom: "-22px" }}>Category</InputLabel>
+            <Select
+              value={values.category}
+              onBlur={handleBlur}
+              name="category"
+              error={Boolean(touched.category) && Boolean(errors.category)}
+              helperText={touched.category && errors.category}
+              onChange={handleChange}
+              sx={{ gridColumn: "span 4" }}
+            >
+              <MenuItem value="auto">Auto</MenuItem>
+              <MenuItem value="tailoring">Tailoring</MenuItem>
+              <MenuItem value="furniture">Furniture</MenuItem>
+              <MenuItem value="electronics">Electronics</MenuItem>
+              <MenuItem value="instalation">Installation</MenuItem>
+            </Select>
+
+            {/* Picture upload */}
             <InputLabel id="picture-label" sx={{ marginBottom: "-22px" }}>
-              Profile Picture
+              Post Picture
             </InputLabel>
+
             <Box
               gridColumn="span 4"
               border={`1px solid ${palette.neutral.medium}`}
@@ -172,6 +141,7 @@ const EditUserForm = ({ userId }) => {
               p="1rem"
               name="picturePath"
             >
+              {/* Dropzone for uploading pictures */}
               <Dropzone
                 acceptedFiles=".jpg,.jpeg,.png"
                 multiple={false}
@@ -186,6 +156,7 @@ const EditUserForm = ({ userId }) => {
                     p="1rem"
                     sx={{ "&:hover": { cursor: "pointer" } }}
                   >
+                    {/* Display the selected picture name and an edit icon */}
                     {!values.picturePath.name ? (
                       <FlexBetween>
                         <Typography>{values.picturePath}</Typography>
@@ -197,12 +168,15 @@ const EditUserForm = ({ userId }) => {
                         <EditOutlinedIcon />
                       </FlexBetween>
                     )}
+                    
+                    {/* Hidden input field for file selection */}
                     <input {...getInputProps()} />
                   </Box>
                 )}
               </Dropzone>
             </Box>
 
+            {/* Submit button */}
             <Box sx={{ gridColumn: "span 4", placeSelf: "center" }}>
               <Button
                 fullWidth
@@ -218,7 +192,7 @@ const EditUserForm = ({ userId }) => {
                   },
                 }}
               >
-                Edit profile
+                Create Post
               </Button>
             </Box>
           </Box>
@@ -228,4 +202,4 @@ const EditUserForm = ({ userId }) => {
   );
 };
 
-export default EditUserForm;
+export default CreatePostForm;

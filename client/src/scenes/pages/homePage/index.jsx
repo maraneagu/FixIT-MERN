@@ -1,10 +1,10 @@
 import { Box, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import Navbar from "scenes/navbar";
+import Navbar from "components/navbar";
 import UserWidget from "scenes/widgets/UserWidget";
-import PostsWidget from "scenes/widgets/PostsWidget";
-import FriendListWidget from "scenes/widgets/FriendListWidget";
+import PostsWidget from "scenes/widgets/postWidgets/PostsWidget";
+import FriendListWidget from "scenes/widgets/friendListWidgets/FriendListWidget";
 import Categories from "scenes/widgets/Categories";
 import SearchBarPosts from "scenes/widgets/SearchBarPosts";
 import WidgetWrapper from "components/WidgetWrapper";
