@@ -47,6 +47,12 @@ export const authSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload.user;
     },
+    setCategory: (state, action) => {
+      state.category = action.payload.category;
+    },
+    setSearchQuery: (state, action) => {
+      state.searchQuery = action.payload.searchQuery;
+    },
     setTips: (state, action) => {
       state.tips = action.payload.tips;
     },
@@ -61,6 +67,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setUser, setTips, setTip, setReviews } =
+export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setUser, setReviews, setCategory,
+  setSearchQuery, setTips, setTip } =
   authSlice.actions;
 export default authSlice.reducer;
