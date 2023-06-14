@@ -106,7 +106,18 @@ const EditPostForm = ({ postId }) => {
 
   // If post data is not fetched yet, show a loading message
   if (!post) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "15px",
+          marginTop: "4rem",
+        }}
+      >
+        Loading...
+      </div>); // Render a loading state while fetching data
   }
 
   return (

@@ -224,53 +224,55 @@ const PostWidgetProfile = ({
             <FavoriteBorderOutlined fontSize="small" />
           )}
         </IconButton>
+        
+        <>
+          {user.isClient === true && (
+            <FlexBetween gap="0.3rem">
+              <IconButton 
+                onClick={handleReviewDialogOpen}
+                sx={{ color: medium }}
+              >
+                <ChatBubbleOutlineOutlined />
+              </IconButton>
+              <Typography
+                onClick={handleReviewDialogOpen}
+                sx={{ 
+                  color: medium, 
+                  "&:hover": {
+                    cursor: "pointer",
+                    color: main,
+                  },
+                }}
+              >
+                Add Review
+              </Typography>
+            </FlexBetween>
+          )}
 
-        {isNonMobileScreens ? (
-          <>
-            {user.isClient === true && (
-              <FlexBetween gap="0.3rem">
-                <IconButton onClick={handleReviewDialogOpen}>
-                  <ChatBubbleOutlineOutlined />
-                </IconButton>
-                <Typography>Add Review</Typography>
-              </FlexBetween>
-            )}
+          {isProfileUser && (
+            <>
+              <IconButton
+                size="small"
+                onClick={() =>
+                  navigate(`/editpost/${postId}`, {
+                    state: { post: { postId } },
+                  })
+                }
+                sx={{ color: medium }}
+              >
+                <EditIcon fontSize="small" />
+              </IconButton>
 
-            {isProfileUser && (
-              <>
-                <IconButton
-                  size="small"
-                  onClick={() =>
-                    navigate(`/editpost/${postId}`, {
-                      state: { post: { postId } },
-                    })
-                  }
-                  sx={{ color: main }}
-                >
-                  <EditIcon fontSize="small" />
-                </IconButton>
-
-                <IconButton
-                  size="small"
-                  onClick={handleDeleteConfirmationOpen}
-                  sx={{ color: main }}
-                >
-                  <DeleteOutlined fontSize="small" />
-                </IconButton>
-              </>
-            )}
-          </>
-        ) : (
-          <Button
-            variant="outlined"
-            size="small"
-            startIcon={<ChatBubbleOutlineOutlined />}
-            onClick={() => navigate(`/post/${postId}`)}
-          >
-            Comments ({comments.length})
-          </Button>
-        )}
-
+              <IconButton
+                size="small"
+                onClick={handleDeleteConfirmationOpen}
+                sx={{ color: main }}
+              >
+                <DeleteOutlined fontSize="small" />
+              </IconButton>
+            </>
+           )}
+        </>
       </FlexBetween>
 
       <Divider sx={{ mt: "1rem", mb: "1rem" }} />
