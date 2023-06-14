@@ -38,6 +38,10 @@ function App() {
               element={isAuth ? <CreatePostPage /> : <Navigate to="/" />}
             />
             <Route
+              path="/createtip/:userId"
+              element={isAuth ? <CreateTipPage /> : <Navigate to="/" />}
+            />
+            <Route
               path="/edit/:userId"
               element={isAuth ? <EditProfilePage /> : <Navigate to="/" />}
             />
@@ -53,7 +57,12 @@ function App() {
               path="/show/:postId"
               element={isAuth ? <ShowPost /> : <Navigate to="/" />}
             />
+            <Route
+              path="/tips"
+              element={isAuth ? <TipsPage /> : <Navigate to="/" />}
+            />
           </Routes>
+          {/* <ToastContainer /> */}
         </ThemeProvider>
       </BrowserRouter>
     </div>

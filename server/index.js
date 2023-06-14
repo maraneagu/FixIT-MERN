@@ -12,8 +12,11 @@ import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
 import reviewRoutes from "./routes/reviews.js";
+import tipRoutes from "./routes/tips.js";
+
 import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js";
+import { createTip, editTip } from "./controllers/tips.js";
 import { editPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
 import { editUser } from "./controllers/users.js";
@@ -45,13 +48,17 @@ const upload = multer({ storage });
 
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
+
 app.post("/posts", verifyToken, upload.single("picture"), createPost);
+// app.post("/posts", verifyToken, upload.single("video"), createPost);
+
 app.post(
   "/users/:id/edit",
   verifyToken,
   upload.single("picturePath"),
   editUser
 );
+
 app.post(
   "/posts/:id/create",
   verifyToken,
@@ -65,11 +72,33 @@ app.post(
   editPost
 );
 
+//app.patch("/users/editUser", upload.single("picture"), editUser);
+
+app.post("/tips", verifyToken, upload.single("picture"), createTip);
+app.post("/tips", verifyToken, upload.single("video"), createTip);
+
+app.post(
+  "/tips/:id/create",
+  verifyToken,
+  upload.single("picturePath"),
+  // upload.single("videoPath"),
+  createTip
+);
+app.post(
+  "/tips/:id/edit",
+  verifyToken,
+  upload.single("picturePath"),
+  // upload.single("videoPath"),
+  editTip
+);
+
+
 /* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 app.use("/reviews", reviewRoutes);
+app.use("/tips", tipRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
