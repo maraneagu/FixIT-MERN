@@ -63,6 +63,7 @@ const PostWidget = ({
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
+  
   const primary = palette.primary.main;
   const location2 = useLocation();
   const isHomePage = location2.pathname === "/home";
