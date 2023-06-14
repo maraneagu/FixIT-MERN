@@ -1,10 +1,10 @@
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
-import Navbar from "scenes/navbar";
+import Navbar from "components/navbar";
 import UserWidget from "scenes/widgets/UserWidget";
 import MyTipWidget from "scenes/widgets/MyTipWidget";
 import TipsWidget from "scenes/widgets/TipsWidget";
-import FriendListWidget from "scenes/widgets/FriendListWidget";
+import FriendListWidget from "scenes/widgets/friendListWidgets/FriendListWidget";
 import { Button } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import {

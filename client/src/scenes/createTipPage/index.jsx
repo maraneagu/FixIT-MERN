@@ -1,4 +1,4 @@
-import Navbar from "scenes/navbar";
+import Navbar from "components/navbar";
 import Form from "scenes/createTipPage/Form";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";

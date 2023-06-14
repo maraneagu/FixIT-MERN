@@ -17,7 +17,6 @@ const tipSchema = mongoose.Schema(
     location: String,
     title: String,
     description: String,
-    // picturePath: String,
     videoPath: String,
     userPicturePath: String,
     category: {

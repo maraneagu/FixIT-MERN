@@ -16,7 +16,6 @@ export const createTip = async (req, res) => {
       title: title,
       description: description,
       userPicturePath: user.picturePath,
-      // picturePath: picturePath,
       videoPath: videoPath,
       category: category,
       components: [],

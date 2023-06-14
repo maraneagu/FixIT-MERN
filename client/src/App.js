@@ -12,6 +12,8 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import EditPost from "scenes/crud/edit/editPost";
+import CreateTipPage from "scenes/createTipPage";
+import TipsPage from "scenes/tipsPage";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -62,7 +64,6 @@ function App() {
               element={isAuth ? <TipsPage /> : <Navigate to="/" />}
             />
           </Routes>
-          {/* <ToastContainer /> */}
         </ThemeProvider>
       </BrowserRouter>
     </div>
