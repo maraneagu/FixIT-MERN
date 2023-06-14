@@ -32,12 +32,13 @@ import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPost } from "state";
-import { setPosts } from "state";
+import { setReviews } from "state";
 import { useNavigate, useLocation } from "react-router-dom";
+import FriendOnPost from "components/FriendOnPost";
 
 const ReviewWidget = ({
   key,
+  reviewId,
   postId,
   userId,
   description,
@@ -61,7 +62,6 @@ const ReviewWidget = ({
   const location2 = useLocation();
   const isHomePage = location2.pathname === "/home";
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  console.log(description);
 
   const handleDeleteConfirmationOpen = () => {
     setDeleteConfirmationOpen(true);
@@ -70,19 +70,22 @@ const ReviewWidget = ({
   const handleDeleteConfirmationClose = () => {
     setDeleteConfirmationOpen(false);
   };
-  const deletePost = async () => {
-    console.log("postid :", postId);
-    const response = await fetch(`http://localhost:3001/posts/${postId}`, {
+
+  const deleteReview = async () => {
+    const response = await fetch(`http://localhost:3001/reviews/${reviewId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId: loggedInUserId }),
+      body: JSON.stringify({ postId: postId }),
     });
     if (response.ok) {
-      const restPosts = await response.json();
-      dispatch(setPosts({ posts: restPosts }));
+      handleDeleteConfirmationClose();
+
+      const restReviews = await response.json();
+      dispatch(setReviews( restReviews ));
+      window.location.reload();
     }
   };
 
@@ -112,54 +115,56 @@ const ReviewWidget = ({
   }, [userId, token]);
 
   return (
-    <WidgetWrapper m="2rem 0" ml={isNonMobileScreens ? "15px" : undefined} mr={isNonMobileScreens ? "15px" : undefined}>
-    <FlexBetween>
-      <Friend
-        friendId={userId}
-        name={`${firstName} ${lastName}`}
-        subtitle={location}
-        userPicturePath={picturePath}
-      />
-      <Rating
-        value={stars}
-        readOnly
-        max={5}
-        emptyIcon={<StarBorderIcon />}
-        icon={<StarIcon />}
-      />
-    </FlexBetween>
+    <Box>
+      <WidgetWrapper m="2rem 0" ml={isNonMobileScreens ? "15px" : undefined} mr={isNonMobileScreens ? "15px" : undefined}>
+      <FlexBetween>
+        <FriendOnPost
+          friendId={userId}
+          name={`${firstName} ${lastName}`}
+          subtitle={location}
+          userPicturePath={picturePath}
+        />
+        <Rating
+          value={stars}
+          readOnly
+          max={5}
+          emptyIcon={<StarBorderIcon />}
+          icon={<StarIcon />}
+        />
+      </FlexBetween>
 
-    <FlexBetween mt="1rem" sx={{ lineHeight: "1.5", wordWrap: "break-word" }}>
-      <Typography color={main} marginBottom="5px" sx={{ mt: "1rem", width: "100%", wordWrap: "break-word" }}>
-          {description}
-      </Typography>
-      
-    </FlexBetween>
-    <Box ml={isNonMobileScreens ? "30rem" : "40rem"}>
-    <IconButton  onClick={handleDeleteConfirmationOpen}>
-        <DeleteOutlined />
-      </IconButton>
+      <FlexBetween mt="1rem" sx={{ lineHeight: "1.5", wordWrap: "break-word" }}>
+        <Typography color={main} marginBottom="5px" sx={{ mt: "1rem", mb: "1rem", width: "100%", wordWrap: "break-word" }}>
+            {description}
+        </Typography> 
+      </FlexBetween>
+
+      <Box ml={isNonMobileScreens ? "94%" : "95.5%"}>
+        {isProfileUser && (
+          <IconButton onClick={handleDeleteConfirmationOpen} sx = {{color: main}}>
+            <DeleteOutlined />
+          </IconButton>
+        )}
       </Box>
 
-    
-
-    <Dialog open={deleteConfirmationOpen} onClose={handleDeleteConfirmationClose}>
-      <DialogTitle>Delete Post</DialogTitle>
-      <DialogContent>
-        <Typography variant="body1">
-          Are you sure you want to delete this post?
-        </Typography>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleDeleteConfirmationClose} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={deletePost} color="primary">
-          Delete
-        </Button>
-      </DialogActions>
-    </Dialog>
-  </WidgetWrapper>
+      <Dialog open={deleteConfirmationOpen} onClose={handleDeleteConfirmationClose}>
+        <DialogTitle>Delete Review</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            Are you sure you want to delete this review?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteConfirmationClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={deleteReview} color="primary">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </WidgetWrapper>
+    </Box>
 );
 };
 
