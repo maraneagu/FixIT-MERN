@@ -1,6 +1,6 @@
 import { Box, Typography, useTheme } from "@mui/material";
 
-const Category = ({ icon, size, text }) => {
+const Category = ({ icon, size, text, isSelected }) => {
 
   // Get the MUI theme and extract the palette object
   const { palette } = useTheme();
@@ -11,16 +11,22 @@ const Category = ({ icon, size, text }) => {
     <Box textAlign="center">
       
       {/* Category icon */}
-      <Box
-        backgroundColor="#2671ab"
-        display="inline-flex"
-        width={circleSize}
-        height={circleSize}
-        justifyContent="center"
-        alignItems="center"
-        style={{ objectFit: "cover", borderRadius: "50%" }}
-        marginLeft="13px"
-        marginRight="13px"
+      <Box sx={{
+        backgroundColor: isSelected? "#123456": "#2671ab",
+        display: "inline-flex",
+        width: circleSize,
+        height: circleSize,
+        justifyContent: "center",
+        alignItems: "center",
+        objectFit: "cover", 
+        borderRadius: "50%" ,
+        marginLeft: "13px",
+        marginRight: "13px",
+        "&:hover": {
+          backgroundColor: "#123456",
+          cursor: "pointer",
+        },
+       }}
       >
         <img
           width={size}

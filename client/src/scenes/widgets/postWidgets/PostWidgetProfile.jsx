@@ -270,6 +270,7 @@ const PostWidgetProfile = ({
             Comments ({comments.length})
           </Button>
         )}
+
       </FlexBetween>
 
       <Divider sx={{ mt: "1rem", mb: "1rem" }} />
