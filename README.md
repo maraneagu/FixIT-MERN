@@ -94,13 +94,14 @@ On the register page, you can create an account and set your name, location, pro
 <div>
     <img src="https://github.com/maraneagu/FixIT-MERN/assets/101599503/68d26d9d-5892-4a5b-b90d-26f7f171b666" alt="registerPage">
 </div>
-<br>
 
 # ProfilePage
+
 <br>
+
 <b><i>Master Profile</i></b>
 <br>
-<br>
+
 
 <div>
     <img src="https://github.com/maraneagu/FixIT-MERN/assets/101599503/35a4d72f-3312-44b2-be32-27e2025c2ab8" alt="masterProfilePage">
@@ -122,7 +123,6 @@ On the profile page, if you are a master, you can see the posts you added, the t
 
 If you are a client, you can only see the people you are currently following.
 
-<br>
 
 # CreatePost
 <br>
@@ -209,9 +209,11 @@ Create a review pop-up:
 
 # ChatGPT Use
 
-
+<br>
 We used this AI tool to add comments about what the code was specifically doing and also for generating some UI code.
 
+<br>
+<br>
 
 ![image](https://github.com/maraneagu/FixIT-MERN/assets/101599503/39a4bafe-6bc6-43d9-86bc-94e8f90e5dd0)
 
