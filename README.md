@@ -22,7 +22,15 @@ trustworthy. Now, with our application, you can see the reviews of the workers t
 7. Dropzone for uploading images.
 
 # Structure ( punem Diagrame ) 
+Diagrama UML
+<div align="center">
+    <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/798ddca3-ec6f-4452-be9c-1399ff0420a8" alt="image" width="600px">
+</div>
 
+Use Case Diagram
+<div align="center">
+    <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/f412fdb7-9139-4317-9e32-213a2c007791" alt="image" width="600px">
+</div>
 # Homepage ( poza la homepage si explicam componentele prezente si lafel la toate de mai jos ) 
 # LoginPage & RegisterPage
 # ProfilePage
