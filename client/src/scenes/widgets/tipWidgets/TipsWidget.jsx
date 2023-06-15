@@ -66,7 +66,7 @@ const TipsWidget = ({ userId, isProfile = false }) => {
     }
   }, [isProfile, userId]); // Include isProfile and userId as dependencies
 
-  if (loading) {
+  if (!tips) {
     // Render a loading state while fetching data
     return (
       <div

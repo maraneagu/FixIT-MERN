@@ -37,9 +37,11 @@ const ProfilePage = () => {
 
   const [posts, setPostsState] = useState([]);
   const hasPosts = posts.length > 0;
+  console.log(posts);
 
   const [tips, setTipsState] = useState([]);
   const hasTips = tips.length > 0;
+  console.log(tips);
 
   // Function to fetch user data from the server
   const getUser = async () => {
@@ -80,6 +82,7 @@ const ProfilePage = () => {
         }
       );
       const data = await response.json();
+      console.log(data);
       const reversedData = data.reverse(); // Sort the data in reverse order
       dispatch(setTips({ tips: reversedData }));
       setTipsState(reversedData);
@@ -120,7 +123,7 @@ const ProfilePage = () => {
             <FriendListWidgetProfile userId={userId} />
 
             {hasTips && (
-              <Box>
+              <Box widht="100%">
                 <Typography color={main} variant="h5" align="center" style={{ marginTop: "3rem", marginBottom: "3rem", fontSize: "1.2rem", fontWeight: "bold" }}>
                   Recommendations
                 </Typography>
@@ -174,7 +177,21 @@ const ProfilePage = () => {
               Recommendations
             </Typography>
 
-            <TipsWidget userId={userId} isProfile />
+            {isProfileUser ? (
+            <Box
+              width={isNonMobileScreens ? "100%" : undefined}
+              mt={isNonMobileScreens ? "1rem" : "1.5rem"}
+            >
+                <TipsWidget userId={userId} isProfile />
+            </Box>
+          ) : (
+            <Box
+              width={isNonMobileScreens ? "100%" : undefined}
+              mt={isNonMobileScreens ? "-30px" : "1.5rem"}
+            >
+                <TipsWidget userId={userId} isProfile />
+            </Box>
+          )}
           </Box>
         </Box>
       ) : (
