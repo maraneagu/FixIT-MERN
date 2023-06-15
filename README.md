@@ -36,7 +36,9 @@ Use Case Diagram
 
 <br>
 
-Homepage-ul contine Widgeturi cu profilul utilizatorului,persoanele pe care le urmareste acesta, postarile din feed, bara de cautare si bara de alegere a categoriei pentru filtrare.
+The homepage contains widgets with the user's profile, the people they are following, the feed posts, the search bar, and the category selection bar for filtering.
+<br>
+
 <div align="center">
     <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/13853e89-f7a0-4529-95f7-bf73750ae976" alt="image" width="1000px">
 </div>
@@ -100,13 +102,24 @@ If you are a client, you can only see the people you are currently following.
 
 <br>
 
-O postare contine informatii despre utilizatorul care a facut-o, cu optiunea de a-l urmari sau scoate de la urmariri, un titlu, o descriere si o poza. Utilizatorul poate aprecia postarea, adauga un review sau poate fi redirectionat catre o pagina separata "Show Post". Daca utilizatorul conectat este cel care a facut postarea, acesta o poate sterge sau edita.
+A post contains information about the user who made it, with the option to follow or unfollow them, a title, a description, and an image. Users can like the post, add a review, or be redirected to a separate "Show Post" page. If the logged-in user is the one who made the post, they can delete or edit it.
 <br>
 
 <div>
     <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/4cf778b5-db26-4062-b47f-72a68f705dab" alt="image" width="1000px">
 </div>
+
 # EditPost
+
+<br>
+
+On this page, you can edit a post by changing its attributes, including the image.
+
+<br>
+
+<div>
+    <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/b56400af-ef0d-478f-b893-e9da3267695d" alt="image" width="1000px">
+</div>
 # TipsPage
 
 
