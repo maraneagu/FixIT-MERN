@@ -92,7 +92,7 @@ On the profile page, if you are a master, you can see the posts you added, the t
 <b>Client Profile</b>
 <br>
 
-![image](https://github.com/maraneagu/FixIT-MERN/assets/101599503/26741a6a-bf98-4977-9f45-f727c5089ff8)
+![image](https://github.com/maraneagu/FixIT-MERN/assets/101599503/e56739c1-16c2-4cbb-b4d6-030404721925)
 
 
 If you are a client, you can only see the people you are currently following.
@@ -133,6 +133,7 @@ On this page, you can edit a post by changing its attributes, including the imag
 <div>
     <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/b56400af-ef0d-478f-b893-e9da3267695d" alt="image" width="1000px">
 </div>
+
 # TipsPage
 
 <br>
@@ -149,6 +150,16 @@ The "Create a tip" form uses a title, description, category and a Youtube link t
 
 
 ![WhatsApp Image 2023-06-15 at 1 02 43 PM](https://github.com/maraneagu/FixIT-MERN/assets/101599503/4e982c83-f55f-4caa-83e5-61adf4441ab4)
+
+
+
+# ChatGPT Use
+
+
+We used this AI tool to add comments about what the code was specifically doing and also for generating some UI code.
+
+
+![image](https://github.com/maraneagu/FixIT-MERN/assets/101599503/39a4bafe-6bc6-43d9-86bc-94e8f90e5dd0)
 
 
 
