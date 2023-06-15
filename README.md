@@ -135,6 +135,21 @@ On this page, you can edit a post by changing its attributes, including the imag
 </div>
 # TipsPage
 
+<br>
+Adding a tip is possible only if you have a master account. You can also add Youtube videos.
+<br>
+<br>
+
+
+
+![WhatsApp Image 2023-06-15 at 1 02 41 PM](https://github.com/maraneagu/FixIT-MERN/assets/101599503/5902ed6f-c918-4b18-9df5-d2de9d4ec050)
+
+
+The "Create a tip" form uses a title, description, category and a Youtube link to create a tip.
+
+
+![WhatsApp Image 2023-06-15 at 1 02 43 PM](https://github.com/maraneagu/FixIT-MERN/assets/101599503/4e982c83-f55f-4caa-83e5-61adf4441ab4)
+
 # Reviews
 
 <br>
@@ -156,6 +171,7 @@ Create a review pop-up:
 <div>
     <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/baa6859a-63d5-436d-9101-bdd51b3aded6" alt="image" width="1000px">
 </div>
+
 
 
 
