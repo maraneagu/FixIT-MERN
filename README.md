@@ -22,17 +22,38 @@ trustworthy. Now, with our application, you can see the reviews of the workers t
 7. Dropzone for uploading images.
 
 # Structure  
-Diagrama UML
 <div align="center">
     <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/798ddca3-ec6f-4452-be9c-1399ff0420a8" alt="image" width="600px">
 </div>
 
+
+<div align="center">
+    <i> Diagrama UML </i>
+</div>
+
+<br>
 <br>
 
-Use Case Diagram
 <div align="center">
     <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/f412fdb7-9139-4317-9e32-213a2c007791" alt="image" width="600px">
 </div>
+
+
+<div align="center">
+    <i> Use Case Diagram </i>
+</div>
+
+
+<br>
+<br>
+
+<div align="center">
+    <img src="https://github.com/maraneagu/FixIT-MERN/assets/93272424/a3f81a1c-1d0b-40a8-a17c-a0e87ea8a8a6" alt="image" width="600px">
+</div>
+<div align="center">
+    <i> WorkFlow Diagram </i>
+</div>
+
 
 <br>
 
@@ -52,14 +73,22 @@ The homepage contains widgets with the user's profile, the people they are follo
 
 # LoginPage & RegisterPage
 <br>
+On the login page, you can log in using an email and a password.
+
+<br>
+<br>
+
 <div>
     <img src="https://github.com/maraneagu/FixIT-MERN/assets/101599503/93496a6f-c9df-416d-ad32-4c2eaddde6e4" alt="loginPage">
 </div>
 
-<br>
-On the login page, you can log in using an email and a password.
+
 
 <br>
+<br>
+
+On the register page, you can create an account and set your name, location, profile picture, role (master or client), email, and a password.
+
 <br>
 
 <div>
@@ -67,13 +96,9 @@ On the login page, you can log in using an email and a password.
 </div>
 <br>
 
-On the register page, you can create an account and set your name, location, profile picture, role (master or client), email, and a password.
-<br>
-<br>
-
 # ProfilePage
 <br>
-<b>Master Profile</b>
+<b><i>Master Profile</i></b>
 <br>
 <br>
 
@@ -89,13 +114,14 @@ On the profile page, if you are a master, you can see the posts you added, the t
 <br>
 
 
-<b>Client Profile</b>
+<b><i>Client Profile</i></b>
 <br>
 
 ![image](https://github.com/maraneagu/FixIT-MERN/assets/101599503/26741a6a-bf98-4977-9f45-f727c5089ff8)
 
 
 If you are a client, you can only see the people you are currently following.
+
 <br>
 
 # CreatePost
@@ -111,11 +137,13 @@ When creating a post, you are sent to a specific form, in which you need to fill
 
 After you have created the post, you are sent to the specific post page, where you are able to see the full description of the post and the reviews of the post. 
 
+
 # ShowPost
 
 <br>
-
 A post contains information about the user who made it, with the option to follow or unfollow them, a title, a description, and an image. Users can like the post, add a review, or be redirected to a separate "Show Post" page. If the logged-in user is the one who made the post, they can delete or edit it.
+
+<br>
 <br>
 
 <div>
@@ -133,6 +161,8 @@ On this page, you can edit a post by changing its attributes, including the imag
 <div>
     <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/b56400af-ef0d-478f-b893-e9da3267695d" alt="image" width="1000px">
 </div>
+
+
 # TipsPage
 
 <br>
@@ -144,9 +174,11 @@ Adding a tip is possible only if you have a master account. You can also add You
 
 ![WhatsApp Image 2023-06-15 at 1 02 41 PM](https://github.com/maraneagu/FixIT-MERN/assets/101599503/5902ed6f-c918-4b18-9df5-d2de9d4ec050)
 
+<br>
 
 The "Create a tip" form uses a title, description, category and a Youtube link to create a tip.
 
+<br>
 
 ![WhatsApp Image 2023-06-15 at 1 02 43 PM](https://github.com/maraneagu/FixIT-MERN/assets/101599503/4e982c83-f55f-4caa-83e5-61adf4441ab4)
 
