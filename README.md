@@ -131,8 +131,31 @@ On this page, you can edit a post by changing its attributes, including the imag
 <br>
 
 <div>
-    <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/b56400af-ef0d-478f-b893-e9da3267695d" alt="image" width="1000px">
+    <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/0f01d000-36b4-495b-bbaa-be1eac8741b5" alt="image" width="1000px">
 </div>
 # TipsPage
+
+# Reviews
+
+<br>
+
+In the ShowPost, you can view the reviews of the respective post. These reviews have a star rating, a description, and a user associated with them. They can be created and deleted through pop-up windows.
+
+<br>
+
+<div>
+    <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/82075945-d267-4021-b7ec-0d308630a525" alt="image" width="1000px">
+</div>
+
+<br>
+Create a review pop-up:
+<br>
+
+<br>
+
+<div>
+    <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/baa6859a-63d5-436d-9101-bdd51b3aded6" alt="image" width="1000px">
+</div>
+
 
 
