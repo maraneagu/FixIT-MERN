@@ -186,7 +186,7 @@ The "Create a tip" form uses a title, description, category and a Youtube link t
 
 <br>
 
-In the ShowPost, you can view the reviews of the respective post. These reviews have a star rating, a description, and a user associated with them. They can be created and deleted through pop-up windows.
+In the ShowPost, you can view the reviews of the specific post. These reviews have a star rating, a description, and a user associated to them. They can be created and deleted through pop-up windows.
 
 <br>
 
