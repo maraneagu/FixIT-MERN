@@ -31,10 +31,32 @@ Use Case Diagram
 <div align="center">
     <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/f412fdb7-9139-4317-9e32-213a2c007791" alt="image" width="600px">
 </div>
-# Homepage ( poza la homepage si explicam componentele prezente si lafel la toate de mai jos ) 
+
+# Homepage 
+
+<br>
+
+Homepage-ul contine Widgeturi cu profilul utilizatorului,persoanele pe care le urmareste acesta, postarile din feed, bara de cautare si bara de alegere a categoriei pentru filtrare.
+<div align="center">
+    <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/13853e89-f7a0-4529-95f7-bf73750ae976" alt="image" width="1000px">
+</div>
+
+<br/>
+
 # LoginPage & RegisterPage
 # ProfilePage
 # CreatePost
+<br>
+
 # ShowPost
+
+<br>
+
+O postare contine informatii despre utilizatorul care a facut-o, cu optiunea de a-l urmari sau scoate de la urmariri, un titlu, o descriere si o poza. Utilizatorul poate aprecia postarea, adauga un review sau poate fi redirectionat catre o pagina separata "Show Post". Daca utilizatorul conectat este cel care a facut postarea, acesta o poate sterge sau edita.
+<br>
+
+<div>
+    <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/4cf778b5-db26-4062-b47f-72a68f705dab" alt="image" width="1000px">
+</div>
 # EditPost
 # TipsPage
