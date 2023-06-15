@@ -126,7 +126,7 @@ const CreatePostForm = () => {
               <MenuItem value="tailoring">Tailoring</MenuItem>
               <MenuItem value="furniture">Furniture</MenuItem>
               <MenuItem value="electronics">Electronics</MenuItem>
-              <MenuItem value="instalation">Installation</MenuItem>
+              <MenuItem value="installation">Installation</MenuItem>
             </Select>
 
             {/* Picture upload */}
