@@ -7,10 +7,24 @@
 # Introduction
 
 
-We are going to present  our fullstack application called "FixIt". This application makes the communication between clients and service providers alot more fluently and efficiently. Through our platform
-users can create an account and search for specific services that they need. Our special feature is that our application is more like a social-media platform, in a sense that our customers
-can add friends. Why we would add that feature? Well, we've thought about it this way. First, when we want to hire someone that we do not know personally we ask a friend, if he/she knows somebody
+We are going to present  our fullstack application called "FixIt". This application makes the communication between clients and service providers a lot more fluently and efficiently. Through our platform,
+users can create an account and search for specific services that they need. Our special feature is that our application is more like a social-media platform, meaning that our customers
+can add friends. Why would we add that feature? Well, we've thought about it this way: first, when we want to hire someone that we do not know personally we ask a friend, if he/she knows somebody
 trustworthy. Now, with our application, you can see the reviews of the workers that have done projects for your friends, and see how your close ones reviewed them.
+
+
+# Contributors
+- [David Bojneagu](https://github.com/DBojneagu)
+- [Elena Georgescu](https://github.com/elenaag23)
+- [Cosmina Gheorghe](https://github.com/cosminagheorghe47)
+- [Mara Neagu](https://github.com/maraneagu)
+- [Vlad Talpiga](https://github.com/vladtalpiga)
+
+
+# Demo
+- [Demo](https://youtu.be/qrWF7znqEJA)
+
+
 
 # TechStack 
 1. React for the frontend
