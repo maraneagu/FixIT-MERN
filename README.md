@@ -28,7 +28,7 @@ trustworthy. Now, with our application, you can see the reviews of the workers t
 
 
 <div align="center">
-    <i> Diagrama UML </i>
+    <i> UML Diagram </i>
 </div>
 
 <br>
