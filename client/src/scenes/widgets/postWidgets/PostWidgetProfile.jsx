@@ -164,13 +164,13 @@ const PostWidgetProfile = ({
     if (response.ok) {
       const restPosts = await response.json();
       dispatch(setPosts({ posts: restPosts }));
-      // Reload the page
       window.location.reload();
     }
   };
 
   return (
     <WidgetWrapper m="2rem 0">
+      {/* Display the friend information */}
       <FriendOnPost
         friendId={postUserId}
         name={name}
@@ -178,6 +178,7 @@ const PostWidgetProfile = ({
         userPicturePath={userPicturePath}
       />
 
+      {/* Display the post title */}
       <Typography
         color={main}
         variant="h5"
@@ -187,6 +188,7 @@ const PostWidgetProfile = ({
         {title}
       </Typography>
 
+      {/* Display the post category */}
       <Typography
         color={medium}
         display="flex"
@@ -197,6 +199,7 @@ const PostWidgetProfile = ({
         {category ? category.charAt(0).toUpperCase() + category.slice(1) : ""}
       </Typography>
 
+      {/* Display the post picture */}
       {picturePath && (
         <img
           width="100%"
@@ -207,12 +210,14 @@ const PostWidgetProfile = ({
         />
       )}
 
+      {/* Display the post description */}
       <Box mt="1rem" sx={{ lineHeight: "1.5", wordWrap: "break-word" }}>
         {description}
       </Box>
 
       <Divider sx={{ my: "1.5rem" }} />
 
+      {/* Display the like button */}
       <FlexBetween>
         <IconButton
           size="small"
@@ -229,6 +234,7 @@ const PostWidgetProfile = ({
         <>
           {user.isClient === true && (
             <FlexBetween gap="0.3rem">
+              {/* Display the review button */}
               <IconButton 
                 onClick={handleReviewDialogOpen}
                 sx={{ color: medium }}
@@ -252,6 +258,7 @@ const PostWidgetProfile = ({
 
           {isProfileUser && (
             <>
+              {/* Display the edit button for the profile user */}
               <IconButton
                 size="small"
                 onClick={() =>
@@ -264,6 +271,7 @@ const PostWidgetProfile = ({
                 <EditIcon fontSize="small" />
               </IconButton>
 
+              {/* Display the delete button for the profile user */}
               <IconButton
                 size="small"
                 onClick={handleDeleteConfirmationOpen}

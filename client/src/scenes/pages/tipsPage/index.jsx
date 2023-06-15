@@ -31,6 +31,7 @@ const TipsPage = () => {
           <UserWidget userId={userId} picturePath={picturePath} /> {/* Render the user widget component and pass the user ID and picture path as props */}
 
           <Box m="2.3em" />
+
           {!isClient && (
             <Button
               onClick={() => navigate(`/createtip/${userId}`)} // Navigate to the create tip page for the current user
