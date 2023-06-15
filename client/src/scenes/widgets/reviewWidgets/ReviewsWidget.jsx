@@ -28,8 +28,9 @@ const ReviewsWidget = ({ postId }) => {
       }
     );
     const data = await response.json();
-    dispatch(setReviews({ reviews: data }));
-    setReviewsState(data);
+    const reversedData = data.reverse(); // Sort the data in reverse order
+    dispatch(setReviews({ reviews: reversedData }));
+    setReviewsState(reversedData);
   };
 
   useEffect(() => {
