@@ -27,10 +27,14 @@ Diagrama UML
     <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/798ddca3-ec6f-4452-be9c-1399ff0420a8" alt="image" width="600px">
 </div>
 
+<br>
+
 Use Case Diagram
 <div align="center">
     <img src="https://github.com/maraneagu/FixIT-MERN/assets/101595151/f412fdb7-9139-4317-9e32-213a2c007791" alt="image" width="600px">
 </div>
+
+<br>
 
 # Homepage 
 
@@ -85,7 +89,6 @@ On the profile page, if you are a master, you can see the posts you added, the t
 
 <b>Client Profile</b>
 <br>
-<br>
 
 ![image](https://github.com/maraneagu/FixIT-MERN/assets/101599503/26741a6a-bf98-4977-9f45-f727c5089ff8)
 
@@ -95,6 +98,16 @@ If you are a client, you can only see the people you are currently following.
 
 # CreatePost
 <br>
+
+When creating a post, you are sent to a specific form, in which you need to fill in the title, description, the category and the picture representing the post. Here is the form:
+
+ <br>
+
+![2023-06-15 (4)](https://github.com/maraneagu/FixIT-MERN/assets/93272424/590f66fd-e444-45a8-b9c3-b4e51148d67d)
+
+<br>
+
+After you have created the post, you are sent to the specific post page, where you are able to see the full description of the post and the reviews of the post. 
 
 # ShowPost
 
