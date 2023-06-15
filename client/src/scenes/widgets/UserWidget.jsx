@@ -134,6 +134,15 @@ const UserWidget = ({ userId, picturePath }) => {
             <Typography color={medium}>Client</Typography>
           </Box>
         </Box>
+
+        <Divider />
+
+        {hasBio ? (
+          <Box display="flex" alignItems="center" gap="1rem" marginTop="10px" marginBottom="5px">
+            <BuildIcon fontSize="large" sx={{ color: main }} />
+            <Typography color={medium}>{bio}</Typography>
+          </Box>
+        ) : null}
       </WidgetWrapper>
     );
   } else {
