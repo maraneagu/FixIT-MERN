@@ -81,16 +81,18 @@ const Navbar = () => {
           </IconButton>
 
           {/* Create post button */}
-          <AddCircleIcon
-            onClick={() => navigate(`/createpost/${userId}`)}
-            sx={{
-              fontSize: "25px",
-              "&:hover": {
-                color: primaryLight,
-                cursor: "pointer",
-              },
-            }}
-          />
+          {user.isClient === false && (
+            <AddCircleIcon
+              onClick={() => navigate(`/createpost/${userId}`)}
+              sx={{
+                fontSize: "25px",
+                "&:hover": {
+                  color: primaryLight,
+                  cursor: "pointer",
+                },
+              }}
+            />
+          )}
           <IconButton
           onClick={() => navigate("/tips")}
           >
