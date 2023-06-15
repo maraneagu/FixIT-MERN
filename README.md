@@ -31,7 +31,7 @@ trustworthy. Now, with our application, you can see the reviews of the workers t
 2. MongoDB for the NoSql database
 3. Express & NodeJS for the backend
 4. MUI for styling
-5. React Redux for managing states,
+5. React Redux for managing states
 6. Bcrypt for the encryption of passwords
 7. Dropzone for uploading images.
 
