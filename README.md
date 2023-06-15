@@ -141,7 +141,7 @@ After you have created the post, you are sent to the specific post page, where y
 # ShowPost
 
 <br>
-A post contains information about the user who made it, with the option to follow or unfollow them, a title, a description, and an image. Users can like the post, add a review, or be redirected to a separate "Show Post" page. If the logged-in user is the one who made the post, they can delete or edit it.
+A post contains information about the user who made it, with the option to follow or unfollow them, a title, a description, and an image. Users can like the post, add a review, or be redirected to a separate "Show Post" page. If the logged-in user is the one who made the post, he can delete or edit it.
 
 <br>
 <br>
